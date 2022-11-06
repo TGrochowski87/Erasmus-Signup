@@ -1,7 +1,7 @@
 import { Counter } from "components/Counter";
 import { useNavigate } from "react-router-dom";
 
-const HomePage = () => {
+const ExampleHomePage = () => {
   const navigate = useNavigate();
 
   return (
@@ -60,4 +60,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default ExampleHomePage;
