@@ -1,14 +1,22 @@
+using Microsoft.EntityFrameworkCore;
+using UniversityApi.DbModels;
+using UniversityApi.Repository;
 using UniversityApi.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
+
+builder.Services.AddDbContext<UniversityDataContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("UniversityDb")));
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<IUniversityService, UniversityService>();
+
+builder.Services.AddTransient<IUniversityService, UniversityService>();
+builder.Services.AddTransient<IUniversityRepository, UniversityRepository>();
 
 
 var app = builder.Build();

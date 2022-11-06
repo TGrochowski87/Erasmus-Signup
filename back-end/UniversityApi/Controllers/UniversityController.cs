@@ -6,7 +6,6 @@ using UniversityApi.Service;
 namespace UniversityApi.Controllers
 {
     [ApiController]
-    [Route("university")]
     public class UniversityController : Controller
     {
         private readonly IUniversityService universityService;
@@ -20,6 +19,12 @@ namespace UniversityApi.Controllers
         public Result<ExampleModel> Example()
         {
             return Result.Ok(universityService.Example());
+        }
+
+        [HttpGet("universities")]
+        public Result<IEnumerable<UniversityVM>> GetList()
+        {
+            return Result.Ok(universityService.GetList());
         }
     }
 }
