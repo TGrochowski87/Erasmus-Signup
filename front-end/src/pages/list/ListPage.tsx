@@ -6,13 +6,14 @@ import {
   MessageOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
-import { Button, Layout, List, Menu } from "antd";
+import { Button, Layout, List, Menu, Rate } from "antd";
 import { Content, Footer, Header } from "antd/lib/layout/layout";
 // Components
 import University from "models/University";
 import IconText from "components/IconText";
 // Styles
 import "./ListPage.scss";
+import openInNewTab from "utilities/openInNewTab";
 
 interface Props {
   universities: University[];
@@ -34,7 +35,6 @@ const ListPage = ({ universities }: Props) => {
         />
       </Header>
       <Layout>
-        <Content></Content>
         <Content
           className="site-layout"
           style={{
@@ -72,7 +72,7 @@ const ListPage = ({ universities }: Props) => {
                     </div>
                     <div className="university-data-space">
                       <div className="university-information">
-                        <span>
+                        <div className="top-row">
                           <h2
                             style={{
                               display: "inline",
@@ -89,44 +89,48 @@ const ListPage = ({ universities }: Props) => {
                           >
                             {item.country}
                           </h3>
-                        </span>
-                        {item.isObserved ? (
-                          <HeartFilled
+                          <Rate
+                            disabled
+                            allowHalf
+                            defaultValue={item.rating}
                             style={{
-                              fontSize: "1.5rem",
-                              position: "absolute",
-                              top: "0%",
-                              right: "0%",
-                              color: "red",
+                              margin: "0 auto",
+                              position: "relative",
+                              top: "-10px",
                             }}
                           />
-                        ) : (
-                          <HeartOutlined
-                            style={{
-                              fontSize: "1.5rem",
-                              position: "absolute",
-                              top: "0%",
-                              right: "0%",
-                            }}
-                          />
-                        )}
+                          {item.isObserved ? (
+                            <HeartFilled
+                              style={{
+                                fontSize: "1.5rem",
+                                color: "red",
+                              }}
+                            />
+                          ) : (
+                            <HeartOutlined
+                              style={{
+                                fontSize: "1.5rem",
+                              }}
+                            />
+                          )}
+                        </div>
+
                         <p style={{ marginTop: "0.5rem" }}>
                           {item.subjectAreaName} | {item.subjectAreaId}
                         </p>
                       </div>
+
                       <div className="text-icons">
                         <IconText
                           icon={TeamOutlined}
                           text={item.availablePlaces}
                           key="list-vertical-star-o"
                         />
-
                         <IconText
                           icon={LineChartOutlined}
                           text={item.lastYearGradeAvg}
                           key="list-vertical-like-o"
                         />
-
                         <IconText
                           icon={MessageOutlined}
                           text={item.opinionsAmount}
@@ -134,11 +138,22 @@ const ListPage = ({ universities }: Props) => {
                         />
                       </div>
                     </div>
+
                     <div className="buttons">
                       <Button size="large" type="primary">
                         Show on map
                       </Button>
-                      <Button size="large" type="primary">
+                      <Button
+                        size="large"
+                        type="primary"
+                        onClick={() => {
+                          if (item.website !== null) {
+                            openInNewTab(item.website);
+                          } else {
+                            alert("No website for this university.");
+                          }
+                        }}
+                      >
                         Visit website
                       </Button>
                     </div>

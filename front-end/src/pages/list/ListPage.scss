@@ -24,12 +24,24 @@
       display: flex;
       flex-direction: column;
 
+      path {
+        stroke: black;
+        stroke-width: 10px;
+        stroke-linejoin: round;
+      }
+
       .university-information{
         flex-grow: 1;
+
+        .top-row{
+          display: flex;
+          flex-direction: row;
+          justify-content: start;
+          align-items: flex-start;
+        }
       }
       
       .text-icons{
-
         .ant-space{
           margin-right: 20px;
         }
