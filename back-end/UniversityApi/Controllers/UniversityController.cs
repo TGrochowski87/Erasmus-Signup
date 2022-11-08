@@ -1,4 +1,5 @@
 ﻿using FluentResults;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using UniversityApi.Models;
 using UniversityApi.Service;
@@ -9,10 +10,13 @@ namespace UniversityApi.Controllers
     public class UniversityController : Controller
     {
         private readonly IUniversityService universityService;
+        private readonly IPublishEndpoint publishEndpoint;
 
-        public UniversityController(IUniversityService universityService)
+        public UniversityController(IUniversityService universityService,
+            IPublishEndpoint publishEndpoint)
         {
             this.universityService = universityService;
+            this.publishEndpoint = publishEndpoint;
         }
 
         [HttpGet("universities")]

@@ -21,5 +21,19 @@ namespace NoteApi.Controllers
         {
             return Result.Ok(noteService.Example());
         }
+
+        [HttpGet]
+        public async Task<Result<IEnumerable<NoteVM>>> GetList()
+        {
+            var notes = await noteService.GetList();
+            return Result.Ok(notes);
+        }
+
+        [HttpPost]
+        public async Task<Result> AddNote(NoteVM note)
+        {
+            await noteService.AddNote(note);
+            return Result.Ok();
+        }
     }
 }
