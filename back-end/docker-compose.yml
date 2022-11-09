@@ -1,0 +1,43 @@
+version: '3.9'
+
+services:
+  rabbitmq:
+    image: masstransit/rabbitmq
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
+    hostname: rabbitmq_host
+  
+  notedb:
+    image: postgres
+    container_name: notedb
+    restart: always
+    environment:
+      - POSTGRES_DB=notedb
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=123
+    ports:
+      - 5432:5432
+    volumes: 
+      - notedbdata:/var/lib/postgresql/data
+
+  opiniondb:
+    image: postgres
+    container_name: opiniondb
+    restart: always
+    environment:
+      - POSTGRES_DB=opiniondb
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=123
+    ports:
+      - 5433:5432
+    volumes: 
+      - opiniondbdata:/var/lib/postgresql/data
+
+volumes:
+  rabbitmqdata:
+  notedbdata:
+  opiniondbdata:

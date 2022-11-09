@@ -20,9 +20,9 @@ namespace UniversityApi.Controllers
         }
 
         [HttpGet("universities")]
-        public Result<IEnumerable<DestinationVM>> GetList()
+        public async Task<Result<IEnumerable<UniversityVM>>> GetList()
         {
-            return Result.Ok(universityService.DestSpecialityGetList());
+            return Result.Ok(await universityService.GetListAsync());
         }
     }
 }
