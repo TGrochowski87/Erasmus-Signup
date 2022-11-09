@@ -23,17 +23,25 @@ namespace NoteApi.Service
 
         public async Task<IEnumerable<NoteVM>> GetList()
         {
-            return (await _noteRepository.GetList()).Select(x => new NoteVM(x));
+            return (await _noteRepository.GetListAsync()).Select(x => new NoteVM(x));
         }
 
         public async Task AddNote(NoteVM noteVM)
         {
-            await _noteRepository.Add(new DbModels.Note
-            {
-                Id = noteVM.Id,
-                Content = noteVM.Content
-            });
-            await _publishEndpoint.Publish(new NoteCreated(noteVM.Id, noteVM.Content));
+            int Id = await _noteRepository.AddAsync(noteVM.Content);
+            await _publishEndpoint.Publish(new NoteCreated(Id, noteVM.Content));
+        }
+
+        public async Task EditNote(NoteVM noteVM)
+        {
+            await _noteRepository.EditAsync(noteVM.Id, noteVM.Content);
+            await _publishEndpoint.Publish(new NoteUpdated(noteVM.Id, noteVM.Content));
+        }
+
+        public async Task DeleteNote(int Id)
+        {
+            await _noteRepository.DeleteAsync(Id);
+            await _publishEndpoint.Publish(new NoteDeleted(Id));
         }
     }
 }

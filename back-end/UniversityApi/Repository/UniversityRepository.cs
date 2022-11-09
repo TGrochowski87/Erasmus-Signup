@@ -1,4 +1,5 @@
-﻿using UniversityApi.DbModels;
+﻿using Microsoft.EntityFrameworkCore;
+using UniversityApi.DbModels;
 
 namespace UniversityApi.Repository
 {
@@ -11,8 +12,10 @@ namespace UniversityApi.Repository
             _context = context;
         }
 
-        public IEnumerable<University> GetList()
+        public async Task<IEnumerable<University>> GetListAsync()
         {
+            //return await _context.Universities.ToListAsync();
+
             var universities = new List<University>();
 
             universities.Add(

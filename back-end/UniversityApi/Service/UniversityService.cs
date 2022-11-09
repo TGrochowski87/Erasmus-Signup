@@ -17,9 +17,10 @@ namespace UniversityApi.Service
             return new ExampleModel("Example");
         }
 
-        public IEnumerable<UniversityVM> GetList()
+        public async Task<IEnumerable<UniversityVM>> GetListAsync()
         {
-            return _universityRepository.GetList().Select(x => new UniversityVM(x));
+            var list = await _universityRepository.GetListAsync();
+            return list.Select(x => new UniversityVM(x));
         }
     }
 }

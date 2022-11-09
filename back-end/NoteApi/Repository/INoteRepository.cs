@@ -4,7 +4,9 @@ namespace NoteApi.Repository
 {
     public interface INoteRepository
     {
-        Task<IEnumerable<Note>> GetList();
-        Task Add(Note note);
+        Task<IEnumerable<Note>> GetListAsync();
+        Task<int> AddAsync(string content);
+        Task EditAsync(int Id, string content);
+        Task DeleteAsync(int Id);
     }
 }
