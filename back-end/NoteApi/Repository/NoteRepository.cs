@@ -1,4 +1,5 @@
-﻿using NoteApi.DbModels;
+﻿using Microsoft.EntityFrameworkCore;
+using NoteApi.DbModels;
 
 namespace NoteApi.Repository
 {
@@ -11,30 +12,41 @@ namespace NoteApi.Repository
             _context = context;
         }
 
-        public async Task<IEnumerable<Note>> GetList()
+        public async Task<IEnumerable<Note>> GetListAsync()
         {
-            var notes = new List<Note>();
-
-            notes.Add(
-                new Note() 
-                { 
-                    Id = 1,
-                    Content = "la fac"
-                });
-
-            notes.Add(
-                new Note()
-                {
-                    Id = 2,
-                    Content = "ok"
-                });
-
-            return notes;
+            return await _context.Notes.ToListAsync();
         }
 
-        public async Task Add(Note note)
+        public async Task<int> AddAsync(string Content)
         {
-           // await _context.AddAsync(note);
+            var note = new Note { Content = Content };
+            await _context.Notes.AddAsync(note);
+            await _context.SaveChangesAsync();
+            return note.Id;
+        }
+
+        public async Task EditAsync(int Id, string content)
+        {
+            var note = await _context.Notes.FindAsync(Id);
+            if (note == null)
+            {
+                throw new ArgumentException($"Note with id {Id} not found.");
+            }
+
+            note.Content = content;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int Id)
+        {
+            var note = await _context.Notes.FindAsync(Id);
+            if (note == null)
+            {
+                throw new ArgumentException($"Note with id {Id} not found.");
+            }
+
+            _context.Notes.Remove(note);
+            await _context.SaveChangesAsync();
         }
     }
 }

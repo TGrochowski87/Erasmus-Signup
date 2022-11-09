@@ -5,6 +5,6 @@ namespace UniversityApi.Service
     public interface IUniversityService
     {
         ExampleModel Example();
-        IEnumerable<UniversityVM> GetList();
+        Task<IEnumerable<UniversityVM>> GetListAsync();
     }
 }

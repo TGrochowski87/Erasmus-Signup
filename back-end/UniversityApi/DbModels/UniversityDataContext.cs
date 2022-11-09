@@ -13,7 +13,7 @@ namespace UniversityApi.DbModels
             modelBuilder.UseSerialColumns();
         }
 
-        public DbSet<University> Universities;
+        public DbSet<University> Universities { get; set; }
 
     }
 }
