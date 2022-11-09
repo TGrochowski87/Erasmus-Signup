@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Communication" Version="1.0.2" />
+    <PackageReference Include="Communication" Version="1.0.3" />
     <PackageReference Include="FluentResults.Extensions.FluentAssertions" Version="2.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.10">
       <PrivateAssets>all</PrivateAssets>
