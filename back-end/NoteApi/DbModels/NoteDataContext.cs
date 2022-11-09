@@ -13,7 +13,7 @@ namespace NoteApi.DbModels
             modelBuilder.UseSerialColumns();
         }
 
-        public DbSet<Note> Universities;
+        public DbSet<Note> Notes { get; set; }
 
     }
 }

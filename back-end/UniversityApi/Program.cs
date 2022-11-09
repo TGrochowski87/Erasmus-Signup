@@ -1,9 +1,8 @@
-using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 using UniversityApi.DbModels;
 using UniversityApi.Repository;
 using UniversityApi.Service;
+using Communication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,24 +11,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<universitydbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("UniversityDb")));
 
-builder.Services.AddMassTransit(x =>
-{
-    x.AddConsumers(Assembly.GetEntryAssembly());
-    x.UsingRabbitMq((context, cfg) =>
-    {
-        cfg.Host("localhost", "/", h =>
-        {
-            h.Username("guest");
-            h.Password("guest");
-        });
-
-        cfg.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter(false));
-        cfg.UseMessageRetry(retryConfigurator =>
-        {
-            retryConfigurator.Interval(3, TimeSpan.FromSeconds(5));
-        });
-    });
-});
+builder.Services.AddRabbitMqServices();
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
