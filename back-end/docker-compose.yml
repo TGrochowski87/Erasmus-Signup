@@ -11,6 +11,22 @@ services:
       - rabbitmqdata:/var/lib/rabbitmq
     hostname: rabbitmq_host
   
+  universitydb:
+    image: postgres
+    container_name: universitydb
+    restart: always
+    build:
+      context: ./UniversityApi/
+      dockerfile: db.Dockerfile
+    environment:
+      - POSTGRES_DB=universitydb
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=123
+    ports:
+      - 5432:5432
+    volumes: 
+      - universitydbdata:/var/lib/postgresql/data
+
   notedb:
     image: postgres
     container_name: notedb
@@ -20,24 +36,11 @@ services:
       - POSTGRES_USER=test
       - POSTGRES_PASSWORD=123
     ports:
-      - 5432:5432
+      - 5433:5432
     volumes: 
       - notedbdata:/var/lib/postgresql/data
 
-  opiniondb:
-    image: postgres
-    container_name: opiniondb
-    restart: always
-    environment:
-      - POSTGRES_DB=opiniondb
-      - POSTGRES_USER=test
-      - POSTGRES_PASSWORD=123
-    ports:
-      - 5433:5432
-    volumes: 
-      - opiniondbdata:/var/lib/postgresql/data
-
 volumes:
   rabbitmqdata:
+  universitydbdata:
   notedbdata:
-  opiniondbdata:
