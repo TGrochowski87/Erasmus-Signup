@@ -10,4 +10,5 @@ services:
       - ./src:/app/src
     environment:
       - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
     
