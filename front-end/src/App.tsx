@@ -9,9 +9,9 @@ import ExampleHomePage from "./pages/home/ExampleHomePage";
 
 function App() {
   return (
-    <div className="App">
+    <div className="app">
       <Router>
-        <Layout>
+        <Layout className="layout">
           <Navbar />
           <Routes>
             <Route path="/" element={<ExampleHomePage />} />
