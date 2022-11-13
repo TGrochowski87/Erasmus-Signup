@@ -1,4 +1,5 @@
 interface UserSpecialty {
+  id: number;
   name: string;
   grade: number;
 }
