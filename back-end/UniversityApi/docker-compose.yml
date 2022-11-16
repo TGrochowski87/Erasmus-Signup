@@ -1,0 +1,7 @@
+﻿version: "3"
+services:
+  university-api-prod:
+    build:
+      dockerfile: Dockerfile.prod
+    ports:
+      - "7009:7009"
