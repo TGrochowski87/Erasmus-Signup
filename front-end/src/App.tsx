@@ -1,5 +1,6 @@
 import ExamplePage from "pages/example/ExamplePage";
 import ListPageContainer from "pages/list/ListPageContainer";
+import LoginPageContainer from "pages/login/LoginPageContainer";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.scss";
 import ExampleHomePage from "./pages/home/ExampleHomePage";
@@ -11,6 +12,7 @@ function App() {
         <Routes>
           <Route path="/" element={<ExampleHomePage />} />
           <Route path="/list" element={<ListPageContainer />} />
+          <Route path="/login" element={<LoginPageContainer />} />
           <Route path="/example" element={<ExamplePage />} />
         </Routes>
       </Router>
