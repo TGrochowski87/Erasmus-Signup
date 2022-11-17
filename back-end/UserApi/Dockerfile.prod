@@ -12,5 +12,5 @@ RUN dotnet publish -c release -o /app
 FROM mcr.microsoft.com/dotnet/aspnet:6.0-focal
 WORKDIR /app
 COPY --from=build /app ./
-EXPOSE 7000 
-ENTRYPOINT ["dotnet","UniversityApi.dll"] 
+EXPOSE 7001 
+ENTRYPOINT ["dotnet","UserApi.dll"] 
