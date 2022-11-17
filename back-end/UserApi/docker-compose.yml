@@ -1,0 +1,7 @@
+﻿version: "3"
+services:
+  user-api-prod:
+    build:
+      dockerfile: Dockerfile.prod
+    ports:
+      - "7001:7001"

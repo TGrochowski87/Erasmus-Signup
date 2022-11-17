@@ -1,0 +1,7 @@
+﻿version: "3"
+services:
+  opinion-api-prod:
+    build:
+      dockerfile: Dockerfile.prod
+    ports:
+      - "7003:7003"
