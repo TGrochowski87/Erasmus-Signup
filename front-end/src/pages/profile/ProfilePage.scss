@@ -1,0 +1,104 @@
+.user-page{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .size-box {
+    width: 100%;
+    max-width: 1200px;
+
+    @media only screen and (max-width: 1600px) {
+      max-width: 900px;
+    }
+    
+    .user-profile {
+      background-color: #fafbfc;
+      outline: 3px solid rgb(68, 68, 68);
+
+      display: flex;
+      flex-direction: row;
+
+      width: 100%;
+      // Next two lines keep height in 3/5 relation to width
+      height: 0; //615px;
+      padding-bottom: 60%;
+      box-shadow: 3px 4px 4px rgba(0, 0, 0, 0.25);
+
+      .section {
+        padding-bottom: 60%;
+        width: 50%;
+      }
+
+      .user{
+        border-right: 2px solid rgb(68, 68, 68);
+
+        .top{
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          padding: 0.5rem;
+
+          img{
+            border: 1px solid rgb(204, 204, 204);
+            border-radius: 10px;
+            padding: 4px;
+            object-fit: cover;
+          }
+
+          .data {
+            margin-top: 0.5rem;
+            width: 60%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          }
+        }
+
+        .bottom {
+          padding: 0 0.5rem;
+        }
+      }
+
+      .utility {
+
+      }
+    }
+  }
+}
+
+// Second variant
+// .user-page{
+//   width: 100%;
+//   height: 100%;
+//   display: flex;
+//   flex-direction: row;
+
+//   .section {
+//     width: 50%;
+//     height: 100%;
+//   }
+
+//   .user-data-space{
+//     background-color: pink;
+//     display: flex;
+//     align-items: center;
+//     justify-content: end;
+//     padding-right: 5rem;
+
+    
+//     .user-card {
+//       box-sizing: border-box;
+      
+      // width: 100%;
+      // height: 0; //615px;
+      // padding-bottom: 60%;
+  
+//       background: linear-gradient(253.6deg, #ADD7D8 4.51%, #ADD7D8 4.51%, rgba(220, 238, 239, 0.421917) 10.83%, rgba(220, 238, 239, 0.421917) 12.74%, rgba(255, 255, 255, 0) 18.62%), linear-gradient(227.81deg, #2EAFA0 11.93%, #68B18A 43.63%, #68B18A 60.65%, #2BA365 77.86%);
+//       border: 2px solid #000000;
+//       box-shadow: 3px 6px 4px rgba(0, 0, 0, 0.25);
+//       border-radius: 27px;
+//     }
+//   }
+// }
