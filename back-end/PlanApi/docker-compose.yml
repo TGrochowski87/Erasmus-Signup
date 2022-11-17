@@ -1,7 +1,7 @@
 ﻿version: "3"
 services:
-  university-api-prod:
+  plan-api-prod:
     build:
       dockerfile: Dockerfile.prod
     ports:
-      - "7000:7000"
+      - "7002:7002"
