@@ -1,4 +1,3 @@
-import { Counter } from "components/Counter";
 import { useNavigate } from "react-router-dom";
 
 const ExampleHomePage = () => {
@@ -6,7 +5,6 @@ const ExampleHomePage = () => {
 
   return (
     <header className="App-header">
-      <Counter />
       <p>
         Edit <code>src/App.tsx</code> and save to reload.
       </p>
