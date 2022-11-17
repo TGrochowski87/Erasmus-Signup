@@ -9,7 +9,7 @@ interface State {
 }
 
 const initialState: State = {
-  value : null,
+  value: null,
   status: RequestStatus.idle,
 };
 
@@ -32,18 +32,16 @@ const loginSlice = createSlice({
     builder
       .addCase(fetchOauthUrl.pending, (state) => {
         state.status = RequestStatus.loading;
-        console.log("state pend",state);
-
+        console.log("state pend", state);
       })
       .addCase(fetchOauthUrl.fulfilled, (state, action) => {
         state.status = RequestStatus.idle;
         state.value = action.payload;
-        console.log("state ful",state,action.payload);
+        console.log("state ful", state, action.payload);
       })
       .addCase(fetchOauthUrl.rejected, (state) => {
         state.status = RequestStatus.failed;
-        console.log("state rej",state);
-
+        console.log("state rej", state);
       });
   },
 });

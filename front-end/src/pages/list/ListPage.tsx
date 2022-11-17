@@ -7,7 +7,7 @@ import {
   TeamOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, List, Menu, Rate } from "antd";
-import { Content, Footer, Header } from "antd/lib/layout/layout";
+import { Content, Header } from "antd/lib/layout/layout";
 // Components
 import University from "models/University";
 import IconText from "components/IconText";
@@ -15,7 +15,7 @@ import IconText from "components/IconText";
 import "./ListPage.scss";
 import openInNewTab from "utilities/openInNewTab";
 // tools
-import { getCookie, setCookie } from "typescript-cookie";
+import { getCookie } from "typescript-cookie";
 
 interface Props {
   universities: University[];
