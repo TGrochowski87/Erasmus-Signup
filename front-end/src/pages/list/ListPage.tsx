@@ -14,6 +14,8 @@ import IconText from "components/IconText";
 // Styles
 import "./ListPage.scss";
 import openInNewTab from "utilities/openInNewTab";
+// tools
+import { getCookie, setCookie } from "typescript-cookie";
 
 interface Props {
   universities: University[];
@@ -33,6 +35,26 @@ const ListPage = ({ universities }: Props) => {
             label: `nav ${index + 1}`,
           }))}
         />
+
+        {getCookie("oauth_token") != null &&
+        getCookie("oauth_verifier") != null ? (
+          <div>You're logged in!</div>
+        ) : (
+          <button
+            onClick={() => {
+              window.location.assign(
+                "/login?loginCallbackPath=" +
+                  encodeURIComponent(
+                    window.location.href.slice(
+                      window.location.origin.length + 1
+                    )
+                  )
+              );
+            }}
+          >
+            Log me in
+          </button>
+        )}
       </Header>
       <Layout>
         <Content
@@ -164,9 +186,6 @@ const ListPage = ({ universities }: Props) => {
           </div>
         </Content>
       </Layout>
-      <Footer style={{ textAlign: "center" }}>
-        Ant Design ©2018 Created by Ant UED
-      </Footer>
     </Layout>
   );
 };
