@@ -66,8 +66,8 @@ export default ProfilePage;
 
 // Maybe I will come back to it
 // Second variant
-{
-  /* <div className="user-page">
+
+/* <div className="user-page">
       <div className="section user-data-space">
         <div style={{ maxWidth: "800px", width: "100%" }}>
           <div className="user-card"></div>
@@ -75,4 +75,3 @@ export default ProfilePage;
       </div>
       <div className="section utility-space"></div>
     </div> */
-}
