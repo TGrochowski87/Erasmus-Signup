@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3'
 
 services:
   rabbitmq:
@@ -17,13 +17,13 @@ services:
     restart: always
     build:
       context: ./UniversityApi/
-      dockerfile: db.Dockerfile
+      dockerfile: Dockerfile.db
     environment:
       - POSTGRES_DB=universitydb
       - POSTGRES_USER=test
       - POSTGRES_PASSWORD=123
     ports:
-      - 5432:5432
+      - 5400:5432
     volumes: 
       - universitydbdata:/var/lib/postgresql/data
 
@@ -31,16 +31,70 @@ services:
     image: postgres
     container_name: notedb
     restart: always
+    build:
+      context: ./UniversityApi/
+      dockerfile: Dockerfile.db
     environment:
       - POSTGRES_DB=notedb
       - POSTGRES_USER=test
       - POSTGRES_PASSWORD=123
     ports:
-      - 5433:5432
+      - 5401:5432
     volumes: 
       - notedbdata:/var/lib/postgresql/data
+
+  opiniondb:
+    image: postgres
+    container_name: opiniondb
+    restart: always
+    build:
+      context: ./UniversityApi/
+      dockerfile: Dockerfile.db
+    environment:
+      - POSTGRES_DB=opiniondb
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=123
+    ports:
+      - 5402:5432
+    volumes: 
+      - opiniondbdata:/var/lib/postgresql/data
+
+  plandb:
+    image: postgres
+    container_name: plandb
+    restart: always
+    build:
+      context: ./UniversityApi/
+      dockerfile: Dockerfile.db
+    environment:
+      - POSTGRES_DB=plandb
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=123
+    ports:
+      - 5403:5432
+    volumes: 
+      - plandbdata:/var/lib/postgresql/data
+
+  userdb:
+    image: postgres
+    container_name: userdb
+    restart: always
+    build:
+      context: ./UniversityApi/
+      dockerfile: Dockerfile.db
+    environment:
+      - POSTGRES_DB=userdb
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=123
+    ports:
+      - 5404:5432
+    volumes: 
+      - userdbdata:/var/lib/postgresql/data
 
 volumes:
   rabbitmqdata:
   universitydbdata:
   notedbdata:
+  opiniondbdata:
+  plandbdata:
+  userdbdata:
