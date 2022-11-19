@@ -141,3 +141,16 @@ CREATE TRIGGER excel_row_insert
     BEFORE INSERT ON excel_format
     FOR EACH ROW
     EXECUTE FUNCTION handle_excel_row();
+
+CREATE TABLE pwr_speciality (
+    id                      serial PRIMARY KEY,
+    name                    varchar(200) NOT NULL,
+    pwr_faculty_short       t_pwr_fac_sh REFERENCES pwr_faculty
+);
+
+CREATE TABLE pwr_subject (
+    id                      serial PRIMARY KEY,
+    name                    varchar(200) NOT NULL,
+    speciality_id           integer REFERENCES pwr_speciality,
+    ects                    integer NOT NULL
+);
