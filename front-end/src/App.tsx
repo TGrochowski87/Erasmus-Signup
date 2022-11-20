@@ -6,7 +6,7 @@ import ProfilePageContainer from "pages/profile/ProfilePageContainer";
 import LoginPageContainer from "pages/login/LoginPageContainer";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.scss";
-import ExampleHomePage from "./pages/home/ExampleHomePage";
+import HomePage from "pages/home/HomePage";
 
 function App() {
   return (
@@ -15,7 +15,7 @@ function App() {
         <Layout className="layout">
           <Navbar />
           <Routes>
-            <Route path="/" element={<ExampleHomePage />} />
+            <Route path="/" element={<HomePage />} />
             <Route path="/list" element={<ListPageContainer />} />
             <Route path="/login" element={<LoginPageContainer />} />
             <Route path="/profile" element={<ProfilePageContainer />} />

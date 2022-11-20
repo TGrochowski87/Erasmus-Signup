@@ -1,11 +1,13 @@
+// React
+import { useEffect, useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
 // Styles
 import "./Navbar.scss";
 // Assets
 import pwrlogo from "assets/pwr.webp";
 import eulogo from "assets/erasmus.webp";
+// Components
 import NavbarLink from "./NavbarLink";
-import { useLocation } from "react-router-dom";
-import { useEffect, useMemo, useState } from "react";
 
 interface NavLinkData {
   id: number;
