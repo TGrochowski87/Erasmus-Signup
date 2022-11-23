@@ -1,5 +1,4 @@
 FROM postgres
-ENV POSTGRES_DB opinion_db
+ENV POSTGRES_DB opiniondb
 ENV POSTGRES_USER test
 ENV POSTGRES_PASSWORD 123
-COPY opinionDatabase.sql /docker-entrypoint-initdb.d/
