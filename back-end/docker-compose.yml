@@ -1,5 +1,4 @@
-version: '3'
-
+version: "3"
 services:
   rabbitmq:
     image: masstransit/rabbitmq
@@ -10,7 +9,7 @@ services:
     volumes:
       - rabbitmqdata:/var/lib/rabbitmq
     hostname: rabbitmq_host
-  
+
   universitydb:
     image: postgres
     container_name: universitydb
@@ -24,15 +23,16 @@ services:
       - POSTGRES_PASSWORD=123
     ports:
       - 5400:5432
-    volumes: 
-      - universitydbdata:/var/lib/postgresql/data
+    volumes:
+      - ./UniversityApi/data.csv:/usr/local/etc/data.csv
+      - ./UniversityApi/universityDatabase.sql:/docker-entrypoint-initdb.d/universityDatabase.sql
 
   notedb:
     image: postgres
     container_name: notedb
     restart: always
     build:
-      context: ./UniversityApi/
+      context: ./NoteApi/
       dockerfile: Dockerfile.db
     environment:
       - POSTGRES_DB=notedb
@@ -41,14 +41,14 @@ services:
     ports:
       - 5401:5432
     volumes: 
-      - notedbdata:/var/lib/postgresql/data
+      - ./NoteApi/noteDatabase.sql:/docker-entrypoint-initdb.d/noteDatabase.sql
 
   opiniondb:
     image: postgres
     container_name: opiniondb
     restart: always
     build:
-      context: ./UniversityApi/
+      context: ./OpinionApi/
       dockerfile: Dockerfile.db
     environment:
       - POSTGRES_DB=opiniondb
@@ -57,14 +57,14 @@ services:
     ports:
       - 5402:5432
     volumes: 
-      - opiniondbdata:/var/lib/postgresql/data
+      - ./OpinionApi/opinionDatabase.sql:/docker-entrypoint-initdb.d/opinionDatabase.sql
 
   plandb:
     image: postgres
     container_name: plandb
     restart: always
     build:
-      context: ./UniversityApi/
+      context: ./PlanApi/
       dockerfile: Dockerfile.db
     environment:
       - POSTGRES_DB=plandb
@@ -73,14 +73,14 @@ services:
     ports:
       - 5403:5432
     volumes: 
-      - plandbdata:/var/lib/postgresql/data
+      - ./PlanApi/planDatabase.sql:/docker-entrypoint-initdb.d/planDatabase.sql
 
   userdb:
     image: postgres
     container_name: userdb
     restart: always
     build:
-      context: ./UniversityApi/
+      context: ./UserApi/
       dockerfile: Dockerfile.db
     environment:
       - POSTGRES_DB=userdb
@@ -89,12 +89,7 @@ services:
     ports:
       - 5404:5432
     volumes: 
-      - userdbdata:/var/lib/postgresql/data
-
+      - ./UserApi/userDatabase.sql:/docker-entrypoint-initdb.d/userDatabase.sql
+  
 volumes:
   rabbitmqdata:
-  universitydbdata:
-  notedbdata:
-  opiniondbdata:
-  plandbdata:
-  userdbdata:
