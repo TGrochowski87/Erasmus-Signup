@@ -1,0 +1,7 @@
+﻿version: "3"
+services:
+  plan-api-prod:
+    build:
+      dockerfile: Dockerfile.prod
+    ports:
+      - "7002:7002"
