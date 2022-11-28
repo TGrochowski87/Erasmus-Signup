@@ -4,6 +4,6 @@ namespace UniversityApi.Repository
 {
     public interface IUniversityRepository
     {
-        IEnumerable<University> GetList();
+        IQueryable<DestSpeciality> DestSpecialityGetList();
     }
 }

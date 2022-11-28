@@ -12,14 +12,12 @@ namespace UniversityApi.Service
             _universityRepository = universityRepository;
         }
 
-        public ExampleModel Example()
-        {
-            return new ExampleModel("Example");
-        }
 
-        public IEnumerable<UniversityVM> GetList()
+
+        public IEnumerable<DestinationVM> DestSpecialityGetList()
         {
-            return _universityRepository.GetList().Select(x => new UniversityVM(x));
+            return _universityRepository.DestSpecialityGetList()
+                .Select(x=> new DestinationVM(x));
         }
     }
 }

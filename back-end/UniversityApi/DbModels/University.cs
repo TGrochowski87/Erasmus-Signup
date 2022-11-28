@@ -1,16 +1,19 @@
 ﻿namespace UniversityApi.DbModels
 {
-    public class University
+    public partial class University
     {
-        public int Id { get; set; }
-        public string? SubjectAreaName { get; set; }
-        public int SubjectAreaId { get; set; }
-        public string? UniversityName { get; set; }
+        public University()
+        {
+            DestSpecialities = new HashSet<DestSpeciality>();
+        }
+
+        public string ErasmusCode { get; set; } = null!;
+        public string Name { get; set; } = null!;
         public string? Country { get; set; }
-        public string? FlagUrl { get; set; }
-        public string? Website { get; set; }
-        public int AvailablePlaces { get; set; }
-        public decimal Rating { get; set; }
-        public bool IsObserved { get; set; }
+        public string? City { get; set; }
+        public string? Email { get; set; }
+        public string? Link { get; set; }
+
+        public virtual ICollection<DestSpeciality> DestSpecialities { get; set; }
     }
 }

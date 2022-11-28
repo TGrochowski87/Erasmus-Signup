@@ -1,0 +1,20 @@
+    #build
+    FROM node:18.12.1-buster as react-build
+
+    WORKDIR /app
+
+    COPY package.json package.json
+    COPY package-lock.json package-lock.json
+
+    RUN npm install 
+
+    COPY . .
+
+    RUN npm run build 
+
+    #production
+    FROM nginx:1.23.2-alpine
+
+    COPY --from=react-build /app/build /usr/share/nginx/html
+    
+

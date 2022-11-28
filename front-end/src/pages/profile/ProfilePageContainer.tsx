@@ -3,7 +3,7 @@ import { useState } from "react";
 import ProfilePage from "./ProfilePage";
 
 const ProfilePageContainer = () => {
-  const [userData, setUserData] = useState<User>({
+  const [userData] = useState<User>({
     firstName: "Test",
     lastName: "Testowy",
     index: "244556",

@@ -15,16 +15,10 @@ namespace UniversityApi.Controllers
             this.universityService = universityService;
         }
 
-        [HttpGet("example")]
-        public Result<ExampleModel> Example()
-        {
-            return Result.Ok(universityService.Example());
-        }
-
         [HttpGet("universities")]
-        public Result<IEnumerable<UniversityVM>> GetList()
+        public Result<IEnumerable<DestinationVM>> GetList()
         {
-            return Result.Ok(universityService.GetList());
+            return Result.Ok(universityService.DestSpecialityGetList());
         }
     }
 }

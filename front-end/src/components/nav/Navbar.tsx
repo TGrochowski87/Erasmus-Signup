@@ -1,22 +1,70 @@
-// Ant Design
-import { Button, Menu } from "antd";
-import { Header } from "antd/lib/layout/layout";
+// React
+import { useEffect, useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
 // Styles
 import "./Navbar.scss";
 // Assets
 import pwrlogo from "assets/pwr.webp";
 import eulogo from "assets/erasmus.webp";
-import { useNavigate } from "react-router-dom";
+// Components
+import NavbarLink from "./NavbarLink";
+
+interface NavLinkData {
+  id: number;
+  text: string;
+  path: string;
+}
 
 const Navbar = () => {
-  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const [activeId, setActiveId] = useState<number>();
+  const links: NavLinkData[] = useMemo<NavLinkData[]>(
+    () => [
+      {
+        id: 0,
+        text: "Home",
+        path: "/",
+      },
+      {
+        id: 1,
+        text: "Destinations",
+        path: "/list",
+      },
+      {
+        id: 2,
+        text: "Profile",
+        path: "/profile",
+      },
+    ],
+    []
+  );
+
+  useEffect(() => {
+    let matchingPaths = links.filter((l) => pathname.includes(l.path));
+    if (matchingPaths.length > 1) {
+      matchingPaths = matchingPaths.filter((p) => p.id !== 0);
+    }
+
+    if (matchingPaths.length !== 1) {
+      throw new Error("Cannot determine a single matching path.");
+    }
+
+    setActiveId(matchingPaths[0].id);
+  }, [pathname, links]);
 
   return (
-    <div className="nav">
+    <nav className="nav">
       <img src={pwrlogo} alt="pwr logo" />
-      <img src={eulogo} alt="eu logo" />
-      <div style={{ marginLeft: "auto" }}>
-        <Button
+      <img src={eulogo} alt="eu logo" style={{ marginRight: "auto" }} />
+      {links.map((link) => (
+        <NavbarLink
+          key={link.id}
+          text={link.text}
+          path={link.path}
+          active={link.id === activeId}
+        />
+      ))}
+      {/* <Button
           onClick={() => {
             navigate("/");
           }}
@@ -36,9 +84,8 @@ const Navbar = () => {
           }}
         >
           Profile
-        </Button>
-      </div>
-    </div>
+        </Button> */}
+    </nav>
   );
 };
 
