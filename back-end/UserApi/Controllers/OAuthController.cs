@@ -61,5 +61,17 @@ namespace UserApi.Controllers
             return BadRequest("Authorised service error: " + responseMessage.ReasonPhrase);
 
         }
+
+        [HttpPost("revoke_token")]
+        public IActionResult SessionLogin(string oauth_token, string oauth_token_secret)
+        {
+            HttpResponseMessage responseMessage = authorisedService.PostRevokeToken(oauth_token, oauth_token_secret);
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return Ok();
+            }
+            return BadRequest("Authorised service error: " + responseMessage.ReasonPhrase);
+
+        }
     }
 }
