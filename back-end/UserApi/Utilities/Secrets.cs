@@ -1,126 +1,99 @@
-﻿using Newtonsoft.Json;
+﻿using Json.Net;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace UserApi.Utilities
 {
     static class Secrets
     {
-        const string SecretsFilePath = @"secrets.json";
-
+        #region variables
+        private const string SecretsFilePath = @"secrets.json";
         static private string serviceUrl = "";
+        static private string oauthHostUrl = "";
+        static private string oauthApiConsumerKey = "";
+        static private string oauthApiConsumerSecret = "";
+        static private string oauthTokenMethod = "";
+        static private string oauthAuthMethod = "";
+        #endregion
+
+        #region Setters and getters
         static public string ServiceUrl
         {
             set { serviceUrl = value; }
             get
             {
-                if (serviceUrl == "")
-                {
-                    using (StreamReader file = File.OpenText(SecretsFilePath))
-                    using (JsonTextReader reader = new JsonTextReader(file))
-                    {
-                        JObject secretJson = (JObject)JToken.ReadFrom(reader);
-                        serviceUrl = secretJson["service_url"] is not null ? secretJson["service_url"]!.ToString() : "";
-
-                    }
-                }
+                if(String.IsNullOrWhiteSpace(serviceUrl)) LoadSecrets();
                 return serviceUrl;
             }
         }
 
-        static private string oauthHostUrl = "";
         static public string OAuthHostUrl
         {
             set { oauthHostUrl = value; }
             get
             {
-                if (oauthHostUrl == "")
-                {
-                    using (StreamReader file = File.OpenText(SecretsFilePath))
-                    using (JsonTextReader reader = new JsonTextReader(file))
-                    {
-                        JObject secretJson = (JObject)JToken.ReadFrom(reader);
-                        oauthHostUrl = secretJson["oauth_host"] is not null ? secretJson["oauth_host"]!.ToString() : "";
-
-                    }
-                }
+                if(String.IsNullOrWhiteSpace(oauthHostUrl)) LoadSecrets();
                 return oauthHostUrl;
             }
         }
 
-        static private string oauthApiConsumerKey = "";
         static public string OAuthApiConsumerKey {
             set { oauthApiConsumerKey = value; }
-            get 
+            get
             {
-                if(oauthApiConsumerKey == "")
-                {
-                    using (StreamReader file = File.OpenText(SecretsFilePath))
-                    using (JsonTextReader reader = new JsonTextReader(file))
-                    {
-                        JObject secretJson = (JObject)JToken.ReadFrom(reader);
-                        oauthApiConsumerKey = secretJson["oauth_consumer_key"] is not null ? secretJson["oauth_consumer_key"]!.ToString() : "";
-                    }
-                }
+                if(String.IsNullOrWhiteSpace(oauthApiConsumerKey)) LoadSecrets();
                 return oauthApiConsumerKey;
             }
         }
 
-        static private string oauthApiConsumerSecret = "";
         static public string OAuthApiConsumerSecret
         {
             set { oauthApiConsumerSecret = value; }
             get
             {
-                if (oauthApiConsumerSecret == "")
-                {
-                    using (StreamReader file = File.OpenText(SecretsFilePath))
-                    using (JsonTextReader reader = new JsonTextReader(file))
-                    {
-                        JObject secretJson = (JObject)JToken.ReadFrom(reader);
-                        oauthApiConsumerSecret = secretJson["oauth_consumer_secret"] is not null ? secretJson["oauth_consumer_secret"]!.ToString() : "";
-                    }
-                }
+                if(String.IsNullOrWhiteSpace(oauthApiConsumerSecret)) LoadSecrets();
                 return oauthApiConsumerSecret;
             }
         }
 
-        static private string oauthTokenMethod = "";
         static public string OAuthTokenMethod
         {
             set { oauthTokenMethod = value; }
             get
             {
-                if (oauthTokenMethod == "")
-                {
-                    using (StreamReader file = File.OpenText(SecretsFilePath))
-                    using (JsonTextReader reader = new JsonTextReader(file))
-                    {
-                        JObject secretJson = (JObject)JToken.ReadFrom(reader);
-                        oauthTokenMethod = secretJson["oauth_token_method"] is not null ? secretJson["oauth_token_method"]!.ToString() : "";
-                    }
-                }
+                if(String.IsNullOrWhiteSpace(oauthTokenMethod)) LoadSecrets();
                 return oauthTokenMethod;
             }
         }
 
-        static private string oauthAuthMethod = "";
         static public string OAuthAuthMethod
         {
             set { oauthAuthMethod = value; }
             get
             {
-                if (oauthAuthMethod == "")
-                {
-                    using (StreamReader file = File.OpenText(SecretsFilePath))
-                    using (JsonTextReader reader = new JsonTextReader(file))
-                    {
-                        JObject secretJson = (JObject)JToken.ReadFrom(reader);
-                        oauthAuthMethod = secretJson["oauth_auth_method"] is not null ? secretJson["oauth_auth_method"]!.ToString() : "";
-                    }
-                }
+                if(String.IsNullOrWhiteSpace(oauthAuthMethod)) LoadSecrets();
                 return oauthAuthMethod;
             }
         }
+        #endregion
+
+        #region Functons
+
+        static public void LoadSecrets()
+        {
+            using (StreamReader file = File.OpenText(SecretsFilePath))
+            using (JsonTextReader reader = new JsonTextReader(file))
+            {
+                JObject secretJson = (JObject)JToken.ReadFrom(reader);
+                serviceUrl              = secretJson["service_url"] is not null ? secretJson["service_url"]!.ToString() : "";
+                oauthHostUrl            = secretJson["oauth_host"] is not null ? secretJson["oauth_host"]!.ToString() : "";
+                oauthApiConsumerKey     = secretJson["oauth_consumer_key"] is not null ? secretJson["oauth_consumer_key"]!.ToString() : "";
+                oauthApiConsumerSecret  = secretJson["oauth_consumer_secret"] is not null ? secretJson["oauth_consumer_secret"]!.ToString() : "";
+                oauthTokenMethod        = secretJson["oauth_token_method"] is not null ? secretJson["oauth_token_method"]!.ToString() : "";
+                oauthAuthMethod         = secretJson["oauth_auth_method"] is not null ? secretJson["oauth_auth_method"]!.ToString() : "";
+            }
+        }
+        #endregion
     }
 }
 

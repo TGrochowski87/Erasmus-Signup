@@ -13,12 +13,12 @@
   <ItemGroup>
     <PackageReference Include="FluentResults.Extensions.FluentAssertions" Version="2.1.0" />
     <PackageReference Include="Json.Net" Version="1.0.33" />
+    <PackageReference Include="Microsoft.AspNet.SessionState.SessionStateModule" Version="1.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Common\" />
     <Folder Include="Repository\" />
   </ItemGroup>
 

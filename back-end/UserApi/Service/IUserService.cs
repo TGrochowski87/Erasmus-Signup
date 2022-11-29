@@ -1,10 +1,7 @@
-﻿using UserApi.Models;
-
-namespace UserApi.Service
+﻿namespace UserApi.Service
 {
     public interface IUserService 
     {
-        ExampleModel Example();
-        OAuthUrlModel OAuthUrl(string callbackUrl);
+        HttpResponseMessage GetCurrentUser(string acces_token, string acces_token_secret, IAuthorisedService authorisedService);
     }
 }
