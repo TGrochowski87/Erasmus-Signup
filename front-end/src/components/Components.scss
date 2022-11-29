@@ -9,3 +9,18 @@
   align-items: center;
   padding: 1rem;
 }
+
+.full-page-loading-container{
+  background-color: #ffffff6c;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 2;
+}

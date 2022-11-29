@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 interface Props {
   text: string;
-  path: string;
+  path?: string;
   active: boolean;
+  customOnClick?: MouseEventHandler<HTMLAnchorElement>;
 }
 
-const NavbarLink = ({ text, path, active }: Props) => {
+const NavbarLink = ({ text, path = "", active, customOnClick }: Props) => {
   const [hoveredOver, setHoveredOver] = useState<boolean>(false);
 
   const determineUnderLineWidth = (): string => {
@@ -34,7 +35,9 @@ const NavbarLink = ({ text, path, active }: Props) => {
         }
       }}
     >
-      <Link to={path}>{text}</Link>
+      <Link to={path} onClick={customOnClick ?? (() => {})}>
+        {text}
+      </Link>
       <div
         className="underline"
         style={{ width: determineUnderLineWidth() }}
