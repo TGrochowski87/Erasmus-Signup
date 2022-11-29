@@ -4,6 +4,7 @@
     {
         HttpResponseMessage GetOAuthUrl(string callbackPath);
         HttpResponseMessage GetAccesToken(string oauth_token, string oauth_verifier, string oauth_token_secret);
+        HttpResponseMessage PostRevokeToken(string oauth_token, string oauth_token_secret);
         HttpResponseMessage Call
         (
             string method,
