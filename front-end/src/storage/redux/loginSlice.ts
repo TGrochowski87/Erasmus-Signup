@@ -1,47 +1,40 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getAuthUrl } from "api/AuthUrlApi";
-import OAuthUrl from "models/OAuthUrl";
+import { getAuthUrl } from "api/oAuthUrlApi";
 import RequestStatus from "./RequestStatus";
 
 interface State {
-  value: OAuthUrl | null;
+  userLoggedIn: boolean;
   status: RequestStatus;
 }
 
 const initialState: State = {
-  value: null,
+  userLoggedIn: false,
   status: RequestStatus.idle,
 };
 
-export const fetchOauthUrl = createAsyncThunk("oauth_url", async () => {
+export const logIn = createAsyncThunk("login", async () => {
   //TODO: Add error handling
-  const response = await getAuthUrl();
-  console.log("resp", response);
-  return response;
+  getAuthUrl().then((response) => {
+    window.location.href = response;
+  });
 });
 
 const loginSlice = createSlice({
   name: "oauth_auth_url",
   initialState,
-  reducers: {
-    test: (state) => {
-      state.value = null;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchOauthUrl.pending, (state) => {
+      .addCase(logIn.pending, (state) => {
         state.status = RequestStatus.loading;
-        console.log("state pend", state);
       })
-      .addCase(fetchOauthUrl.fulfilled, (state, action) => {
+      .addCase(logIn.fulfilled, (state, action) => {
         state.status = RequestStatus.idle;
-        state.value = action.payload;
-        console.log("state ful", state, action.payload);
+        //console.log(action.payload);
+        //state.value = action.payload;
       })
-      .addCase(fetchOauthUrl.rejected, (state) => {
+      .addCase(logIn.rejected, (state) => {
         state.status = RequestStatus.failed;
-        console.log("state rej", state);
       });
   },
 });

@@ -6,8 +6,14 @@ import education from "assets/education.svg";
 import trophy from "assets/trophy.svg";
 // Components
 import ImageTextCard from "components/ImageTextCard";
+import { useAppDispatch, useAppSelector } from "storage/redux/hooks";
+import { RootState } from "storage/redux/store";
+import { logIn } from "storage/redux/loginSlice";
 
 const HomePage = () => {
+  const { userLoggedIn } = useAppSelector((state: RootState) => state.login);
+  const dispatch = useAppDispatch();
+
   return (
     <div className="home-page">
       <div className="jumbotron">
@@ -49,9 +55,18 @@ const HomePage = () => {
           </h3>
         </ImageTextCard>
       </div>
-      <div className="button-space">
-        <div className="login-button">Log in with USOS</div>
-      </div>
+      {userLoggedIn === false && (
+        <div className="button-space">
+          <div
+            className="login-button"
+            onClick={() => {
+              dispatch(logIn());
+            }}
+          >
+            Log in with USOS
+          </div>
+        </div>
+      )}
     </div>
   );
 };
