@@ -4,6 +4,12 @@ CREATE TYPE t_note_type AS ENUM (
     'Normal', 'Plan', 'Speciality'
 );
 
+CREATE TABLE note (
+    id                      serial PRIMARY KEY,
+    user_id                 integer NOT NULL,
+    note_type               t_note_type NOT NULL
+);
+
 CREATE TABLE normal_note (
     id                      serial PRIMARY KEY,
     note_id                 integer REFERENCES note(id),
@@ -24,8 +30,4 @@ CREATE TABLE speciality_note (
     speciality_id           integer NOT NULL
 );
 
-CREATE TABLE note (
-    id                      serial PRIMARY KEY,
-    user_id                 integer NOT NULL,
-    note_type               t_note_type NOT NULL
-);
+
