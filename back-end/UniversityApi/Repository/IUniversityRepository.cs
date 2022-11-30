@@ -4,6 +4,6 @@ namespace UniversityApi.Repository
 {
     public interface IUniversityRepository
     {
-        IQueryable<DestSpeciality> DestSpecialityGetList();
+        Task<IEnumerable<University>> GetListAsync();
     }
 }
