@@ -3,7 +3,12 @@ import { Footer } from "antd/lib/layout/layout";
 import Navbar from "components/nav/Navbar";
 import ListPageContainer from "pages/list/ListPageContainer";
 import ProfilePageContainer from "pages/profile/ProfilePageContainer";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import {
+  Route,
+  BrowserRouter as Router,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import "./App.scss";
 import HomePage from "pages/home/HomePage";
 
@@ -14,7 +19,8 @@ function App() {
         <Navbar />
         <Layout className="layout">
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<Navigate replace to="/home" />} />
+            <Route path="/home" element={<HomePage />} />
             <Route path="/list" element={<ListPageContainer />} />
             <Route path="/profile" element={<ProfilePageContainer />} />
           </Routes>

@@ -32,12 +32,12 @@ const Navbar = () => {
     {
       id: 0,
       text: "Home",
-      path: "/",
+      path: "home",
     },
     {
       id: 1,
       text: "Destinations",
-      path: "/list",
+      path: "list",
     },
     {
       id: 2,
@@ -55,15 +55,20 @@ const Navbar = () => {
         prevState.splice(prevState.length - 1, 1, {
           id: prevState.length - 1,
           text: "Profile",
-          path: "/profile",
+          path: "profile",
         })
       );
     }
   }, [userLoggedIn]);
 
   useEffect(() => {
+    const currentLocation = pathname.slice(1);
+    if (currentLocation === "") {
+      return;
+    }
+
     let matchingPaths = links.filter(
-      (l) => l.path && pathname.includes(l.path)
+      (l) => l.path && currentLocation.includes(l.path)
     );
     if (matchingPaths.length > 1) {
       matchingPaths = matchingPaths.filter((p) => p.id !== 0);
@@ -86,7 +91,7 @@ const Navbar = () => {
           <NavbarLink
             key={link.id}
             text={link.text}
-            path={link.path}
+            path={`/${link.path}`}
             active={link.id === activeId && link.path !== undefined}
             customOnClick={link.customOnClick}
           />

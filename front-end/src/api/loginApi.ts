@@ -1,9 +1,10 @@
 import { default as axios } from "lib/axios";
+import OAuthData from "models/OAuthData";
 
-export const getAuthUrl = async (): Promise<string> => {
+export const getAuthUrl = async (): Promise<OAuthData> => {
   return await axios
-    .get<string>(
-      "https://localhost:7077/user/oauth_url?callbackPath=" +
+    .get<OAuthData>(
+      "https://localhost:7077/oauth/oauth_url?callbackPath=" +
         encodeURIComponent(
           window.location.href.slice(window.location.origin.length + 1)
         )
