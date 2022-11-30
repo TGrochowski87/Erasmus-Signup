@@ -12,13 +12,11 @@ namespace UniversityApi.Repository
             _context = context;
         }
 
-        public IQueryable<DestSpeciality> DestSpecialityGetList()
+        public async Task<IEnumerable<University>> GetListAsync()
         {
-            var destSpecialityList = _context.DestSpecialities
-                 .Include(x => x.DestUniversityCodeNavigation)
-                 .Include(x => x.StudyArea)
-                 .Include(x => x.MinGradeHistories)
-                 .Include(x => x.SubjectLanguage);
+            //return await _context.Universities.ToListAsync();
+
+            var universities = new List<University>();
 
             return destSpecialityList;
         }
