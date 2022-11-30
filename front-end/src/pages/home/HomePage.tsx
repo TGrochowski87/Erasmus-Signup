@@ -8,7 +8,7 @@ import trophy from "assets/trophy.svg";
 import ImageTextCard from "components/ImageTextCard";
 import { useAppDispatch, useAppSelector } from "storage/redux/hooks";
 import { RootState } from "storage/redux/store";
-import { logIn } from "storage/redux/loginSlice";
+import { fetchOAuthUrl } from "storage/redux/loginSlice";
 
 const HomePage = () => {
   const { userLoggedIn } = useAppSelector((state: RootState) => state.login);
@@ -60,7 +60,7 @@ const HomePage = () => {
           <div
             className="login-button"
             onClick={() => {
-              dispatch(logIn());
+              dispatch(fetchOAuthUrl());
             }}
           >
             Log in with USOS

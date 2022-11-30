@@ -1,6 +1,6 @@
 // React
-import { MouseEventHandler, useEffect, useMemo, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { MouseEventHandler, useEffect, useState } from "react";
+import { useLocation, useSearchParams } from "react-router-dom";
 // Styles
 import "./Navbar.scss";
 // Assets
@@ -10,9 +10,10 @@ import eulogo from "assets/erasmus.webp";
 import NavbarLink from "./NavbarLink";
 import { useAppDispatch, useAppSelector } from "storage/redux/hooks";
 import { RootState } from "storage/redux/store";
-import { logIn } from "storage/redux/loginSlice";
+import { fetchOAuthUrl, logIn } from "storage/redux/loginSlice";
 import RequestStatus from "storage/redux/RequestStatus";
 import FullViewLoading from "components/FullViewLoading";
+import AccessTokenRequestDto from "api/DTOs/AccessTokenRequestDto";
 
 interface NavLinkData {
   id: number;
@@ -44,20 +45,30 @@ const Navbar = () => {
       text: "Log in",
       customOnClick: (event) => {
         event.preventDefault();
-        dispatch(logIn());
+        dispatch(fetchOAuthUrl());
       },
     },
   ]);
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    const oAuthToken = searchParams.get("oauth_token");
+    const oAuthVerifier = searchParams.get("oauth_verifier");
+
+    if (oAuthToken && oAuthVerifier) {
+      dispatch(logIn({ oAuthToken, oAuthVerifier }));
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (userLoggedIn) {
-      setLinks((prevState) =>
-        prevState.splice(prevState.length - 1, 1, {
-          id: prevState.length - 1,
-          text: "Profile",
-          path: "profile",
-        })
-      );
+      let linksTemp = [...links];
+      linksTemp.splice(linksTemp.length - 1, 1, {
+        id: linksTemp.length - 1,
+        text: "Profile",
+        path: "profile",
+      });
+      setLinks(linksTemp);
     }
   }, [userLoggedIn]);
 

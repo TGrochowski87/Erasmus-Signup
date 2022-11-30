@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using UserApi.Service;
 
 using UserApi.Models;
@@ -6,6 +7,8 @@ using UserApi.Service;
 using UserApi.Common;
 using UserApi.Utilities;
 using System.Collections.Specialized;
+using Microsoft.AspNetCore.Cors;
+using UserApi.Models.DTOs;
 
 namespace UserApi.Controllers
 {
@@ -24,7 +27,7 @@ namespace UserApi.Controllers
         }
 
         [HttpGet("oauth_url")]
-        public IActionResult RequestOAuthUrl(string callbackPath = "oob")
+        public ActionResult<OAuthUrlResponseModel> RequestOAuthUrl([FromQuery] string callbackPath = "oob")
         {
             HttpResponseMessage responseMessage = authorisedService.GetOAuthUrl(callbackPath);
             if (responseMessage.IsSuccessStatusCode)
@@ -42,10 +45,10 @@ namespace UserApi.Controllers
             return BadRequest("Authorised service error: " + responseMessage.ReasonPhrase);
         }
 
-        [HttpGet("acces_token")]
-        public IActionResult SessionLogin(string oauth_token, string oauth_verifier, string oauth_token_secret)
+        [HttpGet("access_token")]
+        public ActionResult<OAuthAccesTokenResponseModel> SessionLogin([FromQuery] string oAuthToken, [FromQuery] string oAuthVerifier, [FromQuery] string oAuthTokenSecret)
         {
-            HttpResponseMessage responseMessage = authorisedService.GetAccesToken(oauth_token, oauth_verifier, oauth_token_secret);
+            HttpResponseMessage responseMessage = authorisedService.GetAccesToken(oAuthToken, oAuthVerifier, oAuthTokenSecret);
             if (responseMessage.IsSuccessStatusCode)
             {
                 string result = responseMessage.Content.ReadAsStringAsync().Result;
