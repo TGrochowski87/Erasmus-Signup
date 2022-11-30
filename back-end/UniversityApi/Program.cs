@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using UniversityApi.DbModels;
 using UniversityApi.Repository;
 using UniversityApi.Service;
+using Communication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<universitydbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("UniversityDb")));
+
+builder.Services.AddRabbitMqServices();
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
