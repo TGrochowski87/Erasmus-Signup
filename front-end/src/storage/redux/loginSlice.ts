@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getAuthUrl } from "api/oAuthUrlApi";
+import { getAuthUrl } from "api/loginApi";
 import RequestStatus from "./RequestStatus";
 
 interface State {
@@ -15,7 +15,8 @@ const initialState: State = {
 export const logIn = createAsyncThunk("login", async () => {
   //TODO: Add error handling
   getAuthUrl().then((response) => {
-    window.location.href = response;
+    console.log(response);
+    window.location.href = response.oAuthUrl;
   });
 });
 
