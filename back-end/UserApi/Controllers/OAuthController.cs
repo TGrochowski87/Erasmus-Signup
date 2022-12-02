@@ -60,15 +60,15 @@ namespace UserApi.Controllers
                 {
                     HttpResponseMessage responseMessageUserId = userService.GetCurrentUser(oauth_token_acces, oauth_token_acces_secret, authorisedService);
 
-                    if (responseMessage.IsSuccessStatusCode)
+                    if (responseMessageUserId.IsSuccessStatusCode)
                     {
                         string userId;
-                        string resultUserId = responseMessage.Content.ReadAsStringAsync().Result;
-                        JObject querryUserId = JObject.Parse(result);
+                        string resultUserId = responseMessageUserId.Content.ReadAsStringAsync().Result;
+                        JObject jUserId = JObject.Parse(resultUserId);
 
-                        if (querry.Count > 0)
+                        if (jUserId.Count > 0)
                         {
-                            userId = querry["id"]!.ToString();
+                            userId = jUserId["id"]!.ToString();
                             userApiToken = OAuthTool.GenerateToken(userId, oauth_token_acces);
                         }
                     }
