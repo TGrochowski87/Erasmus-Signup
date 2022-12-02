@@ -1,6 +1,9 @@
 using UserApi.Service;
 
 using System.Net.Http.Headers;
+using Microsoft.OpenApi.Models;
+using Microsoft.Net.Http.Headers;
+using UserApi.Attributes;
 
 using HttpClient client = new();
 client.DefaultRequestHeaders.Accept.Clear();
@@ -23,7 +26,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins(
+                          policy.AllowAnyMethod().AllowAnyHeader().WithOrigins(
                             "http://localhost:3000",
                             "http://localhost:3001"
                           );
@@ -35,7 +38,19 @@ builder.Services.AddControllers();
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiPlayground", Version = "v1" });
+    c.AddSecurityDefinition("token", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.ApiKey,
+        In = ParameterLocation.Header,
+        Name = HeaderNames.Authorization,
+        Scheme = "Bearer"
+    });
+    // dont add global security requirement
+    // c.AddSecurityRequirement(/*...*/);
+});
 builder.Services.AddSingleton<IUserService, UserService>();
 builder.Services.AddSingleton<IAuthorisedService, AuthorisedService>();
 builder.Services.AddDistributedMemoryCache();

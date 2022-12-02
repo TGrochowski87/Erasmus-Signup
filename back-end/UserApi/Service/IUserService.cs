@@ -3,5 +3,6 @@
     public interface IUserService 
     {
         HttpResponseMessage GetCurrentUser(string acces_token, string acces_token_secret, IAuthorisedService authorisedService);
+        HttpResponseMessage GetCurrentUserId(string acces_token, string acces_token_secret, IAuthorisedService authorisedService);
     }
 }
