@@ -6,6 +6,9 @@ using UserApi.Service;
 using UserApi.Common;
 using UserApi.Utilities;
 using System.Collections.Specialized;
+using System.Security.Cryptography;
+using System.Text;
+using Newtonsoft.Json.Linq;
 
 namespace UserApi.Controllers
 {
@@ -48,15 +51,34 @@ namespace UserApi.Controllers
             HttpResponseMessage responseMessage = authorisedService.GetAccesToken(oauth_token, oauth_verifier, oauth_token_secret);
             if (responseMessage.IsSuccessStatusCode)
             {
+                string userApiToken = "";
                 string result = responseMessage.Content.ReadAsStringAsync().Result;
                 NameValueCollection querry = System.Web.HttpUtility.ParseQueryString(result);
                 string oauth_token_acces = !String.IsNullOrEmpty(querry["oauth_token"]) ? querry["oauth_token"]!.ToString() : "";
                 string oauth_token_acces_secret = !String.IsNullOrEmpty(querry["oauth_token_secret"]) ? querry["oauth_token_secret"]!.ToString() : "";
                 if (!String.IsNullOrWhiteSpace(oauth_token_acces) && !String.IsNullOrWhiteSpace(oauth_token_acces_secret))
                 {
-                    return Ok(new OAuthAccesTokenResponseModel(oauth_token_acces, oauth_token_acces_secret));
+                    HttpResponseMessage responseMessageUserId = userService.GetCurrentUser(oauth_token_acces, oauth_token_acces_secret, authorisedService);
+
+                    if (responseMessage.IsSuccessStatusCode)
+                    {
+                        string userId;
+                        string resultUserId = responseMessage.Content.ReadAsStringAsync().Result;
+                        JObject querryUserId = JObject.Parse(result);
+
+                        if (querry.Count > 0)
+                        {
+                            userId = querry["id"]!.ToString();
+                            userApiToken = OAuthTool.GenerateToken(userId, oauth_token_acces);
+                        }
+                    }
+
+                    return Ok(new OAuthAccesTokenResponseModel(oauth_token_acces, oauth_token_acces_secret, userApiToken));
                 }
                 return BadRequest("Authorised service error: crucial elements not found");
+
+
+
             }
             return BadRequest("Authorised service error: " + responseMessage.ReasonPhrase);
 

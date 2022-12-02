@@ -7,6 +7,8 @@ using UserApi.Common;
 using UserApi.Utilities;
 using System.Collections.Specialized;
 using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Authorization;
+using UserApi.Attributes;
 
 namespace UserApi.Controllers
 {
@@ -60,6 +62,13 @@ namespace UserApi.Controllers
             }
             return BadRequest("Authorised service error: " + responseMessage.ReasonPhrase);
 
+        }
+
+        [AuthorizeUser]
+        [HttpGet("test/logowania")]
+        public IActionResult Test()
+        {
+            return Ok();
         }
 
     }
