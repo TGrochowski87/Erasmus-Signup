@@ -14,11 +14,7 @@ namespace UniversityApi.Repository
 
         public async Task<IEnumerable<University>> GetListAsync()
         {
-            //return await _context.Universities.ToListAsync();
-
-            var universities = new List<University>();
-
-            return destSpecialityList;
+            return await _context.Universities.ToListAsync();
         }
     }
 }
