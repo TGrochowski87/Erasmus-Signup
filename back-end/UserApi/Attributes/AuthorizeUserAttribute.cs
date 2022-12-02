@@ -24,7 +24,7 @@ namespace UserApi.Attributes
 
                 if (!decodeToken.IsSuccess)
                 {
-                    context.Result = new EmptyResult();
+                    context.Result = new UnauthorizedResult();
                 }
                 else
                     base.OnActionExecuting(context);
