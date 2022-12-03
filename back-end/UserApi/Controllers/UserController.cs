@@ -17,12 +17,12 @@ namespace UserApi.Controllers
     public class UserController : Controller
     {
         private IUserService userService;
-        private IAuthorisedService authorisedService;
+        private IAuthorizedService authorizedService;
 
-        public UserController(IUserService userService, IAuthorisedService authorisedService)
+        public UserController(IUserService userService, IAuthorizedService authorizedService)
         {
             this.userService = userService;
-            this.authorisedService = authorisedService;
+            this.authorizedService = authorizedService;
         }
 
         [HttpGet("ping")]
@@ -32,9 +32,9 @@ namespace UserApi.Controllers
         }
 
         [HttpGet("current")]
-        public IActionResult SessionLogin(string acces_token, string acces_token_secret)
+        public IActionResult SessionLogin(string access_token, string access_token_secret)
         {
-            HttpResponseMessage responseMessage = userService.GetCurrentUser(acces_token, acces_token_secret, authorisedService);
+            HttpResponseMessage responseMessage = userService.GetCurrentUser(access_token, access_token_secret);
             if (responseMessage.IsSuccessStatusCode)
             {
                 string result = responseMessage.Content.ReadAsStringAsync().Result;
@@ -58,14 +58,14 @@ namespace UserApi.Controllers
                         querry["student_number"]!.ToString()
                     ));
                 }
-                return BadRequest("Authorised service error: crucial elements not found");
+                return BadRequest("Authorized service error: crucial elements not found");
             }
-            return BadRequest("Authorised service error: " + responseMessage.ReasonPhrase);
+            return BadRequest("Authorized service error: " + responseMessage.ReasonPhrase);
 
         }
 
         [AuthorizeUser]
-        [HttpGet("test/logowania")]
+        [HttpGet("test/loin_test")]
         public IActionResult Test()
         {
             return Ok();

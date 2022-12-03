@@ -52,7 +52,7 @@ builder.Services.AddSwaggerGen(c =>
     // c.AddSecurityRequirement(/*...*/);
 });
 builder.Services.AddSingleton<IUserService, UserService>();
-builder.Services.AddSingleton<IAuthorisedService, AuthorisedService>();
+builder.Services.AddSingleton<IAuthorizedService, AuthorizedService>();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession( options =>
 {
