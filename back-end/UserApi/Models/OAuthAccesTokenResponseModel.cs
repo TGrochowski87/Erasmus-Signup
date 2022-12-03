@@ -2,14 +2,14 @@
 {
     public class OAuthAccesTokenResponseModel
     {
-        public string AccesToken { get; set; }
-        public string AccesTokenSecret { get; set; }
+        public string AccessToken { get; set; }
+        public string AccessTokenSecret { get; set; }
         public string UserApiToken { get; set; }
 
-        public OAuthAccesTokenResponseModel(string accesToken, string accesTokenSecret, string userApiToken)
+        public OAuthAccesTokenResponseModel(string accessToken, string accessTokenSecret, string userApiToken)
         {
-            AccesToken = accesToken;
-            AccesTokenSecret = accesTokenSecret;
+            AccessToken = accessToken;
+            AccessTokenSecret = accessTokenSecret;
             UserApiToken = userApiToken;
         }
     }

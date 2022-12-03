@@ -1,12 +1,36 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
+import {
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
+// Slices
 import universitySlice from "./universitySlice";
 import loginSlice from "./loginSlice";
+
+const loginPersistConfig = {
+  key: "login",
+  storage,
+  whitelist: ["userLoggedIn"],
+};
 
 export const store = configureStore({
   reducer: {
     university: universitySlice,
-    login: loginSlice,
+    login: persistReducer(loginPersistConfig, loginSlice)!,
   },
+  devTools: process.env.NODE_ENV !== "production",
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
 
 export type AppDispatch = typeof store.dispatch;

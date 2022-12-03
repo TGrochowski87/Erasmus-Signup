@@ -7,6 +7,14 @@ class axiosFacade {
   ): Promise<AxiosResponse<any, any>> => {
     return axios.get<T>(url, config);
   };
+
+  static post = <T>(
+    url: string,
+    data?: any,
+    config?: AxiosRequestConfig<any> | undefined
+  ): Promise<AxiosResponse<any, any>> => {
+    return axios.post<T>(url, data, config);
+  };
 }
 
 export default axiosFacade;
