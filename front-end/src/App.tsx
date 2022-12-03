@@ -18,6 +18,7 @@ import { useAppSelector } from "storage/redux/hooks";
 import { RootState } from "storage/redux/store";
 import Unauthorized from "components/Unauthorized";
 import NotFound from "components/NotFound";
+import LocationEventHandler from "components/LocationEventHandler";
 
 function App() {
   const { userLoggedIn } = useAppSelector((state: RootState) => state.login);
@@ -43,6 +44,7 @@ function App() {
             Ant Design ©2018 Created by Ant UED
           </Footer>
         </Layout>
+        <LocationEventHandler />
       </Router>
     </div>
   );

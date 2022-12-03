@@ -56,7 +56,11 @@ export const logOut = createAsyncThunk("logout", async () => {
 const loginSlice = createSlice({
   name: "oauth_auth_url",
   initialState,
-  reducers: {},
+  reducers: {
+    logOutLocally(state) {
+      state.userLoggedIn = false;
+    },
+  },
   extraReducers: (builder) => {
     builder
       // fetchOAuthUrl
@@ -104,4 +108,5 @@ const loginSlice = createSlice({
   },
 });
 
+export const { logOutLocally } = loginSlice.actions;
 export default loginSlice.reducer;

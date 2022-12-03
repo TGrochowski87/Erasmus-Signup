@@ -1,9 +1,9 @@
 // React
 import { useEffect, useState } from "react";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 // Redux
 import { useAppDispatch, useAppSelector } from "storage/redux/hooks";
-import { fetchOAuthUrl, logIn, logOut } from "storage/redux/loginSlice";
+import { fetchOAuthUrl, logOut } from "storage/redux/loginSlice";
 import { RootState } from "storage/redux/store";
 import RequestStatus from "storage/redux/RequestStatus";
 // Styles
@@ -26,7 +26,6 @@ const Navbar = () => {
   const { pathname } = useLocation();
   const [activeId, setActiveId] = useState<number | null>(null);
   const [links, setLinks] = useState<NavLinkData[]>([]);
-  const [searchParams, setSearchParams] = useSearchParams();
 
   // Handles filling navbar with links
   useEffect(() => {
@@ -57,21 +56,6 @@ const Navbar = () => {
 
     setActiveId(matchingPaths[0].id);
   }, [pathname, links]);
-
-  // Handles OAuth callback
-  useEffect(() => {
-    const oAuthToken = searchParams.get("oauth_token");
-    const oAuthVerifier = searchParams.get("oauth_verifier");
-    searchParams.delete("oauth_token");
-    searchParams.delete("oauth_verifier");
-    setSearchParams(searchParams);
-
-    if (oAuthToken && oAuthVerifier) {
-      dispatch(logIn({ oAuthToken, oAuthVerifier }));
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
 
   return (
     <>
