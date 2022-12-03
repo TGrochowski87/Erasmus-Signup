@@ -10,6 +10,7 @@ using System.Collections.Specialized;
 using System.Security.Cryptography;
 using System.Text;
 using Newtonsoft.Json.Linq;
+using UserApi.Models.DTOs;
 
 namespace UserApi.Controllers
 {
@@ -47,8 +48,9 @@ namespace UserApi.Controllers
         }
 
         [HttpGet("access_token")]
-        public ActionResult<OAuthAccesTokenResponseModel> SessionLogin([FromQuery] string oAuthToken, [FromQuery] string oAuthVerifier, [FromQuery] string oAuthTokenSecret)
+        public ActionResult<OAuthAccesTokenResponseModel> SessionLogin([FromQuery] GetAccessTokenQueryParams getAccessTokenQueryParams)
         {
+            var (oAuthToken, oAuthVerifier, oAuthTokenSecret) = getAccessTokenQueryParams;
             HttpResponseMessage responseMessage = authorisedService.GetAccesToken(oAuthToken, oAuthVerifier, oAuthTokenSecret);
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -86,8 +88,9 @@ namespace UserApi.Controllers
         }
 
         [HttpPost("revoke_token")]
-        public IActionResult SessionLogin(string oauth_token, string oauth_token_secret)
+        public IActionResult SessionLogin([FromBody] RevokeTokenRequestDto revokeTokenRequestDto)
         {
+            var (oauth_token, oauth_token_secret) = revokeTokenRequestDto;
             HttpResponseMessage responseMessage = authorisedService.PostRevokeToken(oauth_token, oauth_token_secret);
             if (responseMessage.IsSuccessStatusCode)
             {
