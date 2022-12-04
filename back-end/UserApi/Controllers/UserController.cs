@@ -38,24 +38,24 @@ namespace UserApi.Controllers
             if (responseMessage.IsSuccessStatusCode)
             {
                 string result = responseMessage.Content.ReadAsStringAsync().Result;
-                JObject querry = JObject.Parse(result);
+                JObject query = JObject.Parse(result);
 
-                if (querry.Count > 0)
+                if (query.Count > 0)
                 {
                     return Ok(new User(
-                        Convert.ToInt64(querry["id"]!.ToString()),
-                        querry["first_name"]!.ToString(),
-                        querry["middle_names"]!.ToString(),
-                        querry["last_name"]!.ToString(),
-                        querry["sex"]!.ToString()[0],
-                        querry["titles"]!["before"]!.ToString(),
-                        querry["titles"]!["after"]!.ToString(),
-                        Convert.ToInt16(querry["student_status"]!.ToString()),
-                        Convert.ToInt16(querry["staff_status"]!.ToString()),
-                        querry["email"]!.ToString(),
-                        querry["photo_urls"]!["50x50"]!.ToString(),
-                        querry["photo_urls"]!["400x500"]!.ToString(),
-                        querry["student_number"]!.ToString()
+                        Convert.ToInt64(query["id"]!.ToString()),
+                        query["first_name"]!.ToString(),
+                        query["middle_names"]!.ToString(),
+                        query["last_name"]!.ToString(),
+                        query["sex"]!.ToString()[0],
+                        query["titles"]!["before"]!.ToString(),
+                        query["titles"]!["after"]!.ToString(),
+                        Convert.ToInt16(query["student_status"]!.ToString()),
+                        Convert.ToInt16(query["staff_status"]!.ToString()),
+                        query["email"]!.ToString(),
+                        query["photo_urls"]!["50x50"]!.ToString(),
+                        query["photo_urls"]!["400x500"]!.ToString(),
+                        query["student_number"]!.ToString()
                     ));
                 }
                 return BadRequest("Authorized service error: crucial elements not found");

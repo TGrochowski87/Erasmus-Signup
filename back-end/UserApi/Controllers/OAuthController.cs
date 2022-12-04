@@ -33,9 +33,9 @@ namespace UserApi.Controllers
             if (responseMessage.IsSuccessStatusCode)
             {
                 string result = responseMessage.Content.ReadAsStringAsync().Result;
-                NameValueCollection querry = System.Web.HttpUtility.ParseQueryString(result);
-                string oauth_token = !String.IsNullOrEmpty(querry["oauth_token"]) ? querry["oauth_token"]!.ToString() : "";
-                string oauth_token_secret = !String.IsNullOrEmpty(querry["oauth_token_secret"]) ? querry["oauth_token_secret"]!.ToString() : "";
+                NameValueCollection query = System.Web.HttpUtility.ParseQueryString(result);
+                string oauth_token = !String.IsNullOrEmpty(query["oauth_token"]) ? query["oauth_token"]!.ToString() : "";
+                string oauth_token_secret = !String.IsNullOrEmpty(query["oauth_token_secret"]) ? query["oauth_token_secret"]!.ToString() : "";
                 if (!String.IsNullOrWhiteSpace(oauth_token) && !String.IsNullOrWhiteSpace(oauth_token_secret))
                 {
                     return Ok(new OAuthUrlResponseModel(Secrets.OAuthHostUrl + Secrets.OAuthAuthMethod + "?oauth_token=" + oauth_token, oauth_token_secret));
@@ -53,9 +53,9 @@ namespace UserApi.Controllers
             {
                 string userApiToken = "";
                 string result = responseMessage.Content.ReadAsStringAsync().Result;
-                NameValueCollection querry = System.Web.HttpUtility.ParseQueryString(result);
-                string oauth_token_access = !String.IsNullOrEmpty(querry["oauth_token"]) ? querry["oauth_token"]!.ToString() : "";
-                string oauth_token_access_secret = !String.IsNullOrEmpty(querry["oauth_token_secret"]) ? querry["oauth_token_secret"]!.ToString() : "";
+                NameValueCollection query = System.Web.HttpUtility.ParseQueryString(result);
+                string oauth_token_access = !String.IsNullOrEmpty(query["oauth_token"]) ? query["oauth_token"]!.ToString() : "";
+                string oauth_token_access_secret = !String.IsNullOrEmpty(query["oauth_token_secret"]) ? query["oauth_token_secret"]!.ToString() : "";
                 if (!String.IsNullOrWhiteSpace(oauth_token_access) && !String.IsNullOrWhiteSpace(oauth_token_access_secret))
                 {
                     HttpResponseMessage responseMessageUserId = userService.GetCurrentUser(oauth_token_access, oauth_token_access_secret);
