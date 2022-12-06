@@ -5,7 +5,6 @@ import {
   Navigate,
 } from "react-router-dom";
 // Ant Design
-import { Layout } from "antd";
 import { Footer } from "antd/lib/layout/layout";
 // Styles
 import "./App.scss";
@@ -27,7 +26,7 @@ function App() {
     <div className="app">
       <Router>
         <Navbar />
-        <Layout className="layout">
+        <div className="layout">
           <Routes>
             <Route path="/" element={<Navigate replace to="/home" />} />
             <Route path="/home" element={<HomePage />} />
@@ -41,9 +40,9 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer style={{ textAlign: "center" }}>
-            Ant Design ©2018 Created by Ant UED
+            Szampon Inc. Erasmus Sign-up
           </Footer>
-        </Layout>
+        </div>
         <LocationEventHandler />
       </Router>
     </div>

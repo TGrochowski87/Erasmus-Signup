@@ -6,8 +6,7 @@ import {
   MessageOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
-import { Button, Layout, List, Rate } from "antd";
-import { Content } from "antd/lib/layout/layout";
+import { Button, List, Rate } from "antd";
 // Components
 import University from "models/University";
 import IconText from "components/IconText";
@@ -21,9 +20,8 @@ interface Props {
 
 const ListPage = ({ universities }: Props) => {
   return (
-    <Layout>
-      <Content
-        className="site-layout"
+    <div>
+      <div
         style={{
           marginTop: 64,
           width: "70%",
@@ -149,8 +147,8 @@ const ListPage = ({ universities }: Props) => {
             )}
           />
         </div>
-      </Content>
-    </Layout>
+      </div>
+    </div>
   );
 };
 
