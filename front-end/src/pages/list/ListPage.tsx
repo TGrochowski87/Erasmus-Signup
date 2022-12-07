@@ -9,16 +9,17 @@ import {
 import { Button, List, Rate } from "antd";
 // Components
 import University from "models/University";
-import IconText from "components/IconText";
+import InlineItems from "components/InlineItems";
 // Styles
 import "./ListPage.scss";
 import openInNewTab from "utilities/openInNewTab";
 
 interface Props {
   universities: University[];
+  handleOnClick: Function;
 }
 
-const ListPage = ({ universities }: Props) => {
+const ListPage = ({ universities, handleOnClick }: Props) => {
   return (
     <div>
       <div
@@ -49,6 +50,9 @@ const ListPage = ({ universities }: Props) => {
                 style={{
                   borderBottomColor: "rgb(184, 184, 184)",
                   paddingLeft: "0.5rem",
+                }}
+                onClick={() => {
+                  handleOnClick(item.erasmusCode, item.id);
                 }}
               >
                 <div className="university-list-item-content">
@@ -106,21 +110,20 @@ const ListPage = ({ universities }: Props) => {
                     </div>
 
                     <div className="text-icons">
-                      <IconText
-                        icon={TeamOutlined}
-                        text={item.availablePlaces}
-                        key="list-vertical-star-o"
-                      />
-                      <IconText
-                        icon={LineChartOutlined}
-                        text={item.lastYearGradeAvg}
-                        key="list-vertical-like-o"
-                      />
-                      <IconText
-                        icon={MessageOutlined}
-                        text={item.opinionsAmount}
-                        key="list-vertical-message"
-                      />
+                      <InlineItems>
+                        <TeamOutlined />
+                        {item.availablePlaces}
+                      </InlineItems>
+
+                      <InlineItems>
+                        <LineChartOutlined />
+                        {item.lastYearGradeAvg}
+                      </InlineItems>
+
+                      <InlineItems>
+                        <MessageOutlined />
+                        {item.opinionsAmount}
+                      </InlineItems>
                     </div>
                   </div>
 

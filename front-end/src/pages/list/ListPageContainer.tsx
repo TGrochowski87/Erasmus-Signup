@@ -5,8 +5,10 @@ import { useEffect } from "react";
 import { fetchUniversities } from "storage/redux/universitySlice";
 // Components
 import ListPage from "./ListPage";
+import { useNavigate } from "react-router-dom";
 
 const ListPageContainer = () => {
+  const navigate = useNavigate();
   const universities = useAppSelector(
     (state: RootState) => state.university.value
   );
@@ -20,7 +22,11 @@ const ListPageContainer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <ListPage universities={universities} />;
+  const handleOnClick = (code: string, id: number) => {
+    navigate(`/list/${code}/${id}`);
+  };
+
+  return <ListPage universities={universities} handleOnClick={handleOnClick} />;
 };
 
 export default ListPageContainer;

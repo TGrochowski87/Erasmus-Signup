@@ -2,6 +2,7 @@ interface University {
   id: number;
   subjectAreaName: string;
   subjectAreaId: number;
+  erasmusCode: string;
   universityName: string;
   country: string;
   flagUrl: string;

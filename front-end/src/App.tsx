@@ -18,6 +18,7 @@ import { RootState } from "storage/redux/store";
 import Unauthorized from "components/Unauthorized";
 import NotFound from "components/NotFound";
 import LocationEventHandler from "components/LocationEventHandler";
+import DestinationDetailsPageContainer from "pages/destination-details/DestinationDetailsPageContainer";
 
 function App() {
   const { userLoggedIn } = useAppSelector((state: RootState) => state.login);
@@ -31,6 +32,10 @@ function App() {
             <Route path="/" element={<Navigate replace to="/home" />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/list" element={<ListPageContainer />} />
+            <Route
+              path="/list/:code/:id"
+              element={<DestinationDetailsPageContainer />}
+            />
             <Route
               path="/profile"
               element={

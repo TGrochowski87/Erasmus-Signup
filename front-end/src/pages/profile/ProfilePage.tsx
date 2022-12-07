@@ -22,15 +22,17 @@ const ProfilePage = ({ user }: Props) => {
                 alt="user"
               />
               <div className="data">
-                <UnderlinedLabeledField
-                  label="First name"
-                  text={user.firstName}
-                />
-                <UnderlinedLabeledField
-                  label="Last name"
-                  text={user.lastName}
-                />
-                <UnderlinedLabeledField label="Index" text={user.index} />
+                <UnderlinedLabeledField label="First name">
+                  <h2 style={{ margin: "0" }}>{user.firstName}</h2>
+                </UnderlinedLabeledField>
+
+                <UnderlinedLabeledField label="Last name">
+                  <h2 style={{ margin: "0" }}>{user.lastName}</h2>
+                </UnderlinedLabeledField>
+
+                <UnderlinedLabeledField label="Index">
+                  <h2 style={{ margin: "0" }}>{user.index}</h2>
+                </UnderlinedLabeledField>
               </div>
             </div>
             <br />
