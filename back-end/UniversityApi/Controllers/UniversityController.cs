@@ -10,19 +10,16 @@ namespace UniversityApi.Controllers
     public class UniversityController : Controller
     {
         private readonly IUniversityService universityService;
-        private readonly IPublishEndpoint publishEndpoint;
 
-        public UniversityController(IUniversityService universityService,
-            IPublishEndpoint publishEndpoint)
+        public UniversityController(IUniversityService universityService)
         {
             this.universityService = universityService;
-            this.publishEndpoint = publishEndpoint;
         }
 
         [HttpGet("universities")]
-        public async Task<Result<IEnumerable<UniversityVM>>> GetList()
+        public Result<IEnumerable<DestinationVM>> GetList()
         {
-            return Result.Ok(await universityService.GetListAsync());
+            return Result.Ok(universityService.DestSpecialityGetList());
         }
     }
 }

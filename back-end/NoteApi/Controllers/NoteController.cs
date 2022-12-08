@@ -1,6 +1,5 @@
 ﻿using FluentResults;
 using Microsoft.AspNetCore.Mvc;
-using NoteApi.DbModels;
 using NoteApi.Models;
 using NoteApi.Service;
 
@@ -10,49 +9,77 @@ namespace NoteApi.Controllers
     [Route("note")]
     public class NoteController : Controller
     {
-        private INoteService noteService;
+        private readonly INoteService noteService;
 
         public NoteController(INoteService noteService)
         {
             this.noteService = noteService;
         }
 
-        [HttpGet("example")]
-        public Result<ExampleModel> Example()
+        [HttpGet("plan")]
+        public async Task<Result<IEnumerable<PlanNoteVM>>> GetPlan()
         {
-            return Result.Ok(noteService.Example());
+            return Result.Ok(await noteService.GetPlanNotesAsync());
+        }
+        
+        [HttpGet("plan/{userId}")]
+        public async Task<Result<IEnumerable<PlanNoteVM>>> GetPlan(int userId)
+        {
+            return Result.Ok(await noteService.GetPlanNotesAsync(userId));
+        }
+        
+        [HttpGet("speciality")]
+        public async Task<Result<IEnumerable<SpecialityNoteVM>>> GetSpeciality()
+        {
+            return Result.Ok(await noteService.GetSpecialityNotesAsync());
+        }
+        
+        [HttpGet("speciality/{userId}")]
+        public async Task<Result<IEnumerable<SpecialityNoteVM>>> GetSpeciality(int userId)
+        {
+            return Result.Ok(await noteService.GetSpecialityNotesAsync(userId));
         }
 
-        // example
-        [HttpGet]
-        public async Task<Result<IEnumerable<NoteVM>>> GetList()
+        [HttpPost("speciality")]
+        public async Task<Result<int>> CreateSpecialityNote(SpecialityNoteVM note)
         {
-            var notes = await noteService.GetList();
-            return Result.Ok(notes);
+            return Result.Ok(await noteService.AddSpecialityNoteAsync(note));
         }
 
-        // example
-        [HttpPost("add")]
-        public async Task<Result> AddNote(NoteVM note)
+        [HttpGet("highlight")]
+        public async Task<Result<IEnumerable<SpecialityHighlightNoteVM>>> GetHighlight()
         {
-            await noteService.AddNote(note);
-            return Result.Ok();
+            return Result.Ok(await noteService.GetSpecialityHighlightNotesAsync());
         }
 
-        // example
-        [HttpPost("edit")]
-        public async Task<Result> EditNote(NoteVM note)
+        [HttpGet("highlight/{userId}")]
+        public async Task<Result<IEnumerable<SpecialityHighlightNoteVM>>> GetHighlight(int userId)
         {
-            await noteService.EditNote(note);
-            return Result.Ok();
+            return Result.Ok(await noteService.GetSpecialityHighlightNotesAsync(userId));
         }
 
-        // example
-        [HttpDelete("{id}")]
-        public async Task<Result> DeleteNote(int id)
+        [HttpPost("highlight")]
+        public async Task<Result<int>> CreateSpecialityHighlightNote(SpecialityHighlightNoteVM note)
         {
-            await noteService.DeleteNote(id);
-            return Result.Ok();
+            return Result.Ok(await noteService.AddSpecialityHighlightNoteAsync(note));
+        }
+
+        [HttpGet("priority")]
+        public async Task<Result<IEnumerable<SpecialityPriorityNoteVM>>> GetPriority()
+        {
+            return Result.Ok(await noteService.GetSpecialityPriorityNotesAsync());
+        }
+
+        [HttpGet("priority/{userId}")]
+        public async Task<Result<IEnumerable<SpecialityPriorityNoteVM>>> GetPriority(int userId)
+        {
+            return Result.Ok(await noteService.GetSpecialityPriorityNotesAsync(userId));
+        }
+
+        [HttpPost("priority")]
+        public async Task<Result<int>> CreatePriorityHighlightNote(SpecialityPriorityNoteVM note)
+        {
+            return Result.Ok(await noteService.AddSpecialityPriorityNoteAsync(note));
         }
     }
 }

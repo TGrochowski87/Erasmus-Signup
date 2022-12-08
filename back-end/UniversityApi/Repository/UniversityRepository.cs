@@ -12,13 +12,24 @@ namespace UniversityApi.Repository
             _context = context;
         }
 
-        public async Task<IEnumerable<University>> GetListAsync()
+        public IQueryable<DestSpeciality> DestSpecialityGetList()
         {
-            //return await _context.Universities.ToListAsync();
-
-            var universities = new List<University>();
+            var destSpecialityList = _context.DestSpecialities
+                 .Include(x => x.DestUniversityCodeNavigation)
+                 .Include(x => x.StudyArea)
+                 .Include(x => x.MinGradeHistories)
+                 .Include(x => x.SubjectLanguage);
 
             return destSpecialityList;
+        }
+
+        public async Task UpdateInterestedStudentsCountAsync(int id, bool increment)
+        {
+            var speciality = await _context.DestSpecialities
+                .SingleAsync(speciality => speciality.Id == id);
+
+            speciality.InterestedStudents += increment ? 1 : -1;
+            await _context.SaveChangesAsync();
         }
     }
 }

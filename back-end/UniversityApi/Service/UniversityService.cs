@@ -14,10 +14,10 @@ namespace UniversityApi.Service
 
 
 
-        public async Task<IEnumerable<UniversityVM>> GetListAsync()
+        public IEnumerable<DestinationVM> DestSpecialityGetList()
         {
-            var list = await _universityRepository.GetListAsync();
-            return list.Select(x => new UniversityVM(x));
+            return _universityRepository.DestSpecialityGetList()
+                .Select(x => new DestinationVM(x));
         }
     }
 }

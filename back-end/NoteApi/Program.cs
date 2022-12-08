@@ -1,15 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using NoteApi.Service;
-using NoteApi.DbModels;
 using NoteApi.Repository;
 using Communication;
+using NoteApi.DbModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
 
-builder.Services.AddDbContext<NoteDataContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("NoteDb")));
+builder.Services.AddDbContext<notedbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("NoteDb")));
 
 builder.Services.AddRabbitMqServices();
 

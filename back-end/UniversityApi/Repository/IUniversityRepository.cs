@@ -4,6 +4,7 @@ namespace UniversityApi.Repository
 {
     public interface IUniversityRepository
     {
-        Task<IEnumerable<University>> GetListAsync();
+        IQueryable<DestSpeciality> DestSpecialityGetList();
+        Task UpdateInterestedStudentsCountAsync(int id, bool increment);
     }
 }
