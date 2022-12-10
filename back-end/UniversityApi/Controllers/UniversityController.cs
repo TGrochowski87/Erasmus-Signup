@@ -20,9 +20,15 @@ namespace UniversityApi.Controllers
         }
 
         [HttpGet("universities")]
-        public async Task<Result<IEnumerable<UniversityVM>>> GetList()
+        public async Task<DestinationResult> GetList([FromQuery] DestinationCriteria criteria)
         {
-            return Result.Ok(await universityService.GetListAsync());
+            return await universityService.GetListAsync(criteria);
+        }
+
+        [HttpGet("universities/{destId}")]
+        public async Task<UniversityGetVM> Get(short destId)
+        {
+            return await universityService.GetAsync(destId);
         }
     }
 }

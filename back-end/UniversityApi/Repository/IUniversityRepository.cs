@@ -4,6 +4,7 @@ namespace UniversityApi.Repository
 {
     public interface IUniversityRepository
     {
-        Task<IEnumerable<University>> GetListAsync();
+        Task<IEnumerable<DestSpeciality>> GetListAsync();
+        Task<University> GetAsync(short destId);
     }
 }
