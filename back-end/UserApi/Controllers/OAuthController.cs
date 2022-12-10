@@ -43,7 +43,7 @@ namespace UserApi.Controllers
         }
 
         [HttpGet("access_token")]
-        public ActionResult<string> SessionLogin(string oauthToken, string oauth_verifier, string oauthTokenSecret)
+        public ActionResult<string> SessionLogin(string oauthToken, string oauthVerifier, string oauthTokenSecret)
         {
             HttpResponseMessage responseMessage = authorizedService.GetAccessToken(oauthToken, oauth_verifier, oauthTokenSecret);
             if (responseMessage.IsSuccessStatusCode)
