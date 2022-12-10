@@ -1,4 +1,5 @@
 ﻿using UniversityApi.DbModels;
+using UniversityApi.Helpers;
 
 namespace UniversityApi.Models
 {
@@ -11,9 +12,9 @@ namespace UniversityApi.Models
         public string? SubjectAreaName { get; set; }
         public string? SubjectAreaId { get; set; }
         public string? FlagUrl { get; set; }
-        public int? InterestedStudents { get; set; }
+        public int? Places { get; set; }
         public float? Average { get; set; }
-        public int Messages { get; set; }
+        public int Opinions { get; set; }
         public decimal Rating { get; set; }
         public bool IsObserved { get; set; }
         public string? Link { get; set; }
@@ -26,13 +27,14 @@ namespace UniversityApi.Models
             Country = dbModel.DestUniversityCodeNavigation?.Country;
             SubjectAreaName = dbModel.StudyArea?.Description;
             SubjectAreaId = dbModel.StudyArea?.StudyDomain;
-            FlagUrl = null; //TODO
-            InterestedStudents = dbModel.InterestedStudents;
+            Places = 0; //TODO
             Average = dbModel.MinGradeHistories.FirstOrDefault()?.Grade;
-            Messages = 0; //TODO 
+            Opinions = 0; //TODO 
             Rating = 0; //TODO 
             IsObserved = false; //TODO 
-            Link = dbModel.DestUniversityCodeNavigation?.Link; 
+            Link = dbModel.DestUniversityCodeNavigation?.Link;
+            if (dbModel.DestUniversityCodeNavigation?.Country != null)
+                FlagUrl = CountryDictionary.Flags.GetValueOrDefault(dbModel.DestUniversityCodeNavigation.Country);
         }
     }
 }

@@ -4,7 +4,7 @@ namespace UniversityApi.Service
 {
     public interface IUniversityService
     {
-        ExampleModel Example();
-        Task<IEnumerable<UniversityVM>> GetListAsync();
+        Task<DestinationResult> GetListAsync(DestinationCriteria criteria);
+        Task<UniversityGetVM> GetAsync(short destId);
     }
 }

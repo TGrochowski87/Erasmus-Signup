@@ -41,18 +41,32 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiPlayground", Version = "v1" });
-    c.AddSecurityDefinition("token", new OpenApiSecurityScheme
+    c.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme
     {
-        Type = SecuritySchemeType.ApiKey,
-        In = ParameterLocation.Header,
         Name = HeaderNames.Authorization,
-        Scheme = "Bearer"
+        Type = SecuritySchemeType.Http,
+        In = ParameterLocation.Header,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Description = "JWT Authorization header using the Bearer scheme.",
     });
-    // dont add global security requirement
-    // c.AddSecurityRequirement(/*...*/);
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "bearerAuth"
+                }
+            },
+            new string[] {}
+        }
+     });
 });
 builder.Services.AddSingleton<IUserService, UserService>();
-builder.Services.AddSingleton<IAuthorisedService, AuthorisedService>();
+builder.Services.AddSingleton<IAuthorizedService, AuthorizedService>();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession( options =>
 {

@@ -2,6 +2,7 @@
 
 namespace UniversityApi.DbModels
 {
+
     public partial class universitydbContext : DbContext
     {
         public universitydbContext()
