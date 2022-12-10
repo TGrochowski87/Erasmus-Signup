@@ -42,19 +42,19 @@ namespace UserApi.Controllers
             return BadRequest("Authorized service error: " + responseMessage.ReasonPhrase);
         }
 
-        [HttpGet("acces_token")]
-        public ActionResult<string> SessionLogin(string oauth_token, string oauth_verifier, string oauth_token_secret)
+        [HttpGet("access_token")]
+        public ActionResult<string> SessionLogin(string oauthToken, string oauth_verifier, string oauthTokenSecret)
         {
-            HttpResponseMessage responseMessage = authorizedService.GetAccessToken(oauth_token, oauth_verifier, oauth_token_secret);
+            HttpResponseMessage responseMessage = authorizedService.GetAccessToken(oauthToken, oauth_verifier, oauthTokenSecret);
             if (responseMessage.IsSuccessStatusCode)
             {
                 string result = responseMessage.Content.ReadAsStringAsync().Result;
                 NameValueCollection query = System.Web.HttpUtility.ParseQueryString(result);
-                string oauth_token_access = !String.IsNullOrEmpty(query["oauth_token"]) ? query["oauth_token"]!.ToString() : "";
-                string oauth_token_access_secret = !String.IsNullOrEmpty(query["oauth_token_secret"]) ? query["oauth_token_secret"]!.ToString() : "";
-                if (!String.IsNullOrWhiteSpace(oauth_token_access) && !String.IsNullOrWhiteSpace(oauth_token_access_secret))
+                string oauthTokenAccess = !String.IsNullOrEmpty(query["oauth_token"]) ? query["oauth_token"]!.ToString() : "";
+                string oauthTokenAccessSecret = !String.IsNullOrEmpty(query["oauth_token_secret"]) ? query["oauth_token_secret"]!.ToString() : "";
+                if (!String.IsNullOrWhiteSpace(oauthTokenAccess) && !String.IsNullOrWhiteSpace(oauthTokenAccessSecret))
                 {
-                    HttpResponseMessage responseMessageUserId = userService.GetCurrentUser(oauth_token_access, oauth_token_access_secret);
+                    HttpResponseMessage responseMessageUserId = userService.GetCurrentUser(oauthTokenAccess, oauthTokenAccessSecret);
 
                     if (responseMessageUserId.IsSuccessStatusCode)
                     {
@@ -65,7 +65,7 @@ namespace UserApi.Controllers
                         if (jUserId.Count > 0)
                         {
                             userId = jUserId["id"]!.ToString();
-                            return Ok(OAuthTool.GenerateToken(userId, oauth_token_access, oauth_token_access_secret));
+                            return Ok(OAuthTool.GenerateToken(userId, oauthTokenAccess, oauthTokenAccessSecret));
                         }
                         return NotFound("Authorized service error: userId not found");
                     }
