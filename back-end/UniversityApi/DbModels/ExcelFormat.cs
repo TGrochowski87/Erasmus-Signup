@@ -14,7 +14,7 @@
         public string? StudyDomain { get; set; }
         public string? AreaDescription { get; set; }
         public string? SubLanguage { get; set; }
-        public DateOnly? ConclusionDate { get; set; }
-        public DateOnly? ExpirationDate { get; set; }
+        public DateTime? ConclusionDate { get; set; }
+        public DateTime? ExpirationDate { get; set; }
     }
 }

@@ -101,11 +101,12 @@ namespace UserApi.Utilities
 
         }
 
-        public static string GenerateToken(string userId, string accessToken)
+        public static string GenerateToken(string userId, string accessToken, string accesTokenSecret)
         {
             var claims = new[] {
                         new Claim("UserId", userId),
                         new Claim("OAuthAccessToken", accessToken),
+                        new Claim("OAuthAccessTokenSecret", accesTokenSecret),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Secrets.JwtKey));
@@ -120,7 +121,7 @@ namespace UserApi.Utilities
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public static DecodeToken DecodeToken(string token)
+        public static UserJWT DecodeToken(string token)
         {
             try
             {
@@ -137,13 +138,55 @@ namespace UserApi.Utilities
 
                 ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(token, validationParameters, out validatedToken);
 
-                return new DecodeToken(principal.FindFirst("UserId")?.Value ?? "", principal.FindFirst("OAuthAccessToken")?.Value ?? "", true);
+                return new UserJWT(principal.FindFirst("UserId")?.Value ?? "", principal.FindFirst("OAuthAccessToken")?.Value ?? "", principal.FindFirst("OAuthAccessTokenSecret")?.Value ?? "", true);
             }
             catch
             {
-                return new DecodeToken(false);
+                return new UserJWT(false);
             }
 
+        }
+
+        public static HttpResponseMessage CallAuthorizedService(
+            string method,
+            List<KeyValuePair<string, string>> urlParams,
+            bool useOAuth = false,
+            string oauth_token_secret = ""
+        )
+        {
+            string url = Secrets.OAuthHostUrl + method;
+            string nonce = useOAuth ? OAuthTool.GenerateNonce() : String.Empty;
+            string timestamp = useOAuth ? OAuthTool.GenerateTimeStamp() : String.Empty;
+            if (useOAuth)
+            {
+                urlParams.Add(new KeyValuePair<string, string>("oauth_consumer_key", Secrets.OAuthApiConsumerKey));
+                urlParams.Add(new KeyValuePair<string, string>("oauth_nonce", nonce));
+                urlParams.Add(new KeyValuePair<string, string>("oauth_signature_method", "HMAC-SHA1"));
+                urlParams.Add(new KeyValuePair<string, string>("oauth_timestamp", timestamp));
+                urlParams.Add(new KeyValuePair<string, string>("oauth_version", "1.0"));
+            }
+            string paramsString = String.Empty;
+            if (urlParams.Any())
+            {
+                urlParams.Sort((x, y) => (String.Compare(x.Key, y.Key)));
+                paramsString += OAuthTool.UrlEncode(urlParams[0].Key) + "=" + OAuthTool.UrlEncode(urlParams[0].Value);
+                for (int i = 1; i < urlParams.Count; i++)
+                {
+                    paramsString += "&" + OAuthTool.UrlEncode(urlParams[i].Key) + "=" + OAuthTool.UrlEncode(urlParams[i].Value);
+                }
+            }
+
+            if (useOAuth)
+            {
+                string oauth_signature = OAuthTool.GenerateSignature("GET", url, paramsString, oauth_token_secret);
+                paramsString += "&oauth_signature=" + HttpUtility.UrlEncode(oauth_signature);
+            }
+
+            var client = new HttpClient
+            {
+                Timeout = new TimeSpan(0, 2, 0)
+            };
+            return client.GetAsync(url + "?" + paramsString).Result;
         }
     }
 }

@@ -14,10 +14,25 @@ namespace UniversityApi.Service
 
 
 
-        public async Task<IEnumerable<UniversityVM>> GetListAsync()
+        public async Task<DestinationResult> GetListAsync(DestinationCriteria criteria)
         {
+            var page = criteria.Page ?? 1;
+            var pageSize = criteria.PageSize ?? 10;
+            var totalRows = 0;
+
             var list = await _universityRepository.GetListAsync();
-            return list.Select(x => new UniversityVM(x));
+
+            totalRows = list.Count();
+            var filterList = list.Skip((page - 1) * pageSize).Take(pageSize);
+
+            return new DestinationResult(filterList.Select(x => new DestinationVM(x)), totalRows);
+        }
+
+        public async Task<UniversityGetVM> GetAsync(short destId)
+        {
+            var university = await _universityRepository.GetAsync(destId);
+
+            return new UniversityGetVM(university, destId);
         }
     }
 }
