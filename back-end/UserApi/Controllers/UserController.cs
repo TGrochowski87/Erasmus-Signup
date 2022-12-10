@@ -1,23 +1,18 @@
-﻿using FluentResults;
-using Microsoft.AspNetCore.Mvc;
-
+﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using UserApi.Models;
 using UserApi.Service;
-using UserApi.Common;
-using UserApi.Utilities;
-using System.Collections.Specialized;
-using Newtonsoft.Json.Linq;
-using Microsoft.AspNetCore.Authorization;
 using UserApi.Attributes;
 
 namespace UserApi.Controllers
 {
     [ApiController]
     [Route("user")]
-    public class UserController : Controller
+    public class UserController : Controller, IUserApiController
     {
         private IUserService userService;
         private IAuthorizedService authorizedService;
+        public UserJWT? UserToken { get; set; }
 
         public UserController(IUserService userService, IAuthorizedService authorizedService)
         {
@@ -31,10 +26,15 @@ namespace UserApi.Controllers
             return Ok("pong");
         }
 
+        [AuthorizeUser]
         [HttpGet("current")]
-        public IActionResult SessionLogin(string access_token, string access_token_secret)
+        public ActionResult<User> GetCurrentUser()
         {
-            HttpResponseMessage responseMessage = userService.GetCurrentUser(access_token, access_token_secret);
+            if(UserToken == null)
+            {
+                return Unauthorized();
+            }
+            HttpResponseMessage responseMessage = userService.GetCurrentUser(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
             if (responseMessage.IsSuccessStatusCode)
             {
                 string result = responseMessage.Content.ReadAsStringAsync().Result;
@@ -61,13 +61,16 @@ namespace UserApi.Controllers
                 return BadRequest("Authorized service error: crucial elements not found");
             }
             return BadRequest("Authorized service error: " + responseMessage.ReasonPhrase);
-
         }
 
         [AuthorizeUser]
-        [HttpGet("test/loin_test")]
-        public IActionResult Test()
+        [HttpGet("test/authorize_test")]
+        public IActionResult AuthorizeTest()
         {
+            if (UserToken == null)
+            {
+                return Unauthorized();
+            }
             return Ok();
         }
 
