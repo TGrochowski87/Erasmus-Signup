@@ -1,5 +1,4 @@
 import { default as axios } from "lib/axios";
-import AccessTokenData from "models/AccessTokenData";
 import OAuthData from "models/OAuthData";
 import GetAccessTokenQueryParams from "./DTOs/GetAccessTokenQueryParams";
 import RevokeTokenRequestDto from "./DTOs/RevokeTokenRequestDto";
@@ -19,9 +18,9 @@ export const getOAuthUrl = async (): Promise<OAuthData> => {
 
 export const getAccessToken = async (
   queryParams: GetAccessTokenQueryParams
-): Promise<AccessTokenData> => {
+): Promise<string> => {
   return await axios
-    .get<AccessTokenData>(`${userApiBaseUrl}/oauth/access_token`, {
+    .get<string>(`${userApiBaseUrl}/oauth/access_token`, {
       params: queryParams,
     })
     .then((response) => response.data)
@@ -29,5 +28,9 @@ export const getAccessToken = async (
 };
 
 export const revokeAccessToken = async (requestDto: RevokeTokenRequestDto) => {
-  return await axios.post(`${userApiBaseUrl}/oauth/revoke_token`, requestDto);
+  return await axios.post(`${userApiBaseUrl}/oauth/revoke_token`, requestDto, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("access-token")}`,
+    },
+  });
 };

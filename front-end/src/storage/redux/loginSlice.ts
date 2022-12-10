@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getAccessToken, getOAuthUrl, revokeAccessToken } from "api/userApi";
-import AccessTokenData from "models/AccessTokenData";
 import OAuthData from "models/OAuthData";
 import RequestStatus from "./RequestStatus";
 
@@ -25,7 +24,7 @@ export const fetchOAuthUrl = createAsyncThunk<OAuthData>(
 
 //TODO: Handle token expiration
 export const logIn = createAsyncThunk<
-  AccessTokenData,
+  string,
   { oAuthToken: string; oAuthVerifier: string }
 >("login", async ({ oAuthToken, oAuthVerifier }) => {
   const oAuthTokenSecret = localStorage.getItem("token-secret");
@@ -82,11 +81,7 @@ const loginSlice = createSlice({
       .addCase(logIn.fulfilled, (state, action) => {
         state.status = RequestStatus.idle;
         localStorage.removeItem("token-secret");
-        localStorage.setItem("access-token", action.payload.accessToken);
-        localStorage.setItem(
-          "access-token-secret",
-          action.payload.accessTokenSecret
-        );
+        localStorage.setItem("access-token", action.payload);
         state.userLoggedIn = true;
       })
       .addCase(logIn.rejected, (state) => {

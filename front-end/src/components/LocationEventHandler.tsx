@@ -28,7 +28,7 @@ const LocationEventHandler = () => {
 
   // Handles monitoring JWT expiry
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = localStorage.getItem("access-token");
     if (accessToken === null) {
       if (userLoggedIn) {
         dispatch(logOutLocally());
@@ -37,7 +37,7 @@ const LocationEventHandler = () => {
     }
 
     const tokenPayload = decodeJwt(accessToken);
-    if (tokenPayload.exp * 1000 > Date.now()) {
+    if (Date.now() > tokenPayload.exp * 1000) {
       dispatch(logOut());
     }
 
