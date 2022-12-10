@@ -101,11 +101,12 @@ namespace UserApi.Utilities
 
         }
 
-        public static string GenerateToken(string userId, string accessToken)
+        public static string GenerateToken(string userId, string accessToken, string accesTokenSecret)
         {
             var claims = new[] {
                         new Claim("UserId", userId),
                         new Claim("OAuthAccessToken", accessToken),
+                        new Claim("OAuthAccessTokenSecret", accesTokenSecret),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Secrets.JwtKey));
@@ -120,7 +121,7 @@ namespace UserApi.Utilities
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public static DecodeToken DecodeToken(string token)
+        public static UserJWT DecodeToken(string token)
         {
             try
             {
@@ -137,11 +138,11 @@ namespace UserApi.Utilities
 
                 ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(token, validationParameters, out validatedToken);
 
-                return new DecodeToken(principal.FindFirst("UserId")?.Value ?? "", principal.FindFirst("OAuthAccessToken")?.Value ?? "", true);
+                return new UserJWT(principal.FindFirst("UserId")?.Value ?? "", principal.FindFirst("OAuthAccessToken")?.Value ?? "", principal.FindFirst("OAuthAccessTokenSecret")?.Value ?? "", true);
             }
             catch
             {
-                return new DecodeToken(false);
+                return new UserJWT(false);
             }
 
         }

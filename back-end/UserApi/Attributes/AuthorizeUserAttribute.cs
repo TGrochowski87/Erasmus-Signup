@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using UserApi.Controllers;
 using UserApi.Utilities;
 
 namespace UserApi.Attributes
@@ -20,14 +21,17 @@ namespace UserApi.Attributes
                 .Substring("Bearer ".Length)
                 .Trim();
 
-                var decodeToken = OAuthTool.DecodeToken(token);
+                var userToken = OAuthTool.DecodeToken(token);
 
-                if (!decodeToken.IsSuccess)
+                if (!userToken.IsSuccess)
                 {
                     context.Result = new UnauthorizedResult();
                 }
                 else
+                {
+                    ((IUserApiController)context.Controller).UserToken = userToken;
                     base.OnActionExecuting(context);
+                }
             }
 
         }

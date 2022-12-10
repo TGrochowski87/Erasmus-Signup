@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-using System.Web;
-using UserApi.Utilities;
+﻿using UserApi.Utilities;
 
 namespace UserApi.Service
 {
@@ -15,7 +13,13 @@ namespace UserApi.Service
                 callbackPath = Secrets.ServiceUrl + callbackPath;
             }
             urlParams.Add(new KeyValuePair<string, string>("oauth_callback", callbackPath));
-            urlParams.Add(new KeyValuePair<string, string>("scopes", "studies|staff_perspective|offline_access|other_emails|email"));
+            urlParams.Add(new KeyValuePair<string, string>(
+                "scopes", 
+                "studies" +
+                "|staff_perspective" +
+                //"|offline_access" +
+                "|other_emails" +
+                "|email"));
             return OAuthTool.CallAuthorizedService(Secrets.OAuthTokenMethod, urlParams, true);
         }
 
