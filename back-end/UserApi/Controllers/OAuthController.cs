@@ -45,7 +45,7 @@ namespace UserApi.Controllers
         [HttpGet("access_token")]
         public ActionResult<string> SessionLogin(string oauthToken, string oauthVerifier, string oauthTokenSecret)
         {
-            HttpResponseMessage responseMessage = authorizedService.GetAccessToken(oauthToken, oauth_verifier, oauthTokenSecret);
+            HttpResponseMessage responseMessage = authorizedService.GetAccessToken(oauthToken, oauthVerifier, oauthTokenSecret);
             if (responseMessage.IsSuccessStatusCode)
             {
                 string result = responseMessage.Content.ReadAsStringAsync().Result;
