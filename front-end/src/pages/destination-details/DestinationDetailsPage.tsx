@@ -185,7 +185,7 @@ const DestinationDetailsPage = ({
         <div className="grid">
           <BlockLabeledTextField label="Vacancy" text="4" />
           <BlockLabeledTextField label="Rating" text="4,3" />
-          <BlockLabeledTextField label="Last year's min. grade" text="3,94" />
+          <BlockLabeledTextField label="Previous min. grade" text="3,94" />
           <BlockLabeledTextField label="Currently interested" text="7" />
         </div>
         <div style={{ position: "absolute", top: "20px", right: "50px" }}>

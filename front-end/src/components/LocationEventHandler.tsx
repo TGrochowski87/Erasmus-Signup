@@ -39,6 +39,7 @@ const LocationEventHandler = () => {
     const tokenPayload = decodeJwt(accessToken);
     if (Date.now() > tokenPayload.exp * 1000) {
       dispatch(logOut());
+      dispatch(logOutLocally());
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -41,22 +41,17 @@ export const logIn = createAsyncThunk<
 });
 
 export const logOut = createAsyncThunk("logout", async () => {
-  const accessToken = localStorage.getItem("access-token")!;
-  const accessTokenSecret = localStorage.getItem("access-token-secret")!;
-
-  const response = await revokeAccessToken({
-    oAuthToken: accessToken,
-    oAuthTokenSecret: accessTokenSecret,
-  });
+  const response = await revokeAccessToken();
 
   return response;
 });
 
 const loginSlice = createSlice({
-  name: "oauth_auth_url",
+  name: "user",
   initialState,
   reducers: {
     logOutLocally(state) {
+      localStorage.removeItem("access-token");
       state.userLoggedIn = false;
     },
   },
@@ -93,9 +88,6 @@ const loginSlice = createSlice({
       })
       .addCase(logOut.fulfilled, (state, action) => {
         state.status = RequestStatus.idle;
-        localStorage.removeItem("access-token");
-        localStorage.removeItem("access-token-secret");
-        state.userLoggedIn = false;
       })
       .addCase(logOut.rejected, (state) => {
         state.status = RequestStatus.failed;
