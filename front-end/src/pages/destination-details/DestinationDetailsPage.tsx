@@ -9,7 +9,6 @@ import {
   HeartOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import VirtualList from "rc-virtual-list";
 // Assets
 import call from "assets/call.svg";
 import email from "assets/email.svg";
@@ -21,8 +20,8 @@ import "./DestinationDetailsPage.scss";
 import InlineItems from "components/InlineItems";
 import TextArea from "antd/lib/input/TextArea";
 import Opinion from "models/Opinion";
-import { UIEventHandler } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import BlockLabeledTextField from "components/BlockLabeledTextField";
 
 interface Props {
   opinionInput: string;
@@ -30,11 +29,6 @@ interface Props {
   ratingInput: number;
   setRatingInput: React.Dispatch<React.SetStateAction<number>>;
   opinions: Opinion[];
-  setOpinions: React.Dispatch<React.SetStateAction<Opinion[]>>;
-  loadingOpinions: boolean;
-  setOpinionLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  onScroll: (e: MouseEvent) => any; //UIEventHandler<HTMLElement>;
-  appendData: () => any;
 }
 
 // TODO: Remove from here
@@ -125,11 +119,6 @@ const DestinationDetailsPage = ({
   ratingInput,
   setRatingInput,
   opinions,
-  setOpinions,
-  loadingOpinions,
-  setOpinionLoading,
-  onScroll,
-  appendData,
 }: Props) => {
   //const { code, id } = useParams(); - will be used for requesting data
 
@@ -137,35 +126,23 @@ const DestinationDetailsPage = ({
     <div className="details-page">
       <div className="all-data">
         <div className="block university-data">
-          <InlineItems style={{ gap: "1rem" }}>
-            <img
-              style={{ width: "70px" }}
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Flag_of_France_%281794%E2%80%931815%2C_1830%E2%80%931974%2C_2020%E2%80%93present%29.svg/240px-Flag_of_France_%281794%E2%80%931815%2C_1830%E2%80%931974%2C_2020%E2%80%93present%29.svg.png"
-              alt="country flag"
-            />
-            <h1>Université Lumière (Lyon II)</h1>
-          </InlineItems>
+          <div className="university-name">
+            <InlineItems>
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Flag_of_France_%281794%E2%80%931815%2C_1830%E2%80%931974%2C_2020%E2%80%93present%29.svg/240px-Flag_of_France_%281794%E2%80%931815%2C_1830%E2%80%931974%2C_2020%E2%80%93present%29.svg.png"
+                alt="country flag"
+              />
+              <h1>Université Lumière (Lyon II)</h1>
+            </InlineItems>
+          </div>
 
           <div className="details">
-            <InlineItems>
-              <img src={Tag} alt="globe" />
-              <h2>ErAsmUS-CODE</h2>
-            </InlineItems>
-
-            <InlineItems>
-              <img src={location} alt="globe" />
-              <h2>France, Lyon</h2>
-            </InlineItems>
-
-            <InlineItems>
-              <img src={email} alt="globe" />
-              <h2>lyon.france@mail.com</h2>
-            </InlineItems>
-
-            <InlineItems>
-              <img src={call} alt="globe" />
-              <h2>123123123</h2>
-            </InlineItems>
+            <BlockLabeledTextField label="Erasmus code" text="ErAsmUS-CODE" />
+            <BlockLabeledTextField label="Location" text="France, Lyon" />
+            <BlockLabeledTextField
+              label="Contact"
+              text="lyon.france@mail.com"
+            />
           </div>
         </div>
 
@@ -205,10 +182,12 @@ const DestinationDetailsPage = ({
 
       <div className="block specialty-data" style={{ position: "relative" }}>
         <h1>History and archaeology | 222</h1>
-        <h2>Vacancy: 4</h2>
-        <h2>Last year's required grade: 3,94</h2>
-        <h2>Rating: 4,3</h2>
-        <h2>Currently interested students: 7</h2>
+        <div className="grid">
+          <BlockLabeledTextField label="Vacancy" text="4" />
+          <BlockLabeledTextField label="Rating" text="4,3" />
+          <BlockLabeledTextField label="Last year's min. grade" text="3,94" />
+          <BlockLabeledTextField label="Currently interested" text="7" />
+        </div>
         <div style={{ position: "absolute", top: "20px", right: "50px" }}>
           <ContainerOutlined
             style={{ marginRight: "2rem", fontSize: "1.5rem" }}
@@ -258,57 +237,25 @@ const DestinationDetailsPage = ({
               padding: "0 16px",
             }}
           >
-            <InfiniteScroll
-              dataLength={opinions.length}
-              next={appendData}
-              onScroll={onScroll}
-              hasMore={opinions.length < 50}
-              loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
-              endMessage={<Divider plain>We are all out of opinions.</Divider>}
-              scrollableTarget="scrollableDiv"
-            >
-              <List
-                dataSource={opinions}
-                renderItem={(item) => (
-                  <List.Item style={{ position: "relative" }} key={item.id}>
-                    <List.Item.Meta
-                      avatar={<Avatar size={64} icon={<UserOutlined />} />}
-                      title={<h2>{item.name}</h2>}
-                    />
-                    <Rate
-                      className="rate"
-                      allowHalf
-                      value={item.rating}
-                      disabled
-                    />
-                    {item.text}
-                  </List.Item>
-                )}
-              />
-            </InfiniteScroll>
-          </div>
-          {/* <List>
-            <VirtualList
-              data={opinions}
-              itemHeight={47}
-              itemKey="id"
-              onScroll={onScroll}
-              height={600}
-            >
-              {(item: Opinion) => (
-                <List.Item
-                  key={item.id}
-                  extra={<Rate allowHalf value={item.rating} disabled />}
-                >
+            <List
+              dataSource={opinions}
+              renderItem={(item) => (
+                <List.Item style={{ position: "relative" }} key={item.id}>
                   <List.Item.Meta
                     avatar={<Avatar size={64} icon={<UserOutlined />} />}
-                    title={item.name}
+                    title={<h2>{item.name}</h2>}
+                  />
+                  <Rate
+                    className="rate"
+                    allowHalf
+                    value={item.rating}
+                    disabled
                   />
                   {item.text}
                 </List.Item>
               )}
-            </VirtualList>
-          </List> */}
+            />
+          </div>
         </div>
       </div>
     </div>

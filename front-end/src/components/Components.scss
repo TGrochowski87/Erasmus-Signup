@@ -35,3 +35,38 @@
     margin: 0;
   }
 }
+
+.block-labeled-text-field {
+  height: fit-content;
+  background-color: #cccccc;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  border-radius: 10px;
+  overflow: hidden;
+
+  .label {
+    background-color: #858585; //#b4b4b4
+    padding: 8px 20px;
+    width: fit-content;
+    min-width: 30%;
+    
+    h2{ 
+      color: #eeeeee;
+    }
+  }
+
+  .text {
+    padding: 8px 20px;
+
+    h2{ 
+      color: #707070;
+    }
+  }
+
+  h2{
+    margin: 0;
+    font-weight: 700;
+  }
+}

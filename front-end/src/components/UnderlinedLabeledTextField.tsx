@@ -1,15 +1,13 @@
-import { Children } from "react";
-
 interface Props {
   label?: string;
-  children: React.ReactNode;
+  text: string;
 }
 
-const UnderlinedLabeledField = ({ label = "", children }: Props) => {
+const UnderlinedLabeledTextField = ({ label = "", text }: Props) => {
   return (
     <div style={{ width: "80%" }}>
       <div style={{ borderBottom: "1px solid black" }}>
-        {Children.only(children)}
+        <h2 style={{ margin: "0" }}>{text}</h2>
       </div>
       <h5
         style={{
@@ -25,4 +23,4 @@ const UnderlinedLabeledField = ({ label = "", children }: Props) => {
   );
 };
 
-export default UnderlinedLabeledField;
+export default UnderlinedLabeledTextField;
