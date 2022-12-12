@@ -21,19 +21,32 @@ namespace NoteApi.Controllers
         {
             return Result.Ok(await noteService.GetPlanNotesAsync());
         }
-        
+
         [HttpGet("plan/{userId}")]
         public async Task<Result<IEnumerable<PlanNoteVM>>> GetPlan(int userId)
         {
             return Result.Ok(await noteService.GetPlanNotesAsync(userId));
         }
-        
+
+        [HttpPost("plan")]
+        public async Task<Result<int>> CreatePlanNote(PlanNoteVM note)
+        {
+            return Result.Ok(await noteService.AddPlanNoteAsync(note));
+        }
+
+        [HttpDelete("plan")]
+        public async Task<Result<int>> DeletePlanNote(int noteId)
+        {
+            await noteService.DeletePlanNoteAsync(noteId);
+            return Result.Ok();
+        }
+
         [HttpGet("speciality")]
         public async Task<Result<IEnumerable<SpecialityNoteVM>>> GetSpeciality()
         {
             return Result.Ok(await noteService.GetSpecialityNotesAsync());
         }
-        
+
         [HttpGet("speciality/{userId}")]
         public async Task<Result<IEnumerable<SpecialityNoteVM>>> GetSpeciality(int userId)
         {
@@ -44,6 +57,13 @@ namespace NoteApi.Controllers
         public async Task<Result<int>> CreateSpecialityNote(SpecialityNoteVM note)
         {
             return Result.Ok(await noteService.AddSpecialityNoteAsync(note));
+        }
+
+        [HttpDelete("speciality")]
+        public async Task<Result<int>> DeleteSpecialityNote(int noteId)
+        {
+            await noteService.DeleteSpecialityNoteAsync(noteId);
+            return Result.Ok();
         }
 
         [HttpGet("highlight")]
@@ -64,6 +84,14 @@ namespace NoteApi.Controllers
             return Result.Ok(await noteService.AddSpecialityHighlightNoteAsync(note));
         }
 
+        [HttpDelete("highlight")]
+        public async Task<Result> DeletePriorityHighlightNote(
+            int noteId, bool positive, int specialityId)
+        {
+            await noteService.DeleteSpecialityHighlightNoteAsync(noteId, positive, specialityId);
+            return Result.Ok();
+        }
+
         [HttpGet("priority")]
         public async Task<Result<IEnumerable<SpecialityPriorityNoteVM>>> GetPriority()
         {
@@ -80,6 +108,13 @@ namespace NoteApi.Controllers
         public async Task<Result<int>> CreatePriorityHighlightNote(SpecialityPriorityNoteVM note)
         {
             return Result.Ok(await noteService.AddSpecialityPriorityNoteAsync(note));
+        }
+
+        [HttpDelete("priority")]
+        public async Task<Result> DeletePriorityHighlightNote(int noteId, int specialityId)
+        {
+            await noteService.DeleteSpecialityPriorityNoteAsync(noteId, specialityId);
+            return Result.Ok();
         }
     }
 }

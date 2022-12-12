@@ -13,9 +13,15 @@ namespace NoteApi.Repository
         Task<IEnumerable<SpecialityHighlightNote>> GetSpecialityHighlightNotesAsync(int userId);
         Task<IEnumerable<SpecialityPriorityNote>> GetSpecialityPriorityNotesAsync();
         Task<IEnumerable<SpecialityPriorityNote>> GetSpecialityPriorityNotesAsync(int userId);
-        Task<int> AddPlanNoteAsync(PlanNoteVM note);
-        Task<int> AddSpecialityNoteAsync(SpecialityNoteVM note);
-        Task<int> AddSpecialityHighlightNoteAsync(SpecialityHighlightNoteVM note);
-        Task<int> AddSpecialityPriorityNoteAsync(SpecialityPriorityNoteVM note);
+        Task<int> AddPlanNoteAsync(PlanNoteVM noteVm);
+        Task<int> AddSpecialityNoteAsync(SpecialityNoteVM noteVm);
+        Task<(int id, bool decrement, bool increment)> AddSpecialityHighlightNoteAsync(
+            SpecialityHighlightNoteVM noteVm);
+        Task<(int id, int decrement, int increment)> AddSpecialityPriorityNoteAsync(
+            SpecialityPriorityNoteVM noteVm);
+        Task DeletePlanNoteAsync(int noteId);
+        Task DeleteSpecialityNoteAsync(int noteId);
+        Task<bool> DeleteSpecialityHighlightNoteAsync(int noteId);
+        Task<bool> DeleteSpecialityPriorityNoteAsync(int noteId);
     }
 }

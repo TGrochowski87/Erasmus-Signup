@@ -10,10 +10,12 @@ namespace UniversityApi.Controllers
     public class UniversityController : Controller
     {
         private readonly IUniversityService universityService;
+        private readonly IPublishEndpoint publishEndpoint;
 
         public UniversityController(IUniversityService universityService)
         {
             this.universityService = universityService;
+            this.publishEndpoint = publishEndpoint;
         }
 
         [HttpGet("universities")]

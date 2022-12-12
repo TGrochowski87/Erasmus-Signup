@@ -14,6 +14,7 @@ namespace UserApi.Utilities
         static private string oauthApiConsumerSecret = "";
         static private string oauthTokenMethod = "";
         static private string oauthAuthMethod = "";
+        static private string jwtKey = "";
         #endregion
 
         #region Setters and getters
@@ -75,6 +76,17 @@ namespace UserApi.Utilities
                 return oauthAuthMethod;
             }
         }
+
+        static public string JwtKey
+        {
+            set { jwtKey = value; }
+            get
+            {
+                if (String.IsNullOrWhiteSpace(jwtKey)) LoadSecrets();
+                return jwtKey;
+            }
+        }
+
         #endregion
 
         #region Functons
@@ -91,6 +103,7 @@ namespace UserApi.Utilities
                 oauthApiConsumerSecret  = secretJson["oauth_consumer_secret"] is not null ? secretJson["oauth_consumer_secret"]!.ToString() : "";
                 oauthTokenMethod        = secretJson["oauth_token_method"] is not null ? secretJson["oauth_token_method"]!.ToString() : "";
                 oauthAuthMethod         = secretJson["oauth_auth_method"] is not null ? secretJson["oauth_auth_method"]!.ToString() : "";
+                jwtKey                  = secretJson["jwt_key"] is not null ? secretJson["jwt_key"]!.ToString() : "";
             }
         }
         #endregion

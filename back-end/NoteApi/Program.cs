@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using NoteApi.Service;
+using NoteApi.DbModels;
 using NoteApi.Repository;
 using Communication;
-using NoteApi.DbModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
