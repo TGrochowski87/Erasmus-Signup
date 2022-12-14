@@ -1,8 +1,10 @@
 import User from "models/User";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ProfilePage from "./ProfilePage";
 
 const ProfilePageContainer = () => {
+  const navigate = useNavigate();
   const [userData] = useState<User>({
     firstName: "Test",
     lastName: "Testowy",
@@ -21,7 +23,11 @@ const ProfilePageContainer = () => {
     ],
   });
 
-  return <ProfilePage user={userData} />;
+  const navigateToNotesPage = () => {
+    navigate("/notes");
+  };
+
+  return <ProfilePage user={userData} navigateToNotesPage={navigateToNotesPage} />;
 };
 
 export default ProfilePageContainer;
