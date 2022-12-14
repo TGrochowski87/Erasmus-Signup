@@ -16,6 +16,7 @@ import ProfilePageContainer from "pages/profile/ProfilePageContainer";
 import HomePage from "pages/home/HomePage";
 import DestinationDetailsPageContainer from "pages/destination-details/DestinationDetailsPageContainer";
 import NotesPageContainer from "pages/notes/NotesPageContainer";
+import NoteViewPageContainer from "pages/note-view/NoteViewPageContainer";
 
 function App() {
   const { userLoggedIn } = useAppSelector((state: RootState) => state.login);
@@ -32,6 +33,8 @@ function App() {
             <Route path="/list/:code/:id" element={<DestinationDetailsPageContainer />} />
             <Route path="/profile" element={userLoggedIn ? <ProfilePageContainer /> : <Unauthorized />} />
             <Route path="/notes" element={userLoggedIn ? <NotesPageContainer /> : <Unauthorized />} />
+            <Route path="/notes/edit" element={userLoggedIn ? <NoteViewPageContainer /> : <Unauthorized />} />
+            <Route path="/notes/edit/:id" element={userLoggedIn ? <NoteViewPageContainer /> : <Unauthorized />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer style={{ textAlign: "center" }}>Szampon Inc. Erasmus Sign-up</Footer>

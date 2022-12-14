@@ -21,7 +21,7 @@ export const anonymousUserLinks = (dispatch: Function, fetchOAuthUrl: Function):
   },
 ];
 
-export const loggedInUserLinks = (dispatch: Function, logOut: Function): NavLinkData[] => [
+export const loggedInUserLinks = (dispatch: Function, logOut: Function, logOutLocally: Function): NavLinkData[] => [
   {
     id: 0,
     text: "Home",
@@ -48,6 +48,7 @@ export const loggedInUserLinks = (dispatch: Function, logOut: Function): NavLink
     customOnClick: event => {
       event.preventDefault();
       dispatch(logOut());
+      dispatch(logOutLocally());
     },
   },
 ];

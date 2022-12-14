@@ -18,9 +18,8 @@ const HomePage = () => {
     <div className="home-page">
       <div className="jumbotron">
         <div className="text">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tortor
-          felis, tristique at elit ut, scelerisque dapibus justo. Fusce elit
-          ante, feugiat eget suscipit quis, porta at dui. Aliquam erat.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tortor felis, tristique at elit ut, scelerisque
+          dapibus justo. Fusce elit ante, feugiat eget suscipit quis, porta at dui. Aliquam erat.
         </div>
       </div>
       <div className="cards">
@@ -29,29 +28,26 @@ const HomePage = () => {
             <img src={globe} alt="globe" />
           </div>
           <h3>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
-            tortor felis, tristique at elit ut, scelerisque dapibus justo. Fusce
-            elit ante, feugiat eget suscipit quis, porta at dui. Aliquam erat.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tortor felis, tristique at elit ut,
+            scelerisque dapibus justo. Fusce elit ante, feugiat eget suscipit quis, porta at dui. Aliquam erat.
           </h3>
         </ImageTextCard>
         <ImageTextCard>
           <div className="image-space">
-            <img src={education} alt="globe" />
+            <img src={education} alt="education" />
           </div>
           <h3>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
-            tortor felis, tristique at elit ut, scelerisque dapibus justo. Fusce
-            elit ante, feugiat eget suscipit quis, porta at dui. Aliquam erat.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tortor felis, tristique at elit ut,
+            scelerisque dapibus justo. Fusce elit ante, feugiat eget suscipit quis, porta at dui. Aliquam erat.
           </h3>
         </ImageTextCard>
         <ImageTextCard>
           <div className="image-space">
-            <img src={trophy} alt="globe" />
+            <img src={trophy} alt="trophy" />
           </div>
           <h3>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
-            tortor felis, tristique at elit ut, scelerisque dapibus justo. Fusce
-            elit ante, feugiat eget suscipit quis, porta at dui. Aliquam erat.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tortor felis, tristique at elit ut,
+            scelerisque dapibus justo. Fusce elit ante, feugiat eget suscipit quis, porta at dui. Aliquam erat.
           </h3>
         </ImageTextCard>
       </div>
@@ -61,8 +57,7 @@ const HomePage = () => {
             className="login-button"
             onClick={() => {
               dispatch(fetchOAuthUrl());
-            }}
-          >
+            }}>
             Log in with USOS
           </div>
         </div>

@@ -1,4 +1,5 @@
 .notes-page {
+  position: relative;
   margin: auto;
   padding: 5rem 1rem;
   max-width: 940px;
@@ -21,6 +22,7 @@
   .tabs {
     position: absolute;
     transform: translate(3px, -40px);
+    width: 100%;
 
     display: flex;
     flex-direction: row;
@@ -58,11 +60,17 @@
 
     .active {
       z-index: 9 !important;
-      background-color: #e0e0e0
+      background-color: #e0e0e0;
     }
 
     .tab:first-child{
       margin-left: 0;
+    }
+
+    .add-note {
+      margin-right: 38px;
+      margin-left: auto;
+      padding-top: 0.3rem;
     }
   }
 }
