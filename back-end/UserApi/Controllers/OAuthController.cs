@@ -18,37 +18,37 @@ namespace UserApi.Controllers
     public class OAuthController : Controller
     {
         private IUserService userService;
-        private IAuthorizedService authorizedService;
+        private IAuthorisedService authorisedService;
 
-        public OAuthController(IUserService userService, IAuthorizedService authorizedService)
+        public OAuthController(IUserService userService, IAuthorisedService authorisedService)
         {
             this.userService = userService;
-            this.authorizedService = authorizedService;
+            this.authorisedService = authorisedService;
         }
 
         [HttpGet("oauth_url")]
         public IActionResult RequestOAuthUrl(string callbackPath = "oob")
         {
-            HttpResponseMessage responseMessage = authorizedService.GetOAuthUrl(callbackPath);
+            HttpResponseMessage responseMessage = authorisedService.GetOAuthUrl(callbackPath);
             if (responseMessage.IsSuccessStatusCode)
             {
                 string result = responseMessage.Content.ReadAsStringAsync().Result;
-                NameValueCollection query = System.Web.HttpUtility.ParseQueryString(result);
-                string oauth_token = !String.IsNullOrEmpty(query["oauth_token"]) ? query["oauth_token"]!.ToString() : "";
-                string oauth_token_secret = !String.IsNullOrEmpty(query["oauth_token_secret"]) ? query["oauth_token_secret"]!.ToString() : "";
+                NameValueCollection querry = System.Web.HttpUtility.ParseQueryString(result);
+                string oauth_token = !String.IsNullOrEmpty(querry["oauth_token"]) ? querry["oauth_token"]!.ToString() : "";
+                string oauth_token_secret = !String.IsNullOrEmpty(querry["oauth_token_secret"]) ? querry["oauth_token_secret"]!.ToString() : "";
                 if (!String.IsNullOrWhiteSpace(oauth_token) && !String.IsNullOrWhiteSpace(oauth_token_secret))
                 {
                     return Ok(new OAuthUrlResponseModel(Secrets.OAuthHostUrl + Secrets.OAuthAuthMethod + "?oauth_token=" + oauth_token, oauth_token_secret));
                 }
-                return BadRequest("Authorized service error: authorized service did not provided crucial elements");
+                return BadRequest("Authorised service error: authorised service did not provided crucial elements");
             }
-            return BadRequest("Authorized service error: " + responseMessage.ReasonPhrase);
+            return BadRequest("Authorised service error: " + responseMessage.ReasonPhrase);
         }
 
-        [HttpGet("access_token")]
+        [HttpGet("acces_token")]
         public IActionResult SessionLogin(string oauth_token, string oauth_verifier, string oauth_token_secret)
         {
-            HttpResponseMessage responseMessage = authorizedService.GetAccessToken(oauth_token, oauth_verifier, oauth_token_secret);
+            HttpResponseMessage responseMessage = authorisedService.GetAccesToken(oauth_token, oauth_verifier, oauth_token_secret);
             if (responseMessage.IsSuccessStatusCode)
             {
                 string userApiToken = "";
@@ -80,19 +80,19 @@ namespace UserApi.Controllers
 
 
             }
-            return BadRequest("Authorized service error: " + responseMessage.ReasonPhrase);
+            return BadRequest("Authorised service error: " + responseMessage.ReasonPhrase);
 
         }
 
         [HttpPost("revoke_token")]
         public IActionResult SessionLogin(string oauth_token, string oauth_token_secret)
         {
-            HttpResponseMessage responseMessage = authorizedService.PostRevokeToken(oauth_token, oauth_token_secret);
+            HttpResponseMessage responseMessage = authorisedService.PostRevokeToken(oauth_token, oauth_token_secret);
             if (responseMessage.IsSuccessStatusCode)
             {
                 return Ok();
             }
-            return BadRequest("Authorized service error: " + responseMessage.ReasonPhrase);
+            return BadRequest("Authorised service error: " + responseMessage.ReasonPhrase);
 
         }
     }
