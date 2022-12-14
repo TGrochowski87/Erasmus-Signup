@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System.Runtime.CompilerServices;
+﻿using System.Security.Claims;
 using System.Web;
 using UserApi.Utilities;
 
@@ -7,7 +6,6 @@ namespace UserApi.Service
 {
     public class AuthorisedService : IAuthorisedService
     {
-        OAuthTool oAuthTool = new OAuthTool();
 
         public HttpResponseMessage GetOAuthUrl(string callbackPath)
         {
@@ -44,8 +42,8 @@ namespace UserApi.Service
         )
         {
             string url = Secrets.OAuthHostUrl + method;
-            string nonce        = useOAuth ? oAuthTool.GenerateNonce()     : String.Empty;
-            string timestamp    = useOAuth ? oAuthTool.GenerateTimeStamp() : String.Empty;
+            string nonce        = useOAuth ? OAuthTool.GenerateNonce()     : String.Empty;
+            string timestamp    = useOAuth ? OAuthTool.GenerateTimeStamp() : String.Empty;
             if (useOAuth)
             {
                 urlParams.Add(new KeyValuePair<string, string>("oauth_consumer_key", Secrets.OAuthApiConsumerKey));
@@ -58,16 +56,16 @@ namespace UserApi.Service
             if(urlParams.Any())
             {
                 urlParams.Sort((x, y) => (String.Compare(x.Key, y.Key)));
-                paramsString += oAuthTool.UrlEncode(urlParams[0].Key) + "=" + oAuthTool.UrlEncode(urlParams[0].Value);
+                paramsString += OAuthTool.UrlEncode(urlParams[0].Key) + "=" + OAuthTool.UrlEncode(urlParams[0].Value);
                 for(int i = 1; i < urlParams.Count; i++)
                 {
-                    paramsString += "&" + oAuthTool.UrlEncode(urlParams[i].Key) + "=" + oAuthTool.UrlEncode(urlParams[i].Value);
+                    paramsString += "&" + OAuthTool.UrlEncode(urlParams[i].Key) + "=" + OAuthTool.UrlEncode(urlParams[i].Value);
                 }
             }
 
             if (useOAuth)
             {
-                string oauth_signature = oAuthTool.GenerateSignature("GET", url, paramsString, oauth_token_secret);
+                string oauth_signature = OAuthTool.GenerateSignature("GET", url, paramsString, oauth_token_secret);
                 paramsString += "&oauth_signature=" + HttpUtility.UrlEncode(oauth_signature);
             }
 

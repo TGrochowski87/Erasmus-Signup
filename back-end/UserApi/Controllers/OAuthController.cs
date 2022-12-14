@@ -53,12 +53,12 @@ namespace UserApi.Controllers
             {
                 string userApiToken = "";
                 string result = responseMessage.Content.ReadAsStringAsync().Result;
-                NameValueCollection query = System.Web.HttpUtility.ParseQueryString(result);
-                string oauth_token_access = !String.IsNullOrEmpty(query["oauth_token"]) ? query["oauth_token"]!.ToString() : "";
-                string oauth_token_access_secret = !String.IsNullOrEmpty(query["oauth_token_secret"]) ? query["oauth_token_secret"]!.ToString() : "";
-                if (!String.IsNullOrWhiteSpace(oauth_token_access) && !String.IsNullOrWhiteSpace(oauth_token_access_secret))
+                NameValueCollection querry = System.Web.HttpUtility.ParseQueryString(result);
+                string oauth_token_acces = !String.IsNullOrEmpty(querry["oauth_token"]) ? querry["oauth_token"]!.ToString() : "";
+                string oauth_token_acces_secret = !String.IsNullOrEmpty(querry["oauth_token_secret"]) ? querry["oauth_token_secret"]!.ToString() : "";
+                if (!String.IsNullOrWhiteSpace(oauth_token_acces) && !String.IsNullOrWhiteSpace(oauth_token_acces_secret))
                 {
-                    HttpResponseMessage responseMessageUserId = userService.GetCurrentUser(oauth_token_access, oauth_token_access_secret);
+                    HttpResponseMessage responseMessageUserId = userService.GetCurrentUser(oauth_token_acces, oauth_token_acces_secret, authorisedService);
 
                     if (responseMessageUserId.IsSuccessStatusCode)
                     {
@@ -69,13 +69,13 @@ namespace UserApi.Controllers
                         if (jUserId.Count > 0)
                         {
                             userId = jUserId["id"]!.ToString();
-                            userApiToken = OAuthTool.GenerateToken(userId, oauth_token_access);
+                            userApiToken = OAuthTool.GenerateToken(userId, oauth_token_acces);
                         }
                     }
 
-                    return Ok(new OAuthAccessTokenResponseModel(oauth_token_access, oauth_token_access_secret, userApiToken));
+                    return Ok(new OAuthAccesTokenResponseModel(oauth_token_acces, oauth_token_acces_secret, userApiToken));
                 }
-                return BadRequest("Authorized service error: crucial elements not found");
+                return BadRequest("Authorised service error: crucial elements not found");
 
 
 

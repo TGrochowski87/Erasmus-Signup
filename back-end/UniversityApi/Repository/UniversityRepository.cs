@@ -12,6 +12,11 @@ namespace UniversityApi.Repository
             _context = context;
         }
 
+        public async Task<IEnumerable<University>> GetListAsync()
+        {
+            return await _context.Universities.ToListAsync();
+        }
+
         public IQueryable<DestSpeciality> DestSpecialityGetList()
         {
             var destSpecialityList = _context.DestSpecialities

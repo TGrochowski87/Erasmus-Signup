@@ -72,5 +72,12 @@ namespace UserApi.Controllers
             return Ok();
         }
 
+        [AuthorizeUser]
+        [HttpGet("test/logowania")]
+        public IActionResult Test()
+        {
+            return Ok();
+        }
+
     }
 }
