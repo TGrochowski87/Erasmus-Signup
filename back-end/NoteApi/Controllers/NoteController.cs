@@ -16,14 +16,18 @@ namespace NoteApi.Controllers
             this.noteService = noteService;
         }
 
-        [HttpGet("plan")]
+        /*
+         * na razie koment bo moze nie bedzie use case'a na to
+         * 
+        [HttpGet("plans")]
         public async Task<Result<IEnumerable<PlanNoteVM>>> GetPlan()
         {
             return Result.Ok(await noteService.GetPlanNotesAsync());
         }
+        */
 
-        [HttpGet("plan/{userId}")]
-        public async Task<Result<IEnumerable<PlanNoteVM>>> GetPlan(int userId)
+        [HttpGet("plan")]
+        public async Task<Result<IEnumerable<PlanNoteVM>>> GetPlan(string acces_token, string acces_token_secret)
         {
             return Result.Ok(await noteService.GetPlanNotesAsync(userId));
         }
