@@ -13,8 +13,8 @@ namespace UniversityApi.DbModels
         public bool? AcceptingUndergraduate { get; set; }
         public bool? AcceptingPostgraduate { get; set; }
         public bool? AcceptingDoctoral { get; set; }
-        public DateOnly? ConclusionDate { get; set; }
-        public DateOnly? ExpirationDate { get; set; }
+        public DateTime? ConclusionDate { get; set; }
+        public DateTime? ExpirationDate { get; set; }
         public short? SpecificDetailsId { get; set; }
 
         public virtual ContractSpecificDetail? SpecificDetails { get; set; }

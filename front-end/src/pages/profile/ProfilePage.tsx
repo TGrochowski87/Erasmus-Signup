@@ -1,5 +1,5 @@
 import { Image, Table } from "antd";
-import UnderlinedLabeledField from "components/UnderlinedLabeledField";
+import UnderlinedLabeledTextField from "components/UnderlinedLabeledTextField";
 import User from "models/User";
 // Styles
 import "./ProfilePage.scss";
@@ -22,15 +22,15 @@ const ProfilePage = ({ user }: Props) => {
                 alt="user"
               />
               <div className="data">
-                <UnderlinedLabeledField
+                <UnderlinedLabeledTextField
                   label="First name"
                   text={user.firstName}
                 />
-                <UnderlinedLabeledField
+                <UnderlinedLabeledTextField
                   label="Last name"
                   text={user.lastName}
                 />
-                <UnderlinedLabeledField label="Index" text={user.index} />
+                <UnderlinedLabeledTextField label="Index" text={user.index} />
               </div>
             </div>
             <br />
@@ -63,15 +63,3 @@ const ProfilePage = ({ user }: Props) => {
 };
 
 export default ProfilePage;
-
-// Maybe I will come back to it
-// Second variant
-
-/* <div className="user-page">
-      <div className="section user-data-space">
-        <div style={{ maxWidth: "800px", width: "100%" }}>
-          <div className="user-card"></div>
-        </div>
-      </div>
-      <div className="section utility-space"></div>
-    </div> */

@@ -1,9 +1,9 @@
 interface Props {
-  label: string;
+  label?: string;
   text: string;
 }
 
-const UnderlinedLabeledField = ({ label, text }: Props) => {
+const UnderlinedLabeledTextField = ({ label = "", text }: Props) => {
   return (
     <div style={{ width: "80%" }}>
       <div style={{ borderBottom: "1px solid black" }}>
@@ -23,4 +23,4 @@ const UnderlinedLabeledField = ({ label, text }: Props) => {
   );
 };
 
-export default UnderlinedLabeledField;
+export default UnderlinedLabeledTextField;

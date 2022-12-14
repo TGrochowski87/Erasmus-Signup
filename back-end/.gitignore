@@ -373,10 +373,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-<<<<<<< HEAD
-.idea/
-=======
 .idea/
 
 secrets.json
->>>>>>> b6060fc3c0473fe89db5457c7b119a229e77849e
