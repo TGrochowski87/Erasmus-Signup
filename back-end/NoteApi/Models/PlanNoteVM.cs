@@ -11,7 +11,6 @@ namespace NoteApi.Models
         public int PlanId { get; set; }
         public string Content { get; set; } = null!;
 
-        [JsonConstructor]
         public PlanNoteVM(int userId, int planId, string content)
         {
             Id = -1;

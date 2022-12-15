@@ -1,20 +1,17 @@
-﻿using FluentResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NoteApi.Models;
 using NoteApi.Service;
-using System.Collections.Specialized;
 using UserApi.Models;
 using UserApi.Service;
-using UserApi.Utilities;
 using UserApi.Attributes;
 using Newtonsoft.Json.Linq;
-
+using UserApi.Controllers;
 
 namespace NoteApi.Controllers
 {
     [ApiController]
     [Route("note")]
-    public class NoteController : Controller
+    public class NoteController : Controller, IUserApiController
     {
         private readonly INoteService noteService;
         private IUserService userService;
@@ -39,25 +36,44 @@ namespace NoteApi.Controllers
         }
         */
 
+        [AuthorizeUser]
         [HttpGet("plan")]
-        public async Task<Result<IEnumerable<PlanNoteVM>>> GetPlan(string access_token, string access_token_secret)
+        public async Task<ActionResult<IEnumerable<PlanNoteVM>>> GetPlan()
         {
-            var userId = GetUserId(access_token, access_token_secret);
-            return Result.Ok(await noteService.GetPlanNotesAsync(Convert.ToInt32(userId)));
+            if (UserToken == null)
+            {
+                return Unauthorized();
+            }
+
+            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
+            return Ok(await noteService.GetPlanNotesAsync(userId));
         }
 
+        [AuthorizeUser]
         [HttpPost("plan")]
-        public async Task<Result<int>> CreatePlanNote(PlanNoteVM note)
+        public async Task<ActionResult<int>> CreatePlanNote(int planId, string content)
         {
-            return Result.Ok(await noteService.AddPlanNoteAsync(note));
+            if (UserToken == null)
+            {
+                return Unauthorized();
+            }
+
+            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
+            return Ok(await noteService.AddPlanNoteAsync(new PlanNoteVM(userId, planId, content)));
         }
 
+        [AuthorizeUser]
         [HttpDelete("plan")]
-        public async Task<Result<int>> DeletePlanNote(string access_token, string access_token_secret)
+        public async Task<ActionResult<int>> DeletePlanNote()
         {
-            var userId = GetUserId(access_token, access_token_secret);
-            await noteService.DeletePlanNoteAsync(Convert.ToInt32(userId));
-            return Result.Ok();
+            if (UserToken == null)
+            {
+                return Unauthorized();
+            }
+
+            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
+            await noteService.DeletePlanNoteAsync(userId);
+            return Ok();
         }
 
         /*
@@ -70,25 +86,44 @@ namespace NoteApi.Controllers
         }
         */
 
+        [AuthorizeUser]
         [HttpGet("speciality")]
-        public async Task<Result<IEnumerable<SpecialityNoteVM>>> GetSpeciality(string access_token, string access_token_secret)
+        public async Task<ActionResult<IEnumerable<SpecialityNoteVM>>> GetSpeciality()
         {
-            var userId = GetUserId(access_token, access_token_secret);
-            return Result.Ok(await noteService.GetSpecialityNotesAsync(Convert.ToInt32(userId)));
+            if (UserToken == null)
+            {
+                return Unauthorized();
+            }
+
+            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
+            return Ok(await noteService.GetSpecialityNotesAsync(userId));
         }
 
+        [AuthorizeUser]
         [HttpPost("speciality")]
-        public async Task<Result<int>> CreateSpecialityNote(SpecialityNoteVM note)
+        public async Task<ActionResult<int>> CreateSpecialityNote(int specialityId, string content)
         {
-            return Result.Ok(await noteService.AddSpecialityNoteAsync(note));
+            if (UserToken == null)
+            {
+                return Unauthorized();
+            }
+
+            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
+            return Ok(await noteService.AddSpecialityNoteAsync(new SpecialityNoteVM(userId, specialityId, content)));
         }
 
+        [AuthorizeUser]
         [HttpDelete("speciality")]
-        public async Task<Result<int>> DeleteSpecialityNote(string access_token, string access_token_secret)
+        public async Task<ActionResult<int>> DeleteSpecialityNote()
         {
-            var userId = GetUserId(access_token, access_token_secret);
-            await noteService.DeleteSpecialityNoteAsync(Convert.ToInt32(userId));
-            return Result.Ok();
+            if (UserToken == null)
+            {
+                return Unauthorized();
+            }
+
+            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
+            await noteService.DeleteSpecialityNoteAsync(userId);
+            return Ok();
         }
 
         /*
@@ -99,25 +134,40 @@ namespace NoteApi.Controllers
         }
         */
 
+        [AuthorizeUser]
         [HttpGet("highlight")]
-        public async Task<Result<IEnumerable<SpecialityHighlightNoteVM>>> GetHighlight(string access_token, string access_token_secret)
+        public async Task<ActionResult<IEnumerable<SpecialityHighlightNoteVM>>> GetHighlight()
         {
-            var userId = GetUserId(access_token, access_token_secret);
-            return Result.Ok(await noteService.GetSpecialityHighlightNotesAsync(Convert.ToInt32(userId)));
+            if (UserToken == null)
+            {
+                return Unauthorized();
+            }
+
+            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
+            return Ok(await noteService.GetSpecialityHighlightNotesAsync(userId));
         }
 
+        [AuthorizeUser]
         [HttpPost("highlight")]
-        public async Task<Result<int>> CreateSpecialityHighlightNote(SpecialityHighlightNoteVM note)
+        public async Task<ActionResult<int>> CreateSpecialityHighlightNote(int specialityId, bool positive)
         {
-            return Result.Ok(await noteService.AddSpecialityHighlightNoteAsync(note));
+            if (UserToken == null)
+            {
+                return Unauthorized();
+            }
+
+            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
+            return Ok(await noteService.AddSpecialityHighlightNoteAsync(
+                new SpecialityHighlightNoteVM(userId, specialityId, positive)));
         }
 
+        [AuthorizeUser]
         [HttpDelete("highlight")]
-        public async Task<Result> DeletePriorityHighlightNote(
+        public async Task<ActionResult> DeletePriorityHighlightNote(
             int noteId, bool positive, int specialityId)
         {
             await noteService.DeleteSpecialityHighlightNoteAsync(noteId, positive, specialityId);
-            return Result.Ok();
+            return Ok();
         }
 
         /*
@@ -128,27 +178,41 @@ namespace NoteApi.Controllers
         }
         */
 
+        [AuthorizeUser]
         [HttpGet("priority")]
-        public async Task<Result<IEnumerable<SpecialityPriorityNoteVM>>> GetPriority(string access_token, string access_token_secret)
+        public async Task<ActionResult<IEnumerable<SpecialityPriorityNoteVM>>> GetPriority()
         {
-            var userId = GetUserId(access_token, access_token_secret);
-            return Result.Ok(await noteService.GetSpecialityPriorityNotesAsync(Convert.ToInt32(userId)));
+            if (UserToken == null)
+            {
+                return Unauthorized();
+            }
+
+            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
+            return Ok(await noteService.GetSpecialityPriorityNotesAsync(userId));
         }
 
+        [AuthorizeUser]
         [HttpPost("priority")]
-        public async Task<Result<int>> CreatePriorityHighlightNote(SpecialityPriorityNoteVM note)
+        public async Task<ActionResult<int>> CreatePriorityHighlightNote(int specialityId, short priority)
         {
-            return Result.Ok(await noteService.AddSpecialityPriorityNoteAsync(note));
+            if (UserToken == null)
+            {
+                return Unauthorized();
+            }
+
+            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
+            return Ok(await noteService.AddSpecialityPriorityNoteAsync(
+                new SpecialityPriorityNoteVM(userId, specialityId, priority)));
         }
 
+        [AuthorizeUser]
         [HttpDelete("priority")]
-        public async Task<Result> DeletePriorityHighlightNote(int noteId, int specialityId)
+        public async Task<ActionResult> DeletePriorityHighlightNote(int noteId, int specialityId)
         {
             await noteService.DeleteSpecialityPriorityNoteAsync(noteId, specialityId);
-            return Result.Ok();
+            return Ok();
         }
-
-        private string GetUserId(string access_token, string access_token_secret)
+        private int GetUserId(string access_token, string access_token_secret)
         {
             HttpResponseMessage responseMessageUserId = userService.GetCurrentUserId(access_token, access_token_secret);
 
@@ -159,7 +223,7 @@ namespace NoteApi.Controllers
 
                 if (jUserId.Count > 0)
                 {
-                    return jUserId["id"]!.ToString();
+                    return Convert.ToInt32(jUserId["id"]!.ToString());
                 }
             }
 
