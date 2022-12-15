@@ -2,6 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using NoteApi.Models;
 using NoteApi.Service;
+using System.Collections.Specialized;
+using UserApi.Models;
+using UserApi.Service;
+using UserApi.Utilities;
+using UserApi.Attributes;
+using Newtonsoft.Json.Linq;
+
 
 namespace NoteApi.Controllers
 {
@@ -10,10 +17,16 @@ namespace NoteApi.Controllers
     public class NoteController : Controller
     {
         private readonly INoteService noteService;
+        private IUserService userService;
+        private IAuthorizedService authorizedService;
+        public UserJWT? UserToken { get; set; }
 
-        public NoteController(INoteService noteService)
+        public NoteController(INoteService noteService, IUserService userService,
+            IAuthorizedService authorizedService)
         {
             this.noteService = noteService;
+            this.userService = userService;
+            this.authorizedService = authorizedService;
         }
 
         /*
@@ -27,9 +40,10 @@ namespace NoteApi.Controllers
         */
 
         [HttpGet("plan")]
-        public async Task<Result<IEnumerable<PlanNoteVM>>> GetPlan(string acces_token, string acces_token_secret)
+        public async Task<Result<IEnumerable<PlanNoteVM>>> GetPlan(string access_token, string access_token_secret)
         {
-            return Result.Ok(await noteService.GetPlanNotesAsync(userId));
+            var userId = GetUserId(access_token, access_token_secret);
+            return Result.Ok(await noteService.GetPlanNotesAsync(Convert.ToInt32(userId)));
         }
 
         [HttpPost("plan")]
@@ -39,22 +53,28 @@ namespace NoteApi.Controllers
         }
 
         [HttpDelete("plan")]
-        public async Task<Result<int>> DeletePlanNote(int noteId)
+        public async Task<Result<int>> DeletePlanNote(string access_token, string access_token_secret)
         {
-            await noteService.DeletePlanNoteAsync(noteId);
+            var userId = GetUserId(access_token, access_token_secret);
+            await noteService.DeletePlanNoteAsync(Convert.ToInt32(userId));
             return Result.Ok();
         }
 
-        [HttpGet("speciality")]
+        /*
+         * jak wyzej
+         * 
+        [HttpGet("specialities")]
         public async Task<Result<IEnumerable<SpecialityNoteVM>>> GetSpeciality()
         {
             return Result.Ok(await noteService.GetSpecialityNotesAsync());
         }
+        */
 
-        [HttpGet("speciality/{userId}")]
-        public async Task<Result<IEnumerable<SpecialityNoteVM>>> GetSpeciality(int userId)
+        [HttpGet("speciality")]
+        public async Task<Result<IEnumerable<SpecialityNoteVM>>> GetSpeciality(string access_token, string access_token_secret)
         {
-            return Result.Ok(await noteService.GetSpecialityNotesAsync(userId));
+            var userId = GetUserId(access_token, access_token_secret);
+            return Result.Ok(await noteService.GetSpecialityNotesAsync(Convert.ToInt32(userId)));
         }
 
         [HttpPost("speciality")]
@@ -64,22 +84,26 @@ namespace NoteApi.Controllers
         }
 
         [HttpDelete("speciality")]
-        public async Task<Result<int>> DeleteSpecialityNote(int noteId)
+        public async Task<Result<int>> DeleteSpecialityNote(string access_token, string access_token_secret)
         {
-            await noteService.DeleteSpecialityNoteAsync(noteId);
+            var userId = GetUserId(access_token, access_token_secret);
+            await noteService.DeleteSpecialityNoteAsync(Convert.ToInt32(userId));
             return Result.Ok();
         }
 
-        [HttpGet("highlight")]
+        /*
+        [HttpGet("highlights")]
         public async Task<Result<IEnumerable<SpecialityHighlightNoteVM>>> GetHighlight()
         {
             return Result.Ok(await noteService.GetSpecialityHighlightNotesAsync());
         }
+        */
 
-        [HttpGet("highlight/{userId}")]
-        public async Task<Result<IEnumerable<SpecialityHighlightNoteVM>>> GetHighlight(int userId)
+        [HttpGet("highlight")]
+        public async Task<Result<IEnumerable<SpecialityHighlightNoteVM>>> GetHighlight(string access_token, string access_token_secret)
         {
-            return Result.Ok(await noteService.GetSpecialityHighlightNotesAsync(userId));
+            var userId = GetUserId(access_token, access_token_secret);
+            return Result.Ok(await noteService.GetSpecialityHighlightNotesAsync(Convert.ToInt32(userId)));
         }
 
         [HttpPost("highlight")]
@@ -96,16 +120,19 @@ namespace NoteApi.Controllers
             return Result.Ok();
         }
 
-        [HttpGet("priority")]
+        /*
+        [HttpGet("priorities")]
         public async Task<Result<IEnumerable<SpecialityPriorityNoteVM>>> GetPriority()
         {
             return Result.Ok(await noteService.GetSpecialityPriorityNotesAsync());
         }
+        */
 
-        [HttpGet("priority/{userId}")]
-        public async Task<Result<IEnumerable<SpecialityPriorityNoteVM>>> GetPriority(int userId)
+        [HttpGet("priority")]
+        public async Task<Result<IEnumerable<SpecialityPriorityNoteVM>>> GetPriority(string access_token, string access_token_secret)
         {
-            return Result.Ok(await noteService.GetSpecialityPriorityNotesAsync(userId));
+            var userId = GetUserId(access_token, access_token_secret);
+            return Result.Ok(await noteService.GetSpecialityPriorityNotesAsync(Convert.ToInt32(userId)));
         }
 
         [HttpPost("priority")]
@@ -119,6 +146,24 @@ namespace NoteApi.Controllers
         {
             await noteService.DeleteSpecialityPriorityNoteAsync(noteId, specialityId);
             return Result.Ok();
+        }
+
+        private string GetUserId(string access_token, string access_token_secret)
+        {
+            HttpResponseMessage responseMessageUserId = userService.GetCurrentUserId(access_token, access_token_secret);
+
+            if (responseMessageUserId.IsSuccessStatusCode)
+            {
+                string resultUserId = responseMessageUserId.Content.ReadAsStringAsync().Result;
+                JObject jUserId = JObject.Parse(resultUserId);
+
+                if (jUserId.Count > 0)
+                {
+                    return jUserId["id"]!.ToString();
+                }
+            }
+
+            throw new BadHttpRequestException("authorization error: " + responseMessageUserId.ReasonPhrase);
         }
     }
 }
