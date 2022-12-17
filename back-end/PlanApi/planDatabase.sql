@@ -24,5 +24,5 @@ CREATE TABLE user_home_subject (
     id                      serial PRIMARY KEY,
     student_id              integer NOT NULL,
     name                    text NOT NULL,
-    ects                    smallint NOT NULL,
+    ects                    smallint NOT NULL
 );
