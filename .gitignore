@@ -1,5 +1,1 @@
-﻿################################################################################
-# Ten plik .gitignore został utworzony automatycznie przez Microsoft(R) Visual Studio.
-################################################################################
-
-/back-end/UserApi/secrets.json
+﻿secrets.json
