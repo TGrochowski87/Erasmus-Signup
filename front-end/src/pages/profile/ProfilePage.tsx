@@ -1,6 +1,6 @@
 import { Image, Table } from "antd";
 import UnderlinedLabeledTextField from "components/UnderlinedLabeledTextField";
-import User from "models/User";
+import { User } from "models/User";
 // Styles
 import "./ProfilePage.scss";
 
@@ -16,16 +16,18 @@ const ProfilePage = ({ user, navigateToNotesPage }: Props) => {
         <div className="block personal-data">
           <div className="image-space">
             <Image
-              width={160}
-              height={180}
-              src="https://image.shutterstock.com/image-photo/passport-photo-portrait-middle-aged-260nw-1506715724.jpg"
+              width={200}
+              height={250}
+              src={user.photoUtl_400x500}
               alt="user"
             />
           </div>
           <div className="data">
-            <UnderlinedLabeledTextField label="First name" text={user.firstName} />
-            <UnderlinedLabeledTextField label="Last name" text={user.lastName} />
-            <UnderlinedLabeledTextField label="Index" text={user.index} />
+            <UnderlinedLabeledTextField label="Full name" text={user.titlesBefore + " " + user.firstName + " " + user.middleNames + " " + user.lastName + " " + user.titlesAfter} />
+            <UnderlinedLabeledTextField label="E-Mail" text={user.email} />
+            <UnderlinedLabeledTextField label="Role" text={ user.isStaff ? "Staff" : "Student" }/>
+            { user.studentNumber ? <UnderlinedLabeledTextField label="Student number" text={user.studentNumber} /> : ""}
+
           </div>
         </div>
         <div className="block fields-of-study">
@@ -37,13 +39,6 @@ const ProfilePage = ({ user, navigateToNotesPage }: Props) => {
               { title: "Name", dataIndex: "name" },
               { title: "Grade", dataIndex: "grade" },
             ]}
-            dataSource={user.specialties.map(s => {
-              return {
-                key: s.id,
-                name: s.name,
-                grade: s.grade,
-              };
-            })}
           />
         </div>
       </div>
