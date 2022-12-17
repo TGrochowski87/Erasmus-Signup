@@ -1,9 +1,11 @@
 import { default as axios } from "lib/axios";
-import University from "models/University";
+import GetUniversitiesResponse from "./DTOs/GET/GetUniversitiesResponse";
 
-export const getUniversities = async (): Promise<University[]> => {
+const universityApiBaseUrl = "https://localhost:7009";
+
+export const getDestinations = async (page: number, pageSize: number): Promise<GetUniversitiesResponse[]> => {
   return await axios
-    .get<University[]>("http://localhost:3000/universities")
-    .then((response) => response.data)
-    .catch((error) => error);
+    .get<GetUniversitiesResponse[]>(`${universityApiBaseUrl}/universities?pageSize=${pageSize}&page=${page}`)
+    .then(response => response.data)
+    .catch(error => error);
 };

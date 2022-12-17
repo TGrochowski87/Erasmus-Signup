@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getUniversities } from "api/universityApi";
+import { getDestinations } from "api/universityApi";
 import University from "models/University";
 import RequestStatus from "./RequestStatus";
 
@@ -15,7 +15,7 @@ const initialState: State = {
 
 export const fetchUniversities = createAsyncThunk("universities", async () => {
   //TODO: Add error handling
-  const response = await getUniversities();
+  const response = await getDestinations();
   return response;
 });
 
@@ -23,20 +23,20 @@ const universitySlice = createSlice({
   name: "university",
   initialState,
   reducers: {
-    test: (state) => {
+    test: state => {
       state.value = [];
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(fetchUniversities.pending, (state) => {
+      .addCase(fetchUniversities.pending, state => {
         state.status = RequestStatus.loading;
       })
       .addCase(fetchUniversities.fulfilled, (state, action) => {
         state.status = RequestStatus.idle;
         state.value = action.payload;
       })
-      .addCase(fetchUniversities.rejected, (state) => {
+      .addCase(fetchUniversities.rejected, state => {
         state.status = RequestStatus.failed;
       });
   },

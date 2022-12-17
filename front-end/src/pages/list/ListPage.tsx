@@ -1,11 +1,5 @@
 // Ant Design
-import {
-  HeartFilled,
-  HeartOutlined,
-  LineChartOutlined,
-  MessageOutlined,
-  TeamOutlined,
-} from "@ant-design/icons";
+import { HeartFilled, HeartOutlined, LineChartOutlined, MessageOutlined, TeamOutlined } from "@ant-design/icons";
 import { Button, List, Rate } from "antd";
 // Components
 import University from "models/University";
@@ -27,12 +21,8 @@ const ListPage = ({ universities, handleOnClick }: Props) => {
           marginTop: 64,
           width: "70%",
           marginLeft: "auto",
-        }}
-      >
-        <div
-          className="site-layout-background"
-          style={{ padding: 24, minHeight: 380 }}
-        >
+        }}>
+        <div className="site-layout-background" style={{ padding: 24, minHeight: 380 }}>
           <List
             loading={universities.length === 0}
             bordered
@@ -43,7 +33,10 @@ const ListPage = ({ universities, handleOnClick }: Props) => {
                 <b>Erasmus Sign up</b> destinations
               </div>
             }
-            renderItem={(item) => (
+            pagination={{
+              position: "both",
+            }}
+            renderItem={item => (
               <List.Item
                 key={item.id}
                 className="university-list-item"
@@ -53,8 +46,7 @@ const ListPage = ({ universities, handleOnClick }: Props) => {
                 }}
                 onClick={() => {
                   handleOnClick(item.erasmusCode, item.id);
-                }}
-              >
+                }}>
                 <div className="university-list-item-content">
                   <div className="country-flag-space">
                     <img src={item.flagUrl} alt="country flag" />
@@ -66,16 +58,14 @@ const ListPage = ({ universities, handleOnClick }: Props) => {
                           style={{
                             display: "inline",
                             marginRight: "10px",
-                          }}
-                        >
+                          }}>
                           {item.universityName}
                         </h2>
                         <h3
                           style={{
                             display: "inline",
                             color: "grey",
-                          }}
-                        >
+                          }}>
                           {item.country}
                         </h3>
                         <Rate
@@ -140,8 +130,7 @@ const ListPage = ({ universities, handleOnClick }: Props) => {
                         } else {
                           alert("No website for this university.");
                         }
-                      }}
-                    >
+                      }}>
                       Visit website
                     </Button>
                   </div>
