@@ -6,6 +6,19 @@ using Communication;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.AllowAnyMethod().AllowAnyHeader().WithOrigins(
+                            "http://localhost:3000",
+                            "http://localhost:3001"
+                          );
+                      });
+});
 
 builder.Services.AddControllers();
 
