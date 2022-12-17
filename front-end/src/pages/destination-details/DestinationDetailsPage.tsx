@@ -1,9 +1,7 @@
-// React
-import { useParams } from "react-router-dom";
 // Ant Design
 import { Avatar, Button, Divider, List, Rate, Table } from "antd";
 import Column from "antd/lib/table/Column";
-import { CompassOutlined, ContainerOutlined, HeartOutlined, UserOutlined } from "@ant-design/icons";
+import { CompassOutlined, UserOutlined } from "@ant-design/icons";
 // Styles
 import "./DestinationDetailsPage.scss";
 // Components
@@ -11,118 +9,59 @@ import InlineItems from "components/InlineItems";
 import TextArea from "antd/lib/input/TextArea";
 import Opinion from "models/Opinion";
 import BlockLabeledTextField from "components/BlockLabeledTextField";
+import GetDestinationDetailsResponse from "api/DTOs/GET/GetDestinationDetailsResponse";
+import FullViewLoading from "components/FullViewLoading";
+import FavoriteStatusIndicator from "components/FavoriteStatusIndicator";
+import NoteStatusIndicator from "components/NoteStatusIndicator";
 
 interface Props {
+  detailsData: GetDestinationDetailsResponse | undefined;
+  selectedDestId: number;
+  setSelectedDestId: React.Dispatch<React.SetStateAction<number>>;
   opinionInput: string;
   setOpinionInput: React.Dispatch<React.SetStateAction<string>>;
   ratingInput: number;
   setRatingInput: React.Dispatch<React.SetStateAction<number>>;
   opinions: Opinion[];
+  loading: { details: boolean; opinions: boolean };
 }
 
 // TODO: Remove from here
-interface SubjectMicro {
+interface DestMicro {
+  id: number;
   subjectArea: string;
   language: string;
   vacancies: number;
 }
 
-// TODO: Remove
-const data: SubjectMicro[] = [
-  // API powinno zwrócić tak, że te bez miejsc są na dole
-  {
-    subjectArea: "History and archaeology | 222",
-    language: "French",
-    vacancies: 2,
-  },
-  {
-    subjectArea: "History and archaeology | 222",
-    language: "French",
-    vacancies: 2,
-  },
-  {
-    subjectArea: "History and archaeology | 222",
-    language: "French",
-    vacancies: 2,
-  },
-  {
-    subjectArea: "History and archaeology | 222",
-    language: "French",
-    vacancies: 2,
-  },
-  {
-    subjectArea: "History and archaeology | 222",
-    language: "French",
-    vacancies: 2,
-  },
-  {
-    subjectArea: "History and archaeology | 222",
-    language: "French",
-    vacancies: 2,
-  },
-  {
-    subjectArea: "History and archaeology | 222",
-    language: "French",
-    vacancies: 2,
-  },
-  {
-    subjectArea: "History and archaeology | 222",
-    language: "French",
-    vacancies: 2,
-  },
-  {
-    subjectArea: "History and archaeology | 222",
-    language: "French",
-    vacancies: 2,
-  },
-  {
-    subjectArea: "History and archaeology | 222",
-    language: "French",
-    vacancies: 2,
-  },
-  {
-    subjectArea: "History and archaeology | 222",
-    language: "French",
-    vacancies: 2,
-  },
-  {
-    subjectArea: "History and archaeology | 222",
-    language: "French",
-    vacancies: 2,
-  },
-  {
-    subjectArea: "History and archaeology | 222",
-    language: "French",
-    vacancies: 2,
-  },
-  {
-    subjectArea: "History and archaeology | 222",
-    language: "French",
-    vacancies: 2,
-  },
-];
+const DestinationDetailsPage = ({
+  detailsData,
+  selectedDestId,
+  setSelectedDestId,
+  opinionInput,
+  setOpinionInput,
+  ratingInput,
+  setRatingInput,
+  opinions,
+  loading,
+}: Props) => {
+  const specialty = detailsData?.destinations.find(d => d.id === selectedDestId)!;
 
-const DestinationDetailsPage = ({ opinionInput, setOpinionInput, ratingInput, setRatingInput, opinions }: Props) => {
-  //const { code, id } = useParams(); - will be used for requesting data
-
-  return (
+  return detailsData ? (
     <div className="details-page">
       <div className="all-data">
         <div className="block university-data">
           <div className="university-name">
             <InlineItems>
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Flag_of_France_%281794%E2%80%931815%2C_1830%E2%80%931974%2C_2020%E2%80%93present%29.svg/240px-Flag_of_France_%281794%E2%80%931815%2C_1830%E2%80%931974%2C_2020%E2%80%93present%29.svg.png"
-                alt="country flag"
-              />
-              <h1>Université Lumière (Lyon II)</h1>
+              <img src={detailsData.flagUrl} alt="country flag" />
+              <h1>{detailsData.universityName}</h1>
             </InlineItems>
           </div>
 
           <div className="details">
-            <BlockLabeledTextField label="Erasmus code" text="ErAsmUS-CODE" />
-            <BlockLabeledTextField label="Location" text="France, Lyon" />
-            <BlockLabeledTextField label="Contact" text="lyon.france@mail.com" />
+            <BlockLabeledTextField label="Erasmus code" text={detailsData.erasmusCode} />
+            <BlockLabeledTextField label="Location" text={`${detailsData.country}, ${detailsData.city}`} />
+            <BlockLabeledTextField label="Contact" text={detailsData.email} />
           </div>
         </div>
 
@@ -131,9 +70,23 @@ const DestinationDetailsPage = ({ opinionInput, setOpinionInput, ratingInput, se
             AVAILABLE DESTINATIONS <CompassOutlined style={{ marginLeft: "0.5rem" }} />
           </h2>
           <Table
-            dataSource={data}
+            dataSource={detailsData.destinations.map<DestMicro>(dest => {
+              return {
+                id: dest.id,
+                subjectArea: `${dest.subjectAreaName} | ${dest.subjectAreaId}`,
+                language: dest.subjectLanguageName,
+                vacancies: dest.places,
+              };
+            })}
+            onRow={record => {
+              return {
+                onClick: event => {
+                  setSelectedDestId(record.id);
+                },
+              };
+            }}
             pagination={false}
-            loading={false} // will be used with requesting data
+            loading={loading.details} // will be used with requesting data
             size="small"
             scroll={{ y: 240 }}
             bordered>
@@ -145,20 +98,18 @@ const DestinationDetailsPage = ({ opinionInput, setOpinionInput, ratingInput, se
       </div>
 
       <div className="block specialty-data" style={{ position: "relative" }}>
-        <h1>History and archaeology | 222</h1>
+        <h1>{`${specialty?.subjectAreaName} | ${specialty.subjectAreaId}`}</h1>
+
         <div className="grid">
-          <BlockLabeledTextField label="Vacancy" text="4" />
-          <BlockLabeledTextField label="Rating" text="4,3" />
-          <BlockLabeledTextField label="Previous min. grade" text="3,94" />
-          <BlockLabeledTextField label="Currently interested" text="7" />
+          <BlockLabeledTextField label="Vacancy" text={specialty.places} />
+          <BlockLabeledTextField label="Rating" text={specialty.rating} />
+          <BlockLabeledTextField label="Previous min. grade" text={specialty.average} />
+          <BlockLabeledTextField label="Currently interested" text={specialty.interestedStudents} />
         </div>
-        <div style={{ position: "absolute", top: "20px", right: "50px" }}>
-          <ContainerOutlined style={{ marginRight: "2rem", fontSize: "1.5rem" }} />
-          <HeartOutlined
-            style={{
-              fontSize: "1.5rem",
-            }}
-          />
+
+        <div className="icon-space">
+          <NoteStatusIndicator active={specialty.isNote} />
+          <FavoriteStatusIndicator active={specialty.isObserved} />
         </div>
       </div>
 
@@ -181,7 +132,9 @@ const DestinationDetailsPage = ({ opinionInput, setOpinionInput, ratingInput, se
             Share opinion
           </Button>
         </div>
+
         <Divider></Divider>
+
         <div className="list">
           <div
             id="scrollableDiv"
@@ -203,6 +156,8 @@ const DestinationDetailsPage = ({ opinionInput, setOpinionInput, ratingInput, se
         </div>
       </div>
     </div>
+  ) : (
+    <FullViewLoading />
   );
 };
 

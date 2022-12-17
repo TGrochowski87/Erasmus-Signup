@@ -30,7 +30,7 @@ function App() {
             <Route path="/" element={<Navigate replace to="/home" />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/list" element={<ListPageContainer />} />
-            <Route path="/list/:code/:id" element={<DestinationDetailsPageContainer />} />
+            <Route path="/list/:id" element={<DestinationDetailsPageContainer />} />
             <Route path="/profile" element={userLoggedIn ? <ProfilePageContainer /> : <Unauthorized />} />
             <Route path="/notes" element={userLoggedIn ? <NotesPageContainer /> : <Unauthorized />} />
             <Route path="/notes/edit" element={userLoggedIn ? <NoteViewPageContainer /> : <Unauthorized />} />

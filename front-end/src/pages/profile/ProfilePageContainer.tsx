@@ -17,7 +17,7 @@ const ProfilePageContainer = () => {
       },
       {
         id: 2,
-        name: "Jakaś bardzo długa nazwa, w koncu to PWR",
+        name: "Jakaś bardzo długa nazwa, w końcu to PWR",
         grade: 3.96,
       },
     ],
