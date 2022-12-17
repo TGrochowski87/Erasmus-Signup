@@ -1,61 +1,53 @@
 import { Image, Table } from "antd";
 import UnderlinedLabeledTextField from "components/UnderlinedLabeledTextField";
-import User from "models/User";
+import { User } from "models/User";
 // Styles
 import "./ProfilePage.scss";
 
 interface Props {
   user: User;
+  navigateToNotesPage: () => void;
 }
 
-const ProfilePage = ({ user }: Props) => {
+const ProfilePage = ({ user, navigateToNotesPage }: Props) => {
   return (
     <div className="user-page">
-      <div className="size-box">
-        <div className="user-profile">
-          <div className="user section">
-            <div className="top">
-              <Image
-                width={160}
-                height={180}
-                src="https://image.shutterstock.com/image-photo/passport-photo-portrait-middle-aged-260nw-1506715724.jpg"
-                alt="user"
-              />
-              <div className="data">
-                <UnderlinedLabeledTextField
-                  label="First name"
-                  text={user.firstName}
-                />
-                <UnderlinedLabeledTextField
-                  label="Last name"
-                  text={user.lastName}
-                />
-                <UnderlinedLabeledTextField label="Index" text={user.index} />
-              </div>
-            </div>
-            <br />
-            <br />
-            <hr />
-            <div className="bottom">
-              <h2>Fields of study</h2>
-              <Table
-                size="small"
-                pagination={false}
-                columns={[
-                  { title: "Name", dataIndex: "name" },
-                  { title: "Grade", dataIndex: "grade" },
-                ]}
-                dataSource={user.specialties.map((s) => {
-                  return {
-                    key: s.id,
-                    name: s.name,
-                    grade: s.grade,
-                  };
-                })}
-              />
-            </div>
+      <div className="user-section">
+        <div className="block personal-data">
+          <div className="image-space">
+            <Image
+              width={200}
+              height={250}
+              src={user.photoUtl_400x500}
+              alt="user"
+            />
           </div>
-          <div className="utility section"></div>
+          <div className="data">
+            <UnderlinedLabeledTextField label="Full name" text={user.titlesBefore + " " + user.firstName + " " + user.middleNames + " " + user.lastName + " " + user.titlesAfter} />
+            <UnderlinedLabeledTextField label="E-Mail" text={user.email} />
+            <UnderlinedLabeledTextField label="Role" text={ user.isStaff ? "Staff" : "Student" }/>
+            { user.studentNumber ? <UnderlinedLabeledTextField label="Student number" text={user.studentNumber} /> : ""}
+
+          </div>
+        </div>
+        <div className="block fields-of-study">
+          <h2>Fields of study</h2>
+          <Table
+            size="small"
+            pagination={false}
+            columns={[
+              { title: "Name", dataIndex: "name" },
+              { title: "Grade", dataIndex: "grade" },
+            ]}
+          />
+        </div>
+      </div>
+      <div className="block utility-section">
+        <div className="button" onClick={() => navigateToNotesPage()}>
+          <h1 className="text">NOTES</h1>
+        </div>
+        <div className="button">
+          <h1 className="text">PLANS</h1>
         </div>
       </div>
     </div>

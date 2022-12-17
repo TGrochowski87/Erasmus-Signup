@@ -9,9 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 const ListPageContainer = () => {
   const navigate = useNavigate();
-  const universities = useAppSelector(
-    (state: RootState) => state.university.value
-  );
+  const universities = useAppSelector((state: RootState) => state.university.value);
   const dispatch = useAppDispatch();
 
   useEffect(() => {

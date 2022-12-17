@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 // Redux
 import { useAppDispatch, useAppSelector } from "storage/redux/hooks";
-import { fetchOAuthUrl, logOut } from "storage/redux/loginSlice";
+import { fetchOAuthUrl, logOut, logOutLocally } from "storage/redux/loginSlice";
 import { RootState } from "storage/redux/store";
 import RequestStatus from "storage/redux/RequestStatus";
 // Styles
@@ -19,9 +19,7 @@ import NavLinkData from "./NavLinkData";
 import { anonymousUserLinks, loggedInUserLinks } from "./links";
 
 const Navbar = () => {
-  const { userLoggedIn, status } = useAppSelector(
-    (state: RootState) => state.login
-  );
+  const { userLoggedIn, status } = useAppSelector((state: RootState) => state.login);
   const dispatch = useAppDispatch();
   const { pathname } = useLocation();
   const [activeId, setActiveId] = useState<number | null>(null);
@@ -30,7 +28,7 @@ const Navbar = () => {
   // Handles filling navbar with links
   useEffect(() => {
     const linkList = userLoggedIn
-      ? loggedInUserLinks(dispatch, logOut)
+      ? loggedInUserLinks(dispatch, logOut, logOutLocally)
       : anonymousUserLinks(dispatch, fetchOAuthUrl);
 
     setLinks(linkList);
@@ -45,9 +43,7 @@ const Navbar = () => {
       return;
     }
 
-    let matchingPaths = links.filter(
-      (l) => l.path && currentLocation.includes(l.path)
-    );
+    let matchingPaths = links.filter(l => l.path && currentLocation.includes(l.path));
 
     if (matchingPaths.length === 0) {
       setActiveId(null);
@@ -63,7 +59,7 @@ const Navbar = () => {
       <nav className="nav">
         <img src={pwrlogo} alt="pwr logo" />
         <img src={eulogo} alt="eu logo" style={{ marginRight: "auto" }} />
-        {links.map((link) => (
+        {links.map(link => (
           <NavbarLink
             key={link.id}
             text={link.text}

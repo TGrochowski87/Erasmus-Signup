@@ -5,7 +5,7 @@ interface Props {
 
 const UnderlinedLabeledTextField = ({ label = "", text }: Props) => {
   return (
-    <div style={{ width: "80%" }}>
+    <div>
       <div style={{ borderBottom: "1px solid black" }}>
         <h2 style={{ margin: "0" }}>{text}</h2>
       </div>
@@ -15,8 +15,7 @@ const UnderlinedLabeledTextField = ({ label = "", text }: Props) => {
           float: "right",
           marginRight: "1rem",
           lineHeight: "1.2",
-        }}
-      >
+        }}>
         {label}
       </h5>
     </div>

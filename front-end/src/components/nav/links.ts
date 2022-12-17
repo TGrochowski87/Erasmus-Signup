@@ -1,9 +1,6 @@
 import NavLinkData from "./NavLinkData";
 
-export const anonymousUserLinks = (
-  dispatch: Function,
-  fetchOAuthUrl: Function
-): NavLinkData[] => [
+export const anonymousUserLinks = (dispatch: Function, fetchOAuthUrl: Function): NavLinkData[] => [
   {
     id: 0,
     text: "Home",
@@ -17,17 +14,14 @@ export const anonymousUserLinks = (
   {
     id: 2,
     text: "Log in",
-    customOnClick: (event) => {
+    customOnClick: event => {
       event.preventDefault();
       dispatch(fetchOAuthUrl());
     },
   },
 ];
 
-export const loggedInUserLinks = (
-  dispatch: Function,
-  logOut: Function
-): NavLinkData[] => [
+export const loggedInUserLinks = (dispatch: Function, logOut: Function, logOutLocally: Function): NavLinkData[] => [
   {
     id: 0,
     text: "Home",
@@ -40,15 +34,21 @@ export const loggedInUserLinks = (
   },
   {
     id: 2,
+    text: "Notes",
+    path: "notes",
+  },
+  {
+    id: 3,
     text: "Profile",
     path: "profile",
   },
   {
-    id: 3,
+    id: 4,
     text: "Log out",
-    customOnClick: (event) => {
+    customOnClick: event => {
       event.preventDefault();
       dispatch(logOut());
+      dispatch(logOutLocally());
     },
   },
 ];
