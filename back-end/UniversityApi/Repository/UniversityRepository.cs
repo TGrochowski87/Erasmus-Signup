@@ -29,5 +29,25 @@ namespace UniversityApi.Repository
                 .Include(x => x.DestSpecialities).ThenInclude(x=>x.SubjectLanguage)
                 .FirstAsync(x => x.DestSpecialities.Any(x => x.Id == destId));
         }
+
+        public IQueryable<DestSpeciality> DestSpecialityGetList()
+        {
+            var destSpecialityList = _context.DestSpecialities
+                 .Include(x => x.DestUniversityCodeNavigation)
+                 .Include(x => x.StudyArea)
+                 .Include(x => x.MinGradeHistories)
+                 .Include(x => x.SubjectLanguage);
+
+            return destSpecialityList;
+        }
+
+        public async Task UpdateInterestedStudentsCountAsync(int id, bool increment)
+        {
+            var speciality = await _context.DestSpecialities
+                .SingleAsync(speciality => speciality.Id == id);
+
+            speciality.InterestedStudents += increment ? 1 : -1;
+            await _context.SaveChangesAsync();
+        }
     }
 }
