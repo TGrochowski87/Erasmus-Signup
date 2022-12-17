@@ -1,11 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
 
 namespace NoteApi.DbModels
 {
-    [Table("Note")]
-    public class Note
+    public partial class Note
     {
         public int Id { get; set; }
-        public string? Content { get; set; }
+        public int UserId { get; set; }
+        public DateTime CreatedAt { get; set; }
+
+        public virtual PlanNote? PlanNote { get; set; }
+        public virtual SpecialityHighlightNote? SpecialityHighlightNote { get; set; }
+        public virtual SpecialityNote? SpecialityNote { get; set; }
+        public virtual SpecialityPriorityNote? SpecialityPriorityNote { get; set; }
     }
 }

@@ -21,7 +21,7 @@ namespace UserApi.Service
 
         public HttpResponseMessage GetAccesToken(string oauth_token, string oauth_verifier, string oauth_token_secret)
         {
-            List<KeyValuePair<string,string>> urlParams = new List<KeyValuePair<string,string>>();
+            List<KeyValuePair<string, string>> urlParams = new List<KeyValuePair<string, string>>();
             urlParams.Add(new KeyValuePair<string, string>("oauth_token", oauth_token));
             urlParams.Add(new KeyValuePair<string, string>("oauth_verifier", oauth_verifier));
             return Call("services/oauth/access_token", urlParams, true, oauth_token_secret);
@@ -42,8 +42,8 @@ namespace UserApi.Service
         )
         {
             string url = Secrets.OAuthHostUrl + method;
-            string nonce        = useOAuth ? OAuthTool.GenerateNonce()     : String.Empty;
-            string timestamp    = useOAuth ? OAuthTool.GenerateTimeStamp() : String.Empty;
+            string nonce = useOAuth ? OAuthTool.GenerateNonce() : String.Empty;
+            string timestamp = useOAuth ? OAuthTool.GenerateTimeStamp() : String.Empty;
             if (useOAuth)
             {
                 urlParams.Add(new KeyValuePair<string, string>("oauth_consumer_key", Secrets.OAuthApiConsumerKey));
@@ -53,11 +53,11 @@ namespace UserApi.Service
                 urlParams.Add(new KeyValuePair<string, string>("oauth_version", "1.0"));
             }
             string paramsString = String.Empty;
-            if(urlParams.Any())
+            if (urlParams.Any())
             {
                 urlParams.Sort((x, y) => (String.Compare(x.Key, y.Key)));
                 paramsString += OAuthTool.UrlEncode(urlParams[0].Key) + "=" + OAuthTool.UrlEncode(urlParams[0].Value);
-                for(int i = 1; i < urlParams.Count; i++)
+                for (int i = 1; i < urlParams.Count; i++)
                 {
                     paramsString += "&" + OAuthTool.UrlEncode(urlParams[i].Key) + "=" + OAuthTool.UrlEncode(urlParams[i].Value);
                 }

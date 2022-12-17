@@ -375,4 +375,4 @@ yarn-error.log*
 
 .idea/
 
-secrets.json
+/UserApi/secrets.json

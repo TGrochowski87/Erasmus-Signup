@@ -24,7 +24,6 @@ services:
     ports:
       - 5400:5432
     volumes:
-      - ./UniversityApi/data.csv:/usr/local/etc/data.csv
       - ./UniversityApi/universityDatabase.sql:/docker-entrypoint-initdb.d/universityDatabase.sql
 
   notedb:

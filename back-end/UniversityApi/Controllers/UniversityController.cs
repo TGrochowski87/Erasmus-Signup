@@ -12,8 +12,7 @@ namespace UniversityApi.Controllers
         private readonly IUniversityService universityService;
         private readonly IPublishEndpoint publishEndpoint;
 
-        public UniversityController(IUniversityService universityService,
-            IPublishEndpoint publishEndpoint)
+        public UniversityController(IUniversityService universityService)
         {
             this.universityService = universityService;
             this.publishEndpoint = publishEndpoint;
