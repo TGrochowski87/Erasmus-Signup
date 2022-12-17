@@ -10,7 +10,7 @@ CREATE TABLE plan (
     status_id               integer REFERENCES status
 );
 
--- w sumie to nie wiem czy bedziemy tu cos zaciagac z zewnatrz
+
 CREATE TABLE subject (
     id                      serial PRIMARY KEY,
     plan_id                 integer REFERENCES plan,
@@ -18,4 +18,11 @@ CREATE TABLE subject (
     ects                    smallint NOT NULL,
     plan_mapping_row        smallint,
     is_pwr                  boolean NOT NULL
+);
+
+CREATE TABLE user_home_subject (
+    id                      serial PRIMARY KEY,
+    student_id              integer NOT NULL,
+    name                    text NOT NULL,
+    ects                    smallint NOT NULL
 );
