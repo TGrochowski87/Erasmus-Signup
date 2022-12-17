@@ -211,16 +211,17 @@ INSERT INTO pwr_faculty (shortcut, name) VALUES ('W13','Pure and Applied Mathema
 INSERT INTO pwr_faculty (shortcut, name) VALUES ('PWr','University-wide');
 INSERT INTO pwr_faculty (shortcut, name) VALUES ('W15','Off-campus Department WUST');
 --university
-INSERT INTO university (erasmus_code, name, country, city, email, link) VALUES ('A GRAZ109','FH JOANNEUM GESELLSCHAFT MBH', 'Austria', 'Graz', 'info@fh-joanneum.at', 'https://www.fh-joanneum.at/');
-INSERT INTO university (erasmus_code, name, country, city, email, link) VALUES ('B ANTWERP01','UNIVERSITEIT ANTWERPEN', 'Belgium', 'Antwerp', 'voornaam.achternaam@student.uantwerpen.be', 'https://www.uantwerpen.be/nl/');
-INSERT INTO university (erasmus_code, name, country, city, email, link) VALUES ('CZ LIBEREC01','TECHNICKA UNIVERZITA  V LIBERCI', 'Czechia', 'Liberec', 'info@tul.cz', 'https://www.tul.cz/en/erasmus-2/');
-INSERT INTO university (erasmus_code, name, country, city, email, link) VALUES ('D BERLIN21','SRH HOCHSCHULE BERLIN', 'Germany', 'Berlin', 'info.hsbe@srh.de', 'https://www.srh-berlin.de/');
-INSERT INTO university (erasmus_code, name, country, city, email, link) VALUES ('E SEVILLA01','UNIVERSIDAD DE SEVILLA', 'Spain', 'Sevilla', 'info@us.es', 'https://www.us.es/');
-INSERT INTO university (erasmus_code, name, country, city, email, link) VALUES ('F MARSEILL84','UNIVERSITE AIX-MARSEILLE', 'France', 'Marseille', 'info@univ-amu.fr', 'https://www.univ-amu.fr/');
-INSERT INTO university (erasmus_code, name, country, city, email, link) VALUES ('G KRITIS09','POLYTECHNIO KRITIS', 'Greece', 'Chania', ' dpo@tuc.gr', 'https://www.tuc.gr/index.php?id=5397');
-INSERT INTO university (erasmus_code, name, country, city, email, link) VALUES ('HR RIJEKA01','UNIVERSITY OF RIJEKA', 'Croatia', 'Rijeka', 'ured@uniri.hr', 'https://uniri.hr/en/home/');
-INSERT INTO university (erasmus_code, name, country, city, email, link) VALUES ('I PADOVA01','UNIVERSIT DEGLI STUDI DI PADOVA', 'Italy', 'Padova', 'amministrazione.centrale@pec.unipd.it', 'https://www.unipd.it/');
-INSERT INTO university (erasmus_code, name, country, city, email, link) VALUES ('P PORTO02','UNIVERSIDADE DO PORTO', 'Portugal', 'Porto', 'info@up.pt', 'https://www.up.pt/portal/en/');
+INSERT INTO university (erasmus_code, name, country, city, email, link) VALUES ('A GRAZ109','Fh Joanneum Gesellschaft MBH', 'Austria', 'Graz', 'info@fh-joanneum.at', 'https://www.fh-joanneum.at/');
+INSERT INTO university (erasmus_code, name, country, city, email, link) VALUES ('B ANTWERP01','Universiteit Antwerpen', 'Belgium', 'Antwerp', 'voornaam.achternaam@student.uantwerpen.be', 'https://www.uantwerpen.be/nl/');
+INSERT INTO university (erasmus_code, name, country, city, email, link) VALUES ('CZ LIBEREC01','Technicka Univerzita v Liberci', 'Czechia', 'Liberec', 'info@tul.cz', 'https://www.tul.cz/en/erasmus-2/');
+INSERT INTO university (erasmus_code, name, country, city, email, link) VALUES ('D BERLIN21','SRH Hochschule Berlin', 'Germany', 'Berlin', 'info.hsbe@srh.de', 'https://www.srh-berlin.de/');
+INSERT INTO university (erasmus_code, name, country, city, email, link) VALUES ('E SEVILLA01','Universidad de Sevilla', 'Spain', 'Sevilla', 'info@us.es', 'https://www.us.es/');
+INSERT INTO university (erasmus_code, name, country, city, email, link) VALUES ('F MARSEILL84','Universite Aix-Marseille', 'France', 'Marseille', 'info@univ-amu.fr', 'https://www.univ-amu.fr/');
+INSERT INTO university (erasmus_code, name, country, city, email, link) VALUES ('G KRITIS09','Polytechnio Kritis', 'Greece', 'Chania', ' dpo@tuc.gr', 'https://www.tuc.gr/index.php?id=5397');
+INSERT INTO university (erasmus_code, name, country, city, email, link) VALUES ('HR RIJEKA01','University of Rijeka', 'Croatia', 'Rijeka', 'ured@uniri.hr', 'https://uniri.hr/en/home/');
+INSERT INTO university (erasmus_code, name, country, city, email, link) VALUES ('I PADOVA01','Universit Delgi Studi di Padova', 'Italy', 'Padova', 'amministrazione.centrale@pec.unipd.it', 'https://www.unipd.it/');
+INSERT INTO university (erasmus_code, name, country, city, email, link) VALUES ('P PORTO02','Universidade do Porto', 'Portugal', 'Porto', 'info@up.pt', 'https://www.up.pt/portal/en/');
+
 --pwr_speciality
 INSERT INTO pwr_speciality (name,pwr_faculty_short) VALUES ('IS-II-IO','W4N');
 INSERT INTO pwr_speciality (name,pwr_faculty_short) VALUES ('IS-II-PSI','W4N');
