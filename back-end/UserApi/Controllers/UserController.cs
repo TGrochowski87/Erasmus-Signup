@@ -53,6 +53,11 @@ namespace UserApi.Controllers
 
                 if (jUser.Count > 0)
                 {
+                    if(Convert.ToInt16(jUser["student_status"]!.ToString()) != 2 && Convert.ToInt16(jUser["staff_status"]!.ToString()) != 2)
+                    {
+                        return Unauthorized("User is not an active user or staff");
+                    }
+                    
                     return Ok(new User(
                         Convert.ToInt64(jUser["id"]!.ToString()),
                         jUser["first_name"]!.ToString(),
@@ -61,8 +66,7 @@ namespace UserApi.Controllers
                         jUser["sex"]!.ToString()[0],
                         jUser["titles"]!["before"]!.ToString(),
                         jUser["titles"]!["after"]!.ToString(),
-                        Convert.ToInt16(jUser["student_status"]!.ToString()),
-                        Convert.ToInt16(jUser["staff_status"]!.ToString()),
+                        Convert.ToInt16(jUser["staff_status"]!.ToString()) == 2,
                         jUser["email"]!.ToString(),
                         jUser["photo_urls"]!["50x50"]!.ToString(),
                         jUser["photo_urls"]!["400x500"]!.ToString(),
