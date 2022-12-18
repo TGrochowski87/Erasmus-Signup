@@ -1,6 +1,6 @@
 interface Props {
   label?: string;
-  text: string;
+  text: string | number;
   style?: React.CSSProperties;
 }
 

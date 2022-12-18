@@ -13,32 +13,29 @@ const initialState: State = {
   status: RequestStatus.idle,
 };
 
-export const fetchOAuthUrl = createAsyncThunk<OAuthData>(
-  "oauth_url",
-  async () => {
-    //TODO: Add error handling
-    const response = await getOAuthUrl();
+export const fetchOAuthUrl = createAsyncThunk<OAuthData>("oauth_url", async () => {
+  //TODO: Add error handling
+  const response = await getOAuthUrl();
+  return response;
+});
+
+//TODO: Handle token expiration
+export const logIn = createAsyncThunk<string, { oAuthToken: string; oAuthVerifier: string }>(
+  "login",
+  async ({ oAuthToken, oAuthVerifier }) => {
+    const oAuthTokenSecret = localStorage.getItem("token-secret");
+    if (oAuthTokenSecret === null) {
+      throw Error("OAuth Token missing.");
+    }
+
+    const response = await getAccessToken({
+      oAuthToken,
+      oAuthVerifier,
+      oAuthTokenSecret,
+    });
     return response;
   }
 );
-
-//TODO: Handle token expiration
-export const logIn = createAsyncThunk<
-  string,
-  { oAuthToken: string; oAuthVerifier: string }
->("login", async ({ oAuthToken, oAuthVerifier }) => {
-  const oAuthTokenSecret = localStorage.getItem("token-secret");
-  if (oAuthTokenSecret === null) {
-    throw Error("OAuth Token missing.");
-  }
-
-  const response = await getAccessToken({
-    oAuthToken,
-    oAuthVerifier,
-    oAuthTokenSecret,
-  });
-  return response;
-});
 
 export const logOut = createAsyncThunk("logout", async () => {
   const response = await revokeAccessToken();
@@ -55,10 +52,10 @@ const loginSlice = createSlice({
       state.userLoggedIn = false;
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
       // fetchOAuthUrl
-      .addCase(fetchOAuthUrl.pending, (state) => {
+      .addCase(fetchOAuthUrl.pending, state => {
         state.status = RequestStatus.loading;
       })
       .addCase(fetchOAuthUrl.fulfilled, (state, action) => {
@@ -66,11 +63,11 @@ const loginSlice = createSlice({
         localStorage.setItem("token-secret", action.payload.oAuthTokenSecret);
         window.location.href = action.payload.oAuthUrl;
       })
-      .addCase(fetchOAuthUrl.rejected, (state) => {
+      .addCase(fetchOAuthUrl.rejected, state => {
         state.status = RequestStatus.failed;
       })
       // logIn
-      .addCase(logIn.pending, (state) => {
+      .addCase(logIn.pending, state => {
         state.status = RequestStatus.loading;
       })
       .addCase(logIn.fulfilled, (state, action) => {
@@ -79,17 +76,17 @@ const loginSlice = createSlice({
         localStorage.setItem("access-token", action.payload);
         state.userLoggedIn = true;
       })
-      .addCase(logIn.rejected, (state) => {
+      .addCase(logIn.rejected, state => {
         state.status = RequestStatus.failed;
       })
       // logOut
-      .addCase(logOut.pending, (state) => {
+      .addCase(logOut.pending, state => {
         state.status = RequestStatus.loading;
       })
       .addCase(logOut.fulfilled, (state, action) => {
         state.status = RequestStatus.idle;
       })
-      .addCase(logOut.rejected, (state) => {
+      .addCase(logOut.rejected, state => {
         state.status = RequestStatus.failed;
       });
   },

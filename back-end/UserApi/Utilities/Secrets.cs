@@ -89,7 +89,16 @@ namespace UserApi.Utilities
 
         #endregion
 
-        #region Functons
+        #region Functions
+
+        static private string getRequiredSecretString(JObject jObj, string valueName)
+        {
+            if(jObj[valueName] is null)
+            {
+                throw new Exception("secrets.json has no \""+ valueName + "\" parameter");
+            }
+            return jObj[valueName]!.ToString();
+        }
 
         static public void LoadSecrets()
         {
@@ -97,14 +106,14 @@ namespace UserApi.Utilities
             using (JsonTextReader reader = new JsonTextReader(file))
             {
                 JObject secretJson = (JObject)JToken.ReadFrom(reader);
-                serviceUrl              = secretJson["service_url"] is not null ? secretJson["service_url"]!.ToString() : "";
-                oauthHostUrl            = secretJson["oauth_host"] is not null ? secretJson["oauth_host"]!.ToString() : "";
-                oauthApiConsumerKey     = secretJson["oauth_consumer_key"] is not null ? secretJson["oauth_consumer_key"]!.ToString() : "";
-                oauthApiConsumerSecret  = secretJson["oauth_consumer_secret"] is not null ? secretJson["oauth_consumer_secret"]!.ToString() : "";
-                oauthTokenMethod        = secretJson["oauth_token_method"] is not null ? secretJson["oauth_token_method"]!.ToString() : "";
-                oauthAuthMethod         = secretJson["oauth_auth_method"] is not null ? secretJson["oauth_auth_method"]!.ToString() : "";
-                jwtKey                  = secretJson["jwt_key"] is not null ? secretJson["jwt_key"]!.ToString() : "";
-            }
+                serviceUrl              = getRequiredSecretString(secretJson, "service_url");
+                oauthHostUrl            = getRequiredSecretString(secretJson, "oauth_host");
+                oauthApiConsumerKey     = getRequiredSecretString(secretJson, "oauth_consumer_key");
+                oauthApiConsumerSecret  = getRequiredSecretString(secretJson, "oauth_consumer_secret");
+                oauthTokenMethod        = getRequiredSecretString(secretJson, "oauth_token_method");
+                oauthAuthMethod         = getRequiredSecretString(secretJson, "oauth_auth_method");
+                jwtKey                  = getRequiredSecretString(secretJson, "jwt_key");
+            }   
         }
         #endregion
     }

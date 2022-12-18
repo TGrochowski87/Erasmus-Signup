@@ -1,25 +1,23 @@
 // Ant Design
-import {
-  HeartFilled,
-  HeartOutlined,
-  LineChartOutlined,
-  MessageOutlined,
-  TeamOutlined,
-} from "@ant-design/icons";
+import { HeartFilled, HeartOutlined, LineChartOutlined, MessageOutlined, TeamOutlined } from "@ant-design/icons";
 import { Button, List, Rate } from "antd";
 // Components
-import University from "models/University";
 import InlineItems from "components/InlineItems";
+import DestSpecialty from "models/DestSpecialty";
 // Styles
 import "./ListPage.scss";
 import openInNewTab from "utilities/openInNewTab";
+import FavoriteStatusIndicator from "components/FavoriteStatusIndicator";
 
 interface Props {
-  universities: University[];
-  handleOnClick: Function;
+  destinations: DestSpecialty[];
+  handlePageChange: (page: number, pageSize: number) => void;
+  totalAmount: number;
+  loading: boolean;
+  handleOnClick: (id: number) => void;
 }
 
-const ListPage = ({ universities, handleOnClick }: Props) => {
+const ListPage = ({ destinations, handlePageChange, totalAmount, loading, handleOnClick }: Props) => {
   return (
     <div>
       <div
@@ -27,34 +25,37 @@ const ListPage = ({ universities, handleOnClick }: Props) => {
           marginTop: 64,
           width: "70%",
           marginLeft: "auto",
-        }}
-      >
-        <div
-          className="site-layout-background"
-          style={{ padding: 24, minHeight: 380 }}
-        >
+        }}>
+        <div className="site-layout-background" style={{ padding: 24, minHeight: 380 }}>
           <List
-            loading={universities.length === 0}
+            loading={loading}
             bordered
             itemLayout="vertical"
-            dataSource={universities}
+            dataSource={destinations}
             footer={
               <div>
                 <b>Erasmus Sign up</b> destinations
               </div>
             }
-            renderItem={(item) => (
+            pagination={{
+              position: "both",
+              total: totalAmount,
+              pageSize: 10,
+              onChange: (page, pageSize) => {
+                handlePageChange(page, pageSize);
+              },
+            }}
+            renderItem={item => (
               <List.Item
-                key={item.id}
+                key={item.destinationSpecialityId}
                 className="university-list-item"
                 style={{
                   borderBottomColor: "rgb(184, 184, 184)",
                   paddingLeft: "0.5rem",
                 }}
                 onClick={() => {
-                  handleOnClick(item.erasmusCode, item.id);
-                }}
-              >
+                  handleOnClick(item.destinationSpecialityId);
+                }}>
                 <div className="university-list-item-content">
                   <div className="country-flag-space">
                     <img src={item.flagUrl} alt="country flag" />
@@ -66,16 +67,14 @@ const ListPage = ({ universities, handleOnClick }: Props) => {
                           style={{
                             display: "inline",
                             marginRight: "10px",
-                          }}
-                        >
+                          }}>
                           {item.universityName}
                         </h2>
                         <h3
                           style={{
                             display: "inline",
                             color: "grey",
-                          }}
-                        >
+                          }}>
                           {item.country}
                         </h3>
                         <Rate
@@ -88,20 +87,7 @@ const ListPage = ({ universities, handleOnClick }: Props) => {
                             top: "-10px",
                           }}
                         />
-                        {item.isObserved ? (
-                          <HeartFilled
-                            style={{
-                              fontSize: "1.5rem",
-                              color: "red",
-                            }}
-                          />
-                        ) : (
-                          <HeartOutlined
-                            style={{
-                              fontSize: "1.5rem",
-                            }}
-                          />
-                        )}
+                        <FavoriteStatusIndicator active={item.isObserved} />
                       </div>
 
                       <p style={{ marginTop: "0.5rem" }}>
@@ -112,17 +98,17 @@ const ListPage = ({ universities, handleOnClick }: Props) => {
                     <div className="text-icons">
                       <InlineItems>
                         <TeamOutlined />
-                        {item.availablePlaces}
+                        {item.places}
                       </InlineItems>
 
                       <InlineItems>
                         <LineChartOutlined />
-                        {item.lastYearGradeAvg}
+                        {item.average}
                       </InlineItems>
 
                       <InlineItems>
                         <MessageOutlined />
-                        {item.opinionsAmount}
+                        {item.opinions}
                       </InlineItems>
                     </div>
                   </div>
@@ -135,13 +121,12 @@ const ListPage = ({ universities, handleOnClick }: Props) => {
                       size="large"
                       type="primary"
                       onClick={() => {
-                        if (item.website !== null) {
-                          openInNewTab(item.website);
+                        if (item.link !== null) {
+                          openInNewTab(item.link);
                         } else {
                           alert("No website for this university.");
                         }
-                      }}
-                    >
+                      }}>
                       Visit website
                     </Button>
                   </div>
