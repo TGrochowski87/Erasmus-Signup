@@ -1,0 +1,94 @@
+version: "3"
+services:
+  rabbitmq:
+    image: masstransit/rabbitmq
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
+    hostname: rabbitmq_host
+
+  universitydb:
+    image: postgres
+    container_name: universitydb
+    restart: always
+    build:
+      context: ./UniversityApi/
+      dockerfile: Dockerfile.db
+    environment:
+      - POSTGRES_DB=universitydb
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=123
+    ports:
+      - 5400:5432
+    volumes:
+      - ./UniversityApi/universityDatabase.sql:/docker-entrypoint-initdb.d/universityDatabase.sql
+
+  notedb:
+    image: postgres
+    container_name: notedb
+    restart: always
+    build:
+      context: ./NoteApi/
+      dockerfile: Dockerfile.db
+    environment:
+      - POSTGRES_DB=notedb
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=123
+    ports:
+      - 5401:5432
+    volumes: 
+      - ./NoteApi/noteDatabase.sql:/docker-entrypoint-initdb.d/noteDatabase.sql
+
+  opiniondb:
+    image: postgres
+    container_name: opiniondb
+    restart: always
+    build:
+      context: ./OpinionApi/
+      dockerfile: Dockerfile.db
+    environment:
+      - POSTGRES_DB=opiniondb
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=123
+    ports:
+      - 5402:5432
+    volumes: 
+      - ./OpinionApi/opinionDatabase.sql:/docker-entrypoint-initdb.d/opinionDatabase.sql
+
+  plandb:
+    image: postgres
+    container_name: plandb
+    restart: always
+    build:
+      context: ./PlanApi/
+      dockerfile: Dockerfile.db
+    environment:
+      - POSTGRES_DB=plandb
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=123
+    ports:
+      - 5403:5432
+    volumes: 
+      - ./PlanApi/planDatabase.sql:/docker-entrypoint-initdb.d/planDatabase.sql
+
+  userdb:
+    image: postgres
+    container_name: userdb
+    restart: always
+    build:
+      context: ./UserApi/
+      dockerfile: Dockerfile.db
+    environment:
+      - POSTGRES_DB=userdb
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=123
+    ports:
+      - 5404:5432
+    volumes: 
+      - ./UserApi/userDatabase.sql:/docker-entrypoint-initdb.d/userDatabase.sql
+  
+volumes:
+  rabbitmqdata:

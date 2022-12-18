@@ -1,0 +1,7 @@
+﻿version: "3"
+services:
+  note-api-prod:
+    build:
+      dockerfile: Dockerfile.prod
+    ports:
+      - "7004:7004"
