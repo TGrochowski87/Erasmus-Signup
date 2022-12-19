@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\PlanNotePostVM - kopiować.cs" />
+    <Compile Remove="Models\SpecialityNoteVM - kopiować.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Communication" Version="1.0.5" />
     <PackageReference Include="FluentResults.Extensions.FluentAssertions" Version="2.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.10">
@@ -20,7 +25,6 @@
 
   <ItemGroup>
     <Folder Include="Common\" />
-    <Folder Include="DbModels\" />
     <Folder Include="Repository\" />
   </ItemGroup>
 

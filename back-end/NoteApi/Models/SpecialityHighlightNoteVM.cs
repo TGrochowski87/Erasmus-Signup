@@ -11,13 +11,12 @@ namespace NoteApi.Models
         public int SpecialityId { get; set; }
         public bool Positive { get; set; }
 
-        [JsonConstructor]
-        public SpecialityHighlightNoteVM(int userId, int specialityId, bool positive)
+        public SpecialityHighlightNoteVM(int userId, SpecialityHighlightNotePostVM postVm)
         {
             Id = -1;
             UserId = userId;
-            SpecialityId = specialityId;
-            Positive = positive;
+            SpecialityId = postVm.SpecialityId;
+            Positive = postVm.Positive;
         }
 
         public SpecialityHighlightNoteVM(SpecialityHighlightNote dbModel)

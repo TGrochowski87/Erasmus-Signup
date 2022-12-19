@@ -3,10 +3,9 @@ using System.Collections.Generic;
 
 namespace NoteApi.DbModels
 {
-    public partial class PlanNote
+    public partial class CommonNote
     {
         public int NoteId { get; set; }
-        public int PlanId { get; set; }
         public string Title { get; set; } = null!;
         public string Content { get; set; } = null!;
 

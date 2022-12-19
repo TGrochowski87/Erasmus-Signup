@@ -16,6 +16,7 @@ namespace NoteApi.DbModels
         {
         }
 
+        public virtual DbSet<CommonNote> CommonNotes { get; set; } = null!;
         public virtual DbSet<Note> Notes { get; set; } = null!;
         public virtual DbSet<PlanNote> PlanNotes { get; set; } = null!;
         public virtual DbSet<SpecialityHighlightNote> SpecialityHighlightNotes { get; set; } = null!;
@@ -33,6 +34,27 @@ namespace NoteApi.DbModels
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<CommonNote>(entity =>
+            {
+                entity.HasKey(e => e.NoteId)
+                    .HasName("common_note_pkey");
+
+                entity.ToTable("common_note");
+
+                entity.Property(e => e.NoteId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("note_id");
+
+                entity.Property(e => e.Content).HasColumnName("content");
+
+                entity.Property(e => e.Title).HasColumnName("title");
+
+                entity.HasOne(d => d.Note)
+                    .WithOne(p => p.CommonNote)
+                    .HasForeignKey<CommonNote>(d => d.NoteId)
+                    .HasConstraintName("common_note_note_id_fkey");
+            });
+
             modelBuilder.Entity<Note>(entity =>
             {
                 entity.ToTable("note");
@@ -60,6 +82,8 @@ namespace NoteApi.DbModels
                 entity.Property(e => e.Content).HasColumnName("content");
 
                 entity.Property(e => e.PlanId).HasColumnName("plan_id");
+
+                entity.Property(e => e.Title).HasColumnName("title");
 
                 entity.HasOne(d => d.Note)
                     .WithOne(p => p.PlanNote)
@@ -102,6 +126,8 @@ namespace NoteApi.DbModels
                 entity.Property(e => e.Content).HasColumnName("content");
 
                 entity.Property(e => e.SpecialityId).HasColumnName("speciality_id");
+
+                entity.Property(e => e.Title).HasColumnName("title");
 
                 entity.HasOne(d => d.Note)
                     .WithOne(p => p.SpecialityNote)

@@ -4,9 +4,17 @@ CREATE TABLE note (
     created_at              timestamp NOT NULL
 );
 
+CREATE TABLE common_note (
+    note_id                 integer REFERENCES note(id) ON DELETE CASCADE,
+    title                   text NOT NULL,
+    content                 text NOT NULL,
+    PRIMARY KEY (note_id)
+);
+
 CREATE TABLE plan_note (
     note_id                 integer REFERENCES note(id) ON DELETE CASCADE,
     plan_id                 integer NOT NULL,
+    title                   text NOT NULL,
     content                 text NOT NULL,
     PRIMARY KEY (note_id)
 );
@@ -14,6 +22,7 @@ CREATE TABLE plan_note (
 CREATE TABLE speciality_note (
     note_id                 integer REFERENCES note(id) ON DELETE CASCADE,
     speciality_id           integer NOT NULL,
+    title                   text NOT NULL,
     content                 text NOT NULL,
     PRIMARY KEY (note_id)
 );

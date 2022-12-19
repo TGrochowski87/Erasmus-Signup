@@ -11,13 +11,12 @@ namespace NoteApi.Models
         public int SpecialityId { get; set; }
         public short Priority { get; set; }
 
-        [JsonConstructor]
-        public SpecialityPriorityNoteVM(int userId, int specialityId, short priority)
+        public SpecialityPriorityNoteVM(int userId, SpecialityPriorityNotePostVM postVm)
         {
             Id = -1;
             UserId = userId;
-            SpecialityId = specialityId;
-            Priority = priority;
+            SpecialityId = postVm.SpecialityId;
+            Priority = postVm.Priority;
         }
 
         public SpecialityPriorityNoteVM(SpecialityPriorityNote dbModel)
