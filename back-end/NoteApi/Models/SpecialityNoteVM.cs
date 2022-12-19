@@ -7,13 +7,13 @@ namespace NoteApi.Models
     public class SpecialityNoteVM
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         public DateTime? CreatedAt { get; set; }
         public int SpecialityId { get; set; }
         public string Title { get; set; } = null!;
         public string Content { get; set; } = null!;
 
-        public SpecialityNoteVM(int userId, SpecialityNotePostVM postVm)
+        public SpecialityNoteVM(long userId, SpecialityNotePostVM postVm)
         {
             Id = -1;
             UserId = userId;

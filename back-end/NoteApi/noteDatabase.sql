@@ -1,6 +1,6 @@
 CREATE TABLE note (
     id                      serial PRIMARY KEY,
-    user_id                 integer NOT NULL,
+    user_id                 bigint NOT NULL,
     created_at              timestamp NOT NULL
 );
 

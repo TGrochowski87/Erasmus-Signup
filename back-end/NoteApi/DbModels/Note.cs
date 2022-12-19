@@ -6,7 +6,7 @@ namespace NoteApi.DbModels
     public partial class Note
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         public DateTime CreatedAt { get; set; }
 
         public virtual CommonNote? CommonNote { get; set; }

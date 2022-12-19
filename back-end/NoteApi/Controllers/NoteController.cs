@@ -315,7 +315,7 @@ namespace NoteApi.Controllers
             return Ok(await noteService.GetSpecialityRatingNoteAsync(userId));
         }
 
-        private int GetUserId(string access_token, string access_token_secret)
+        private long GetUserId(string access_token, string access_token_secret)
         {
             HttpResponseMessage responseMessageUserId = userService.GetCurrentUserId(access_token, access_token_secret);
 
@@ -326,7 +326,7 @@ namespace NoteApi.Controllers
 
                 if (jUserId.Count > 0)
                 {
-                    return Convert.ToInt32(jUserId["id"]!.ToString());
+                    return Convert.ToInt64(jUserId["id"]!.ToString());
                 }
             }
 

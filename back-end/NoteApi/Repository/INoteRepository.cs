@@ -6,15 +6,15 @@ namespace NoteApi.Repository
     public interface INoteRepository
     {
         Task<IEnumerable<CommonNote>> GetCommonNotesAsync();
-        Task<IEnumerable<CommonNote>> GetCommonNotesAsync(int userId);
+        Task<IEnumerable<CommonNote>> GetCommonNotesAsync(long userId);
         Task<IEnumerable<PlanNote>> GetPlanNotesAsync();
-        Task<IEnumerable<PlanNote>> GetPlanNotesAsync(int userId);
+        Task<IEnumerable<PlanNote>> GetPlanNotesAsync(long userId);
         Task<IEnumerable<SpecialityNote>> GetSpecialityNotesAsync();
-        Task<IEnumerable<SpecialityNote>> GetSpecialityNotesAsync(int userId);
+        Task<IEnumerable<SpecialityNote>> GetSpecialityNotesAsync(long userId);
         Task<IEnumerable<SpecialityHighlightNote>> GetSpecialityHighlightNotesAsync();
-        Task<IEnumerable<SpecialityHighlightNote>> GetSpecialityHighlightNotesAsync(int userId);
+        Task<IEnumerable<SpecialityHighlightNote>> GetSpecialityHighlightNotesAsync(long userId);
         Task<IEnumerable<SpecialityPriorityNote>> GetSpecialityPriorityNotesAsync();
-        Task<IEnumerable<SpecialityPriorityNote>> GetSpecialityPriorityNotesAsync(int userId);
+        Task<IEnumerable<SpecialityPriorityNote>> GetSpecialityPriorityNotesAsync(long userId);
         Task<int> AddCommonNoteAsync(CommonNoteVM noteVm);
         Task<int> AddPlanNoteAsync(PlanNoteVM noteVm);
         Task<int> AddSpecialityNoteAsync(SpecialityNoteVM noteVm);

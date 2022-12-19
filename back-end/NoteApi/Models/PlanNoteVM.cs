@@ -6,13 +6,13 @@ namespace NoteApi.Models
     public class PlanNoteVM
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         public DateTime CreatedAt { get; set; }
         public int PlanId { get; set; }
         public string Title { get; set; } = null!;
         public string Content { get; set; } = null!;
 
-        public PlanNoteVM(int userId, PlanNotePostVM postVm)
+        public PlanNoteVM(long userId, PlanNotePostVM postVm)
         {
             Id = -1;
             UserId = userId;

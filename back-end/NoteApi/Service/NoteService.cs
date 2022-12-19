@@ -21,7 +21,7 @@ namespace NoteApi.Service
             return list.Select(x => new CommonNoteVM(x));
         }
 
-        public async Task<IEnumerable<CommonNoteVM>> GetCommonNotesAsync(int userId)
+        public async Task<IEnumerable<CommonNoteVM>> GetCommonNotesAsync(long userId)
         {
             var list = await _noteRepository.GetCommonNotesAsync(userId);
             return list.Select(x => new CommonNoteVM(x));
@@ -33,7 +33,7 @@ namespace NoteApi.Service
             return list.Select(x => new PlanNoteVM(x));
         }
 
-        public async Task<IEnumerable<PlanNoteVM>> GetPlanNotesAsync(int userId)
+        public async Task<IEnumerable<PlanNoteVM>> GetPlanNotesAsync(long userId)
         {
             var list = await _noteRepository.GetPlanNotesAsync(userId);
             return list.Select(x => new PlanNoteVM(x));
@@ -45,7 +45,7 @@ namespace NoteApi.Service
             return list.Select(x => new SpecialityNoteVM(x));
         }
 
-        public async Task<IEnumerable<SpecialityNoteVM>> GetSpecialityNotesAsync(int userId)
+        public async Task<IEnumerable<SpecialityNoteVM>> GetSpecialityNotesAsync(long userId)
         {
             var list = await _noteRepository.GetSpecialityNotesAsync(userId);
             return list.Select(x => new SpecialityNoteVM(x));
@@ -57,7 +57,7 @@ namespace NoteApi.Service
             return list.Select(x => new SpecialityHighlightNoteVM(x));
         }
 
-        public async Task<IEnumerable<SpecialityHighlightNoteVM>> GetSpecialityHighlightNotesAsync(int userId)
+        public async Task<IEnumerable<SpecialityHighlightNoteVM>> GetSpecialityHighlightNotesAsync(long userId)
         {
             var list = await _noteRepository.GetSpecialityHighlightNotesAsync(userId);
             return list.Select(x => new SpecialityHighlightNoteVM(x));
@@ -69,7 +69,7 @@ namespace NoteApi.Service
             return list.Select(x => new SpecialityPriorityNoteVM(x));
         }
 
-        public async Task<IEnumerable<SpecialityPriorityNoteVM>> GetSpecialityPriorityNotesAsync(int userId)
+        public async Task<IEnumerable<SpecialityPriorityNoteVM>> GetSpecialityPriorityNotesAsync(long userId)
         {
             var list = await _noteRepository.GetSpecialityPriorityNotesAsync(userId);
             return list.Select(x => new SpecialityPriorityNoteVM(x));
@@ -160,7 +160,7 @@ namespace NoteApi.Service
             await _noteRepository.DeleteSpecialityNoteAsync(noteId);
         }
 
-        public async Task<IEnumerable<SpecialityRatingVM>> GetSpecialityRatingNoteAsync(int userId)
+        public async Task<IEnumerable<SpecialityRatingVM>> GetSpecialityRatingNoteAsync(long userId)
         {
             var highlights = await _noteRepository.GetSpecialityHighlightNotesAsync();
             var priorities = await _noteRepository.GetSpecialityPriorityNotesAsync();

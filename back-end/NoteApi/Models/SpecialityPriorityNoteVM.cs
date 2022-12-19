@@ -6,12 +6,12 @@ namespace NoteApi.Models
     public class SpecialityPriorityNoteVM
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         public DateTime? CreatedAt { get; set; }
         public int SpecialityId { get; set; }
         public short Priority { get; set; }
 
-        public SpecialityPriorityNoteVM(int userId, SpecialityPriorityNotePostVM postVm)
+        public SpecialityPriorityNoteVM(long userId, SpecialityPriorityNotePostVM postVm)
         {
             Id = -1;
             UserId = userId;

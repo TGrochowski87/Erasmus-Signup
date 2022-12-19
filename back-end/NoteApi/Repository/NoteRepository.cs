@@ -19,7 +19,7 @@ namespace NoteApi.Repository
                 .Include(note => note.Note).ToListAsync();
         }
 
-        public async Task<IEnumerable<CommonNote>> GetCommonNotesAsync(int userId)
+        public async Task<IEnumerable<CommonNote>> GetCommonNotesAsync(long userId)
         {
             return await _notedbContext.CommonNotes
                 .Where(n => n.Note.UserId == userId)
@@ -32,7 +32,7 @@ namespace NoteApi.Repository
                 .Include(note => note.Note).ToListAsync();
         }
 
-        public async Task<IEnumerable<PlanNote>> GetPlanNotesAsync(int userId)
+        public async Task<IEnumerable<PlanNote>> GetPlanNotesAsync(long userId)
         {
             return await _notedbContext.PlanNotes
                 .Where(n => n.Note.UserId == userId)
@@ -45,7 +45,7 @@ namespace NoteApi.Repository
                 .Include(note => note.Note).ToListAsync();
         }
 
-        public async Task<IEnumerable<SpecialityNote>> GetSpecialityNotesAsync(int userId)
+        public async Task<IEnumerable<SpecialityNote>> GetSpecialityNotesAsync(long userId)
         {
             return await _notedbContext.SpecialityNotes
                 .Where(n => n.Note.UserId == userId)
@@ -58,7 +58,7 @@ namespace NoteApi.Repository
                 .Include(note => note.Note).ToListAsync();
         }
 
-        public async Task<IEnumerable<SpecialityHighlightNote>> GetSpecialityHighlightNotesAsync(int userId)
+        public async Task<IEnumerable<SpecialityHighlightNote>> GetSpecialityHighlightNotesAsync(long userId)
         {
             return await _notedbContext.SpecialityHighlightNotes
                 .Where(n => n.Note.UserId == userId)
@@ -71,7 +71,7 @@ namespace NoteApi.Repository
                 .Include(note => note.Note).ToListAsync();
         }
 
-        public async Task<IEnumerable<SpecialityPriorityNote>> GetSpecialityPriorityNotesAsync(int userId)
+        public async Task<IEnumerable<SpecialityPriorityNote>> GetSpecialityPriorityNotesAsync(long userId)
         {
             return await _notedbContext.SpecialityPriorityNotes
                 .Where(n => n.Note.UserId == userId)
@@ -250,7 +250,7 @@ namespace NoteApi.Repository
             return -1;
         }
 
-        private async Task<bool> IsLiked(int id, int userId)
+        private async Task<bool> IsLiked(int id, long userId)
         {
             var liked = await (
                 from note in _notedbContext.Notes
@@ -318,7 +318,7 @@ namespace NoteApi.Repository
             return (id, existingHighlight is not null);
         }
 
-        private async Task<bool> IsPrioritized(int specialityId, int userId)
+        private async Task<bool> IsPrioritized(int specialityId, long userId)
         {
             var prioritized = await (
                 from note in _notedbContext.Notes
@@ -329,7 +329,7 @@ namespace NoteApi.Repository
             return prioritized is not null;
         }
 
-        private async Task<int> AddNoteAsync<T>(int userId, Func<Note, T> Provider)
+        private async Task<int> AddNoteAsync<T>(long userId, Func<Note, T> Provider)
             where T : class
         {
             var note = new Note

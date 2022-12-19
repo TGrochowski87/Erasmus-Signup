@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="Common\" />
+    <Folder Include="DbModels\" />
     <Folder Include="Repository\" />
   </ItemGroup>
 
