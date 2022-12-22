@@ -12,7 +12,7 @@ namespace UniversityApi.Models
         public string? SubjectAreaName { get; set; }
         public string? SubjectAreaId { get; set; }
         public string? FlagUrl { get; set; }
-        public int? Places { get; set; }
+        public int? Vacancies { get; set; }
         public float? Average { get; set; }
         public int Opinions { get; set; }
         public decimal Rating { get; set; }
@@ -27,7 +27,7 @@ namespace UniversityApi.Models
             Country = dbModel.DestUniversityCodeNavigation?.Country;
             SubjectAreaName = dbModel.StudyArea?.Description;
             SubjectAreaId = dbModel.StudyArea?.StudyDomain;
-            Places = 0; //TODO
+            Vacancies = dbModel.ContractDetails?.VacancyMaxPositions;
             Average = dbModel.MinGradeHistories.FirstOrDefault()?.Grade;
             Opinions = 0; //TODO 
             Rating = 0; //TODO 

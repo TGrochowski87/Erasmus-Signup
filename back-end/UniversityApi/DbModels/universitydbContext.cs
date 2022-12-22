@@ -15,9 +15,7 @@ namespace UniversityApi.DbModels
         }
 
         public virtual DbSet<ContractDetail> ContractDetails { get; set; } = null!;
-        public virtual DbSet<ContractSpecificDetail> ContractSpecificDetails { get; set; } = null!;
         public virtual DbSet<DestSpeciality> DestSpecialities { get; set; } = null!;
-        public virtual DbSet<ExcelFormat> ExcelFormats { get; set; } = null!;
         public virtual DbSet<MinGradeHistory> MinGradeHistories { get; set; } = null!;
         public virtual DbSet<PwrFaculty> PwrFaculties { get; set; } = null!;
         public virtual DbSet<PwrSpeciality> PwrSpecialities { get; set; } = null!;
@@ -57,33 +55,9 @@ namespace UniversityApi.DbModels
 
                 entity.Property(e => e.ExpirationDate).HasColumnName("expiration_date");
 
-                entity.Property(e => e.SpecificDetailsId).HasColumnName("specific_details_id");
+                entity.Property(e => e.VacancyMaxPositions).HasColumnName("vacancy_max_positions");
 
-                entity.HasOne(d => d.SpecificDetails)
-                    .WithMany(p => p.ContractDetails)
-                    .HasForeignKey(d => d.SpecificDetailsId)
-                    .HasConstraintName("contract_details_specific_details_id_fkey");
-            });
-
-            modelBuilder.Entity<ContractSpecificDetail>(entity =>
-            {
-                entity.ToTable("contract_specific_details");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.DoctoralYearRestriction)
-                    .HasMaxLength(10)
-                    .HasColumnName("doctoral_year_restriction");
-
-                entity.Property(e => e.IsAggregate).HasColumnName("is_aggregate");
-
-                entity.Property(e => e.PostgraduateYearRestriction)
-                    .HasMaxLength(10)
-                    .HasColumnName("postgraduate_year_restriction");
-
-                entity.Property(e => e.UndergraduateYearRestriction)
-                    .HasMaxLength(10)
-                    .HasColumnName("undergraduate_year_restriction");
+                entity.Property(e => e.VacancyMonths).HasColumnName("vacancy_months");
             });
 
             modelBuilder.Entity<DestSpeciality>(entity =>
@@ -125,59 +99,6 @@ namespace UniversityApi.DbModels
                     .WithMany(p => p.DestSpecialities)
                     .HasForeignKey(d => d.SubjectLanguageId)
                     .HasConstraintName("dest_speciality_subject_language_id_fkey");
-            });
-
-            modelBuilder.Entity<ExcelFormat>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToTable("excel_format");
-
-                entity.Property(e => e.AcceptingDoctoral).HasColumnName("accepting_doctoral");
-
-                entity.Property(e => e.AcceptingPostgraduate).HasColumnName("accepting_postgraduate");
-
-                entity.Property(e => e.AcceptingUndergraduate).HasColumnName("accepting_undergraduate");
-
-                entity.Property(e => e.AreaDescription)
-                    .HasMaxLength(200)
-                    .HasColumnName("area_description");
-
-                entity.Property(e => e.ConclusionDate).HasColumnName("conclusion_date");
-
-                entity.Property(e => e.Country)
-                    .HasMaxLength(60)
-                    .HasColumnName("country");
-
-                entity.Property(e => e.DoctoralYearRestriction)
-                    .HasMaxLength(10)
-                    .HasColumnName("doctoral_year_restriction");
-
-                entity.Property(e => e.ErasmusCode)
-                    .HasMaxLength(30)
-                    .HasColumnName("erasmus_code");
-
-                entity.Property(e => e.ExpirationDate).HasColumnName("expiration_date");
-
-                entity.Property(e => e.PostgraduateYearRestriction)
-                    .HasMaxLength(10)
-                    .HasColumnName("postgraduate_year_restriction");
-
-                entity.Property(e => e.StudyDomain)
-                    .HasMaxLength(4)
-                    .HasColumnName("study_domain");
-
-                entity.Property(e => e.SubLanguage)
-                    .HasMaxLength(200)
-                    .HasColumnName("sub_language");
-
-                entity.Property(e => e.UndergraduateYearRestriction)
-                    .HasMaxLength(10)
-                    .HasColumnName("undergraduate_year_restriction");
-
-                entity.Property(e => e.UniversityName)
-                    .HasMaxLength(200)
-                    .HasColumnName("university_name");
             });
 
             modelBuilder.Entity<MinGradeHistory>(entity =>
