@@ -20,11 +20,6 @@ CREATE TYPE t_pwr_fac AS ENUM (
     'Off-campus Department WUST'
 );
 
-CREATE TYPE t_vacancy AS (
-    max_positions           smallint,
-    months                  smallint
-);
-
 CREATE TABLE university (
     erasmus_code            varchar(30) PRIMARY KEY,
     name                    varchar(200) NOT NULL,
@@ -39,26 +34,15 @@ CREATE TABLE pwr_faculty (
     name                    t_pwr_fac
 );
 
-CREATE TABLE contract_specific_details (
-    id                      smallserial PRIMARY KEY,
-    undergraduate_vacancy   t_vacancy,
-    postgraduate_vacancy    t_vacancy,
-    doctoral_vacancy        t_vacancy,
-    undergraduate_year_restriction  varchar(10),
-    postgraduate_year_restriction   varchar(10),
-    doctoral_year_restriction       varchar(10),
-    is_aggregate            boolean
-);
-
 CREATE TABLE contract_details (
     id                      smallserial PRIMARY KEY,
     accepting_undergraduate boolean,
     accepting_postgraduate  boolean,
     accepting_doctoral      boolean,
-    vacancy                 t_vacancy,
+    vacancy_max_positions   smallint,
+    vacancy_months          smallint,
     conclusion_date         date,
-    expiration_date         date,
-    specific_details_id     smallint REFERENCES contract_specific_details
+    expiration_date         date
 );
 
 CREATE TABLE study_area (
@@ -160,7 +144,7 @@ INSERT INTO study_area (study_domain, description) VALUES ('0345','Management an
 INSERT INTO study_area (study_domain, description) VALUES ('0530','Physical sciences');
 INSERT INTO study_area (study_domain, description) VALUES ('0581','Architecture and town planning');
 INSERT INTO study_area (study_domain, description) VALUES ('0582','Building and civil engineering');
-INSERT INTO study_area (study_domain, description) VALUES ('0850','Environmental protection (broad programmes)');
+INSERT INTO study_area (study_domain, description) VALUES ('0850','Environmental protection');
 INSERT INTO study_area (study_domain, description) VALUES ('0523','Electronics and automation');
 INSERT INTO study_area (study_domain, description) VALUES ('0524','Chemical and process');
 INSERT INTO study_area (study_domain, description) VALUES ('0580','Architecture and building');
@@ -171,16 +155,16 @@ INSERT INTO study_area (study_domain, description) VALUES ('0418','Business and 
 INSERT INTO study_area (study_domain, description) VALUES ('0731','Architecture and town planning');
 INSERT INTO study_area (study_domain, description) VALUES ('0533','Physics');
 INSERT INTO study_area (study_domain, description) VALUES ('0480','Informatics, computer science');
-INSERT INTO study_area (study_domain, description) VALUES ('0500','Engineering, manufacturing and construction/Engineering and engineering trades');
+INSERT INTO study_area (study_domain, description) VALUES ('0500','Engineering, manufacturing and construction');
 INSERT INTO study_area (study_domain, description) VALUES ('0311','Economics');
 INSERT INTO study_area (study_domain, description) VALUES ('0716','Motor vehicles, ships and aircraft');
 INSERT INTO study_area (study_domain, description) VALUES ('0441','Physics');
 INSERT INTO study_area (study_domain, description) VALUES ('0460','Mathematics and statistics');
-INSERT INTO study_area (study_domain, description) VALUES ('0712','Environmental protection technology (07.4 - 85, 850, 851, 859)');
+INSERT INTO study_area (study_domain, description) VALUES ('0712','Environmental protection technology');
 INSERT INTO study_area (study_domain, description) VALUES ('0531','Chemistry');
 INSERT INTO study_area (study_domain, description) VALUES ('0400','Mathematics, Informatics');
 INSERT INTO study_area (study_domain, description) VALUES ('0443','Earth sciences');
-INSERT INTO study_area (study_domain, description) VALUES ('0719','Engineering and engineering trades, not elsewhere classified');
+INSERT INTO study_area (study_domain, description) VALUES ('0719','Engineering and engineering trades');
 INSERT INTO study_area (study_domain, description) VALUES ('0512','Biochemistry');
 INSERT INTO study_area (study_domain, description) VALUES ('0540','Manufacturing and processing');
 INSERT INTO study_area (study_domain, description) VALUES ('0611','Computer use');
@@ -191,7 +175,7 @@ INSERT INTO study_area (study_domain, description) VALUES ('0724','Mining and ex
 INSERT INTO study_area (study_domain, description) VALUES ('0140','Transport services');
 INSERT INTO study_area (study_domain, description) VALUES ('0727','Pharmacy');
 INSERT INTO study_area (study_domain, description) VALUES ('0600','Engineering Technology');
-INSERT INTO study_area (study_domain, description) VALUES ('0722','Materials (glass, paper, plastic and wood)');
+INSERT INTO study_area (study_domain, description) VALUES ('0722','Materials');
 INSERT INTO study_area (study_domain, description) VALUES ('0914','Biomedical Engineering');
 INSERT INTO study_area (study_domain, description) VALUES ('0413','Management and administration');
 --pwr_faculty
@@ -267,36 +251,36 @@ INSERT INTO pwr_subject (name,speciality_id,ects) VALUES ('Eksploracja danych me
 INSERT INTO pwr_subject (name,speciality_id,ects) VALUES ('Projektowanie usług dziedzinowych winfrastrukturze chmurowej','3','2');
 INSERT INTO pwr_subject (name,speciality_id,ects) VALUES ('Praca dyplomowa I','1','2');
 --contract_details
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,FALSE,FALSE,'2','6','2014-07-02','2021-09-30');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,FALSE,FALSE,'2','5','2014-07-02','2021-09-30');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'2','5','2014-03-21','2021-09-30');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'2','10','2014-04-03','2021-09-30');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'1','5','2014-04-03','2021-09-30');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'2','10','2014-04-03','2021-09-30');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'2','5','2017-02-17','2021-09-30');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,FALSE,TRUE,'2','10','2015-11-18','2021-09-30');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (FALSE,TRUE,FALSE,'2','4','2015-10-09','2021-09-30');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'1','10','2015-10-09','2021-09-30');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,FALSE,FALSE,'2','6','2022-09-02','2022-10-01');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,FALSE,FALSE,'2','5','2022-09-02','2021-09-30');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'2','10','2022-03-21','2023-02-01');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'2','5','2022-04-03','2022-09-30');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'1','5','2022-04-03','2022-09-30');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'1','10','2022-09-30','2023-09-01');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'2','5','2022-09-02','2023-03-01');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,FALSE,TRUE,'2','4','2022-11-18','2023-03-12');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (FALSE,TRUE,FALSE,'1','5','2022-10-02','2023-09-01');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'2','10','2023-10-02','2024-09-01');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,FALSE,FALSE,'2','6','2023-09-02','2023-10-01');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,FALSE,FALSE,'2','5','2023-09-02','2024-09-30');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'2','10','2023-03-21','2024-02-01');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'2','5','2023-04-03','2023-09-30');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'1','5','2023-04-03','2023-09-30');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'1','10','2023-09-30','2024-09-01');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'2','5','2023-09-02','2024-03-01');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,FALSE,TRUE,'2','4','2023-11-18','2024-03-12');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (FALSE,TRUE,FALSE,'1','5','2023-10-02','2024-09-01');
-INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy.max_positions,vacancy.months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'2','10','2023-10-02','2024-09-01');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,FALSE,FALSE,'2','6','2014-07-02','2021-09-30');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,FALSE,FALSE,'2','5','2014-07-02','2021-09-30');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'2','5','2014-03-21','2021-09-30');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'2','10','2014-04-03','2021-09-30');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'1','5','2014-04-03','2021-09-30');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'2','10','2014-04-03','2021-09-30');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'2','5','2017-02-17','2021-09-30');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,FALSE,TRUE,'2','10','2015-11-18','2021-09-30');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (FALSE,TRUE,FALSE,'2','4','2015-10-09','2021-09-30');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'1','10','2015-10-09','2021-09-30');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,FALSE,FALSE,'2','6','2022-09-02','2022-10-01');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,FALSE,FALSE,'2','5','2022-09-02','2021-09-30');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'2','10','2022-03-21','2023-02-01');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'2','5','2022-04-03','2022-09-30');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'1','5','2022-04-03','2022-09-30');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'1','10','2022-09-30','2023-09-01');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'2','5','2022-09-02','2023-03-01');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,FALSE,TRUE,'2','4','2022-11-18','2023-03-12');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (FALSE,TRUE,FALSE,'1','5','2022-10-02','2023-09-01');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'2','10','2023-10-02','2024-09-01');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,FALSE,FALSE,'2','6','2023-09-02','2023-10-01');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,FALSE,FALSE,'2','5','2023-09-02','2024-09-30');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'2','10','2023-03-21','2024-02-01');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'2','5','2023-04-03','2023-09-30');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'1','5','2023-04-03','2023-09-30');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'1','10','2023-09-30','2024-09-01');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'2','5','2023-09-02','2024-03-01');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,FALSE,TRUE,'2','4','2023-11-18','2024-03-12');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (FALSE,TRUE,FALSE,'1','5','2023-10-02','2024-09-01');
+INSERT INTO contract_details (accepting_undergraduate,accepting_postgraduate,accepting_doctoral,vacancy_max_positions,vacancy_months,conclusion_date,expiration_date) VALUES (TRUE,TRUE,FALSE,'2','10','2023-10-02','2024-09-01');
 --dest_speciality
 INSERT INTO dest_speciality (dest_university_code,pwr_faculty_short,contract_details_id,study_area_id,subject_language_id,interested_students) VALUES ('A GRAZ109','W4N','1','0610','2','24');
 INSERT INTO dest_speciality (dest_university_code,pwr_faculty_short,contract_details_id,study_area_id,subject_language_id,interested_students) VALUES ('CZ LIBEREC01','W6','4','0724','10','7');
