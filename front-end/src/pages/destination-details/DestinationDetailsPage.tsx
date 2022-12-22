@@ -75,7 +75,7 @@ const DestinationDetailsPage = ({
                 id: dest.id,
                 subjectArea: `${dest.subjectAreaName} | ${dest.subjectAreaId}`,
                 language: dest.subjectLanguageName,
-                vacancies: dest.places,
+                vacancies: dest.vacancies,
               };
             })}
             onRow={record => {
@@ -101,7 +101,7 @@ const DestinationDetailsPage = ({
         <h1>{`${specialty?.subjectAreaName} | ${specialty.subjectAreaId}`}</h1>
 
         <div className="grid">
-          <BlockLabeledTextField label="Vacancy" text={specialty.places} />
+          <BlockLabeledTextField label="Vacancy" text={specialty.vacancies} />
           <BlockLabeledTextField label="Rating" text={specialty.rating} />
           <BlockLabeledTextField label="Previous min. grade" text={specialty.average} />
           <BlockLabeledTextField label="Currently interested" text={specialty.interestedStudents} />

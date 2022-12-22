@@ -3,7 +3,7 @@ interface SpecialtyDetails {
   subjectAreaName: string;
   subjectAreaId: string;
   interestedStudents: number;
-  places: number;
+  vacancies: number;
   average: number;
   rating: number;
   isObserved: boolean;
