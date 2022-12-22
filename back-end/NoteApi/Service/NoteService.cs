@@ -1,5 +1,5 @@
 ﻿using MassTransit;
-using Communication.NoteContracts;
+using ErasmusRabbitContracts.NoteContracts;
 using NoteApi.Models;
 using NoteApi.Repository;
 

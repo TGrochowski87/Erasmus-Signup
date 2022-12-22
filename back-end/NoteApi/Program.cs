@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using NoteApi.Service;
 using NoteApi.DbModels;
 using NoteApi.Repository;
-using Communication;
+using ErasmusRabbitContracts;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using System.Net.Http.Headers;
