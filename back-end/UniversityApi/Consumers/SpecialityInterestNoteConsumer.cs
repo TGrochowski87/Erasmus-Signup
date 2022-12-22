@@ -1,4 +1,4 @@
-﻿using Communication.NoteContracts;
+﻿using ErasmusRabbitContracts.NoteContracts;
 using MassTransit;
 using UniversityApi.Repository;
 

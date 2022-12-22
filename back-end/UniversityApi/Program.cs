@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using UniversityApi.DbModels;
 using UniversityApi.Repository;
 using UniversityApi.Service;
-using Communication;
+using ErasmusRabbitContracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
