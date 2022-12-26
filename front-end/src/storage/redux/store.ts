@@ -13,6 +13,7 @@ import storage from "redux-persist/lib/storage";
 import universitySlice from "./universitySlice";
 import loginSlice from "./loginSlice";
 import userCurrentSlice from "./userCurrentSlice";
+import opinionSlice from "./opinionSlice";
 
 const loginPersistConfig = {
   key: "login",
@@ -24,7 +25,8 @@ export const store = configureStore({
   reducer: {
     university: universitySlice,
     login: persistReducer(loginPersistConfig, loginSlice)!,
-    userCurrent: userCurrentSlice, 
+    userCurrent: userCurrentSlice,
+    opinions: opinionSlice,
   },
   devTools: process.env.NODE_ENV !== "production",
   middleware: (getDefaultMiddleware) =>

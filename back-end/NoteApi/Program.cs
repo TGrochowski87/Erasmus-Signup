@@ -102,6 +102,8 @@ if (app.Environment.IsDevelopment())
 app.UseRouting();
 app.UseSession();
 
+app.UseCors(MyAllowSpecificOrigins);
+
 app.UseHttpsRedirection();
 app.MapControllers();
 app.UseCookiePolicy();

@@ -4,11 +4,11 @@ namespace OpinionApi.Models
 {
     public class OpinionCreateVM
     {
-        public short SpecialityId { get; set; }
+        public long SpecialityId { get; set; }
+        public float Rating { get; set; }
         public string? Content { get; set; }
-        public short Rating { get; set; }
 
-        public Opinion ToModel(int studentId)
+        public Opinion ToModel(long studentId)
         {
             return new Opinion()
             {

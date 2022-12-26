@@ -4,9 +4,9 @@ namespace OpinionApi.Repository
 {
     public interface IOpinionRepository
     {
-        Task<int> CreateAsync(Opinion opinion);
-        Task<bool> DeleteAsync(int id);
+        Task<long> CreateAsync(Opinion opinion);
+        Task<bool> DeleteAsync(long id);
         Task EditAsync(Opinion opinion);
-        Task<IEnumerable<Opinion>> GetListAsync(int specId);
+        Task<IEnumerable<Opinion>> GetListAsync(long specId);
     }
 }
