@@ -21,26 +21,26 @@ namespace OpinionApi.Controllers
         [HttpGet("opinions")]
         public async Task<OpinionResult> GetList([FromQuery] OpinionCriteria criteria)
         {
-            return await opinionService.GetListAsync(criteria, UserToken != null ? int.Parse(UserToken.UserId) : null);
+            return await opinionService.GetListAsync(criteria, UserToken != null ? long.Parse(UserToken.UserId) : null);
         }
 
         [AuthorizeUser]
         [HttpPost("opinions")]
-        public async Task<int> Create([FromBody] OpinionCreateVM create)
+        public async Task<long> Create([FromBody] OpinionCreateVM create)
         {
-            return await opinionService.CreateAsync(create, int.Parse(UserToken.UserId));
+            return await opinionService.CreateAsync(create, long.Parse(UserToken.UserId));
         }
 
         [AuthorizeUser]
         [HttpPut("opinions/{id}")]
-        public async Task Edit([FromRoute]int id,[FromBody] OpinionEditVM edit)
+        public async Task Edit([FromRoute]long id,[FromBody] OpinionEditVM edit)
         {
              await opinionService.EditAsync(edit, id);
         }
 
         [AuthorizeUser]
         [HttpDelete("opinions/{id}")]
-        public async Task Delete([FromRoute] int id)
+        public async Task Delete([FromRoute] long id)
         {
             await opinionService.DeleteAsync(id);
         }

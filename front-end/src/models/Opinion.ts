@@ -1,8 +1,18 @@
-interface Opinion {
+export interface Opinion {
   id: number;
-  name: string;
-  text: string;
+  // studentId: number;
+  content: string;
   rating: number;
+  canEdit: boolean;
 }
 
-export default Opinion;
+export interface OpinionPOST {
+  specialityId: number,
+  content: string,
+  rating: number
+}
+
+export interface OpinionResponse {
+  totalRows: number;
+  opinions: Opinion[];
+}

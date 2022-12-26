@@ -5,13 +5,10 @@ namespace OpinionApi.DbModels;
 
 public partial class Opinion
 {
-    public int Id { get; set; }
-
-    public int StudentId { get; set; }
-
-    public short SpecialityId { get; set; }
-
+    public long Id { get; set; }
+    public long SpecialityId { get; set; }
+    public long StudentId { get; set; }
     public string Content { get; set; } = null!;
+    public double Rating { get; set; }
 
-    public short Rating { get; set; }
 }

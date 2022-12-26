@@ -2,14 +2,19 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 // Components
-import Opinion from "models/Opinion";
+import { Opinion, OpinionResponse } from "models/Opinion";
 import DestinationDetailsPage from "./DestinationDetailsPage";
 import GetDestinationDetailsResponse from "api/DTOs/GET/GetDestinationDetailsResponse";
 import { getDestinationDetails } from "api/universityApi";
+import { createOpinion, getOpinion } from "api/opinionApi";
+import { useAppDispatch, useAppSelector } from "storage/redux/hooks";
+import { fetchOpinion } from "storage/redux/opinionSlice";
+import { RootState } from "storage/redux/store";
 
 const DestinationDetailsPageContainer = () => {
   const { id } = useParams();
   const [detailsData, setDetailsData] = useState<GetDestinationDetailsResponse | undefined>(undefined);
+  const [opinions, setOpinions] = useState<OpinionResponse|undefined>(undefined)
   const [selectedDestId, setSelectedDestId] = useState<number>(0);
   const [loading, setLoading] = useState<{ details: boolean; opinions: boolean }>({
     details: false,
@@ -22,9 +27,19 @@ const DestinationDetailsPageContainer = () => {
     if (detailsData === undefined) {
       fetchDetailsData();
     }
+    if(opinions === undefined){
+      fetchOpinions();
+    }
   }, []);
 
   const fetchDetailsData = async () => {
+    setLoading({ ...loading, opinions: true });
+    const opinions = await getOpinion(10,0,id!);
+    setOpinions(opinions);
+    setLoading({ ...loading, opinions: false });
+  };
+
+  const fetchOpinions = async () => {
     setLoading({ ...loading, details: true });
     const details = await getDestinationDetails(parseInt(id!));
     setDetailsData(details);
@@ -32,38 +47,22 @@ const DestinationDetailsPageContainer = () => {
     setLoading({ ...loading, details: false });
   };
 
-  const [opinions, setOpinions] = useState<Opinion[]>([
-    {
-      id: 0,
-      name: "Anonymous",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-      rating: 31,
-    },
-    {
-      id: 1,
-      name: "Anonymous",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-      rating: 31,
-    },
-    {
-      id: 2,
-      name: "Anonymous",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-      rating: 31,
-    },
-    {
-      id: 3,
-      name: "Anonymous",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-      rating: 31,
-    },
-    {
-      id: 4,
-      name: "Anonymous",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-      rating: 31,
-    },
-  ]);
+  const submitOpinionHandler = async () => {
+    await createOpinion({"rating": ratingInput, "content": opinionInput, "specialityId": selectedDestId});
+
+    const newOpinions = [...opinions!.opinions, {
+      id: Math.max(...opinions!.opinions.map(o => o.id)) + 1,
+      canEdit: false,
+      content: opinionInput,
+      rating: ratingInput
+    }]
+    setOpinions(prevState =>  { return {
+      totalRows: prevState!.totalRows, 
+      opinions: newOpinions}});
+
+    setRatingInput(0);
+    setOpinionInput("");
+  }
 
   return (
     <DestinationDetailsPage
@@ -74,8 +73,9 @@ const DestinationDetailsPageContainer = () => {
       setOpinionInput={setOpinionInput}
       ratingInput={ratingInput}
       setRatingInput={setRatingInput}
-      opinions={opinions}
+      opinions={opinions ? opinions.opinions : []}
       loading={loading}
+      submitOpinionHandler={submitOpinionHandler}
     />
   );
 };

@@ -7,12 +7,13 @@ import "./DestinationDetailsPage.scss";
 // Components
 import InlineItems from "components/InlineItems";
 import TextArea from "antd/lib/input/TextArea";
-import Opinion from "models/Opinion";
+import { Opinion } from "models/Opinion";
 import BlockLabeledTextField from "components/BlockLabeledTextField";
 import GetDestinationDetailsResponse from "api/DTOs/GET/GetDestinationDetailsResponse";
 import FullViewLoading from "components/FullViewLoading";
 import FavoriteStatusIndicator from "components/FavoriteStatusIndicator";
 import NoteStatusIndicator from "components/NoteStatusIndicator";
+import { createOpinion } from "api/opinionApi";
 
 interface Props {
   detailsData: GetDestinationDetailsResponse | undefined;
@@ -24,10 +25,12 @@ interface Props {
   setRatingInput: React.Dispatch<React.SetStateAction<number>>;
   opinions: Opinion[];
   loading: { details: boolean; opinions: boolean };
+  submitOpinionHandler: () => void
 }
 
 // TODO: Remove from here
 interface DestMicro {
+  key: number;
   id: number;
   subjectArea: string;
   language: string;
@@ -44,6 +47,7 @@ const DestinationDetailsPage = ({
   setRatingInput,
   opinions,
   loading,
+  submitOpinionHandler
 }: Props) => {
   const specialty = detailsData?.destinations.find(d => d.id === selectedDestId)!;
 
@@ -72,6 +76,7 @@ const DestinationDetailsPage = ({
           <Table
             dataSource={detailsData.destinations.map<DestMicro>(dest => {
               return {
+                key: dest.id,
                 id: dest.id,
                 subjectArea: `${dest.subjectAreaName} | ${dest.subjectAreaId}`,
                 language: dest.subjectLanguageName,
@@ -127,8 +132,8 @@ const DestinationDetailsPage = ({
             onChange={event => {
               setOpinionInput(event.target.value);
             }}
-          />
-          <Button style={{ marginTop: "10px", padding: "0 2rem" }} size="large" type="primary">
+          />.
+          <Button style={{ marginTop: "10px", padding: "0 2rem" }} onClick={submitOpinionHandler} size="large" type="primary">
             Share opinion
           </Button>
         </div>
@@ -146,9 +151,9 @@ const DestinationDetailsPage = ({
               dataSource={opinions}
               renderItem={item => (
                 <List.Item style={{ position: "relative" }} key={item.id}>
-                  <List.Item.Meta avatar={<Avatar size={64} icon={<UserOutlined />} />} title={item.name} />
+                  <List.Item.Meta avatar={<Avatar size={64} style={{marginBottom: "1.5rem"}} icon={<UserOutlined />} />} />
                   <Rate className="rate" allowHalf value={item.rating} disabled />
-                  {item.text}
+                  {item.content}
                 </List.Item>
               )}
             />
