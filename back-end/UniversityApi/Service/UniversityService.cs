@@ -20,12 +20,12 @@ namespace UniversityApi.Service
             var pageSize = criteria.PageSize ?? 10;
             var totalRows = 0;
 
-            var list = await _universityRepository.GetListAsync();
+            var list = await _universityRepository.GetListAsync(criteria);
 
             totalRows = list.Count();
             var filterList = list.Skip((page - 1) * pageSize).Take(pageSize);
 
-            return new DestinationResult(filterList.Select(x => new DestinationVM(x)), totalRows);
+            return new DestinationResult(filterList.Select(x => new DestinationVM(x)), new List<DestinationVM>(), new List<DestinationVM>(), totalRows);
         }
 
         public async Task<UniversityGetVM> GetAsync(short destId)

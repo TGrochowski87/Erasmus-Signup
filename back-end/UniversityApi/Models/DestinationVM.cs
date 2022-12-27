@@ -18,6 +18,8 @@ namespace UniversityApi.Models
         public decimal Rating { get; set; }
         public bool IsObserved { get; set; }
         public string? Link { get; set; }
+        public int? InterestedStudents { get; set; }
+
 
         public DestinationVM(DestSpeciality dbModel)
         {
@@ -33,6 +35,7 @@ namespace UniversityApi.Models
             Rating = 0; //TODO 
             IsObserved = false; //TODO 
             Link = dbModel.DestUniversityCodeNavigation?.Link;
+            InterestedStudents = dbModel.InterestedStudents;
             if (dbModel.DestUniversityCodeNavigation?.Country != null)
                 FlagUrl = CountryDictionary.Flags.GetValueOrDefault(dbModel.DestUniversityCodeNavigation.Country);
         }
