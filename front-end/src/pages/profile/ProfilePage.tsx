@@ -7,9 +7,11 @@ import "./ProfilePage.scss";
 interface Props {
   user: User;
   navigateToNotesPage: () => void;
+  navigateToPlansPage: () => void;
+  navigateToSubjectsPage: () => void;
 }
 
-const ProfilePage = ({ user, navigateToNotesPage }: Props) => {
+const ProfilePage = ({ user, navigateToNotesPage, navigateToPlansPage, navigateToSubjectsPage}: Props) => {
   return (
     <div className="user-page">
       <div className="user-section">
@@ -46,8 +48,11 @@ const ProfilePage = ({ user, navigateToNotesPage }: Props) => {
         <div className="button" onClick={() => navigateToNotesPage()}>
           <h1 className="text">NOTES</h1>
         </div>
-        <div className="button">
+        <div className="button"  onClick={() => navigateToPlansPage()}>
           <h1 className="text">PLANS</h1>
+        </div>
+        <div className="button"  onClick={() => navigateToSubjectsPage()}>
+          <h1 className="text">SUBJECTS</h1>
         </div>
       </div>
     </div>
