@@ -1,10 +1,30 @@
 ﻿using UserApi.Utilities;
 using UserApi.Service;
+using UserApi.Repository;
+using UserApi.Models;
 
 namespace UserApi.Service
 {
     public class UserService : IUserService
     {
+        private readonly IUserRepository userRepository;
+
+        public UserService(IUserRepository userRepository)
+        {
+            this.userRepository = userRepository;
+        }
+
+        public async Task StudentEdit(StudentEditVM viewModel, int userId)
+        {
+            await userRepository.StudentEditAsync(viewModel.ToModel(userId));
+        }
+
+        public async Task<StudentGetVM> GetStudent(int userId)
+        {
+            var student = await userRepository.GetStudentAsync(userId);
+
+            return new StudentGetVM(student);
+        }
 
         public HttpResponseMessage GetCurrentUser(string access_token, string access_token_secret)
         {

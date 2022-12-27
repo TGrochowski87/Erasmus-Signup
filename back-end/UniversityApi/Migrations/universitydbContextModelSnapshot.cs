@@ -10,7 +10,7 @@ using UniversityApi.DbModels;
 
 namespace UniversityApi.Migrations
 {
-    [DbContext(typeof(universitydbContext))]
+    [DbContext(typeof(UniversitydbContext))]
     partial class universitydbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

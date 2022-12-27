@@ -1,15 +1,13 @@
-﻿namespace UniversityApi.DbModels
+﻿using System;
+using System.Collections.Generic;
+
+namespace UniversityApi.DbModels;
+
+public partial class SubjectLanguage
 {
-    public partial class SubjectLanguage
-    {
-        public SubjectLanguage()
-        {
-            DestSpecialities = new HashSet<DestSpeciality>();
-        }
+    public short Id { get; set; }
 
-        public short Id { get; set; }
-        public string? Name { get; set; }
+    public string? Name { get; set; }
 
-        public virtual ICollection<DestSpeciality> DestSpecialities { get; set; }
-    }
+    public virtual ICollection<DestSpeciality> DestSpecialities { get; } = new List<DestSpeciality>();
 }

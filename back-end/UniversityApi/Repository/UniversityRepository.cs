@@ -6,9 +6,9 @@ namespace UniversityApi.Repository
 {
     public class UniversityRepository : IUniversityRepository
     {
-        private readonly universitydbContext _context;
+        private readonly UniversitydbContext _context;
 
-        public UniversityRepository(universitydbContext context)
+        public UniversityRepository(UniversitydbContext context)
         {
             _context = context;
         }
@@ -22,7 +22,7 @@ namespace UniversityApi.Repository
                 .Include(x => x.MinGradeHistories)
                 .Include(x => x.SubjectLanguage)
                 .Where(x => string.IsNullOrEmpty(criteria.Country) || x.DestUniversityCodeNavigation.Country == criteria.Country)
-                .Where(x=> string.IsNullOrEmpty(criteria.SubjectArea) || x.StudyArea.StudyDomain == criteria.SubjectArea)
+                .Where(x=> string.IsNullOrEmpty(criteria.SubjectAreaId) || x.StudyArea.Id == criteria.SubjectAreaId)
                 .ToListAsync();
 
             switch (criteria.OrderByInterestedStudents)
@@ -34,6 +34,43 @@ namespace UniversityApi.Repository
                 default:
                     return list;
             }
+        }
+
+        public async Task<IEnumerable<DestSpeciality>> GetListRecomendedDestinationsAsync(short studyDomainId)
+        {
+            var list = await _context.DestSpecialities
+                .Include(x => x.DestUniversityCodeNavigation)
+                .Include(x => x.StudyArea)
+                .Include(x => x.ContractDetails)
+                .Include(x => x.MinGradeHistories)
+                .Include(x => x.SubjectLanguage)
+                .Where(x => x.StudyArea.StudyDomainId == studyDomainId)
+                .ToListAsync();
+
+            return list;
+        }
+
+        public async Task<DestSpeciality> GetRecommendedByStudentsDestinationsAsync(short destId)
+        {
+            var dest = await _context.DestSpecialities
+                .Include(x => x.DestUniversityCodeNavigation)
+                .Include(x => x.StudyArea)
+                .Include(x => x.ContractDetails)
+                .Include(x => x.MinGradeHistories)
+                .Include(x => x.SubjectLanguage)
+                .FirstOrDefaultAsync(x => x.Id == destId);
+
+            return dest;
+        }
+
+        public async Task<IEnumerable<StudyDomain>> GetStudyDomainListAsync()
+        {
+            return await _context.StudyDomains.ToListAsync();
+        }
+
+        public async Task<IEnumerable<StudyArea>> GetStudyAreaListAsync()
+        {
+            return await _context.StudyAreas.ToListAsync();
         }
 
         public async Task<University> GetAsync(short destId)

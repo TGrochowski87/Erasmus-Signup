@@ -1,4 +1,5 @@
-﻿using UniversityApi.Models;
+﻿using UniversityApi.DbModels;
+using UniversityApi.Models;
 using UniversityApi.Repository;
 
 namespace UniversityApi.Service
@@ -25,7 +26,25 @@ namespace UniversityApi.Service
             totalRows = list.Count();
             var filterList = list.Skip((page - 1) * pageSize).Take(pageSize);
 
-            return new DestinationResult(filterList.Select(x => new DestinationVM(x)), new List<DestinationVM>(), new List<DestinationVM>(), totalRows);
+
+            var recomendedDestinations = await _universityRepository.GetListRecomendedDestinationsAsync(1); //TODO
+            var filterRecomendedDestinations = recomendedDestinations.Take(10);
+
+            return new DestinationResult(filterList.Select(x => new DestinationVM(x)), filterRecomendedDestinations.Select(x => new DestinationVM(x)), new List<DestinationVM>(), totalRows);
+        }
+
+        public async Task<IEnumerable<StudyDomainVM>> GetStudyDomainListAsync()
+        {
+            var list = await _universityRepository.GetStudyDomainListAsync();
+            
+            return list.Select(x=>new StudyDomainVM(x));
+        }
+
+        public async Task<IEnumerable<StudyAreaVM>> GetStudyAreaListAsync()
+        {
+            var list = await _universityRepository.GetStudyAreaListAsync();
+
+            return list.Select(x => new StudyAreaVM(x));
         }
 
         public async Task<UniversityGetVM> GetAsync(short destId)

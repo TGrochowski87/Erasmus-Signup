@@ -27,8 +27,8 @@ namespace UniversityApi.Models
             UniversityName = dbModel.DestUniversityCodeNavigation?.Name;
             ErasmusCode = dbModel.DestUniversityCodeNavigation?.ErasmusCode;
             Country = dbModel.DestUniversityCodeNavigation?.Country;
-            SubjectAreaName = dbModel.StudyArea?.Description;
-            SubjectAreaId = dbModel.StudyArea?.StudyDomain;
+            SubjectAreaName = dbModel.StudyArea?.AreaName;
+            SubjectAreaId = dbModel.StudyArea?.Id;
             Vacancies = dbModel.ContractDetails?.VacancyMaxPositions;
             Average = dbModel.MinGradeHistories.FirstOrDefault()?.Grade;
             Opinions = 0; //TODO 

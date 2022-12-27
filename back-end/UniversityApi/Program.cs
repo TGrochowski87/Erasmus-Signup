@@ -22,7 +22,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddControllers();
 
-builder.Services.AddDbContext<universitydbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("UniversityDb")));
+builder.Services.AddDbContext<UniversitydbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("UniversityDb")));
 
 builder.Services.AddRabbitMqServices();
 

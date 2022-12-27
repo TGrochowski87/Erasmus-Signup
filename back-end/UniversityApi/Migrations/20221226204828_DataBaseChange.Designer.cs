@@ -11,7 +11,7 @@ using UniversityApi.DbModels;
 
 namespace UniversityApi.Migrations
 {
-    [DbContext(typeof(universitydbContext))]
+    [DbContext(typeof(UniversitydbContext))]
     [Migration("20221226204828_DataBaseChange")]
     partial class DataBaseChange
     {

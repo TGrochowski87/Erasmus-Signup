@@ -24,6 +24,18 @@ namespace UniversityApi.Controllers
             return await universityService.GetListAsync(criteria);
         }
 
+        [HttpGet("study-domains")]
+        public async Task<IEnumerable<StudyDomainVM>> GetStudyDomainList()
+        {
+            return await universityService.GetStudyDomainListAsync();
+        }
+
+        [HttpGet("study-areas")]
+        public async Task<IEnumerable<StudyAreaVM>> GetStudyAreaList()
+        {
+            return await universityService.GetStudyAreaListAsync();
+        }
+
         [HttpGet("universities/{destId}")]
         public async Task<UniversityGetVM> Get(short destId)
         {

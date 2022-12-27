@@ -6,5 +6,7 @@ namespace UniversityApi.Service
     {
         Task<DestinationResult> GetListAsync(DestinationCriteria criteria);
         Task<UniversityGetVM> GetAsync(short destId);
+        Task<IEnumerable<StudyDomainVM>> GetStudyDomainListAsync();
+        Task<IEnumerable<StudyAreaVM>> GetStudyAreaListAsync();
     }
 }
