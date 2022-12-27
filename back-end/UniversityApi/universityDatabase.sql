@@ -45,9 +45,15 @@ CREATE TABLE contract_details (
     expiration_date         date
 );
 
+CREATE TABLE study_domain (
+    id                      smallserial PRIMARY KEY,
+    domain_name             varchar(200)
+);
+
 CREATE TABLE study_area (
-    study_domain            varchar(4) PRIMARY KEY,
-    description             varchar(200)
+    id                      varchar(4) PRIMARY KEY,
+    area_name               varchar(200),
+    study_domain_id         smallint REFERENCES study_domain
 );
 
 CREATE TABLE subject_language (
@@ -120,64 +126,79 @@ INSERT INTO subject_language (name) VALUES ('Swedish');
 INSERT INTO subject_language (name) VALUES ('Turkish');
 INSERT INTO subject_language (name) VALUES ('Ukrainian');
 INSERT INTO subject_language (name) VALUES ('Bosnian');
+--study_domain
+INSERT INTO study_domain (domain_name) VALUES ('Architecture, Building, Urban and Regional Planning');
+INSERT INTO study_domain (domain_name) VALUES ('Law, Business Studies and Management Sciences');
+INSERT INTO study_domain (domain_name) VALUES ('Geography, Geology');
+INSERT INTO study_domain (domain_name) VALUES ('Engineering, Technology');
+INSERT INTO study_domain (domain_name) VALUES ('Mathematics');
+INSERT INTO study_domain (domain_name) VALUES ('Informatics');
+INSERT INTO study_domain (domain_name) VALUES ('Humanities');
+INSERT INTO study_domain (domain_name) VALUES ('Agricultural Sciences');
+INSERT INTO study_domain (domain_name) VALUES ('Art and Design');
+INSERT INTO study_domain (domain_name) VALUES ('Education, Teacher Training');
+INSERT INTO study_domain (domain_name) VALUES ('Natural Sciences');
+INSERT INTO study_domain (domain_name) VALUES ('Medical Sciences');
+INSERT INTO study_domain (domain_name) VALUES ('Social Sciences');
+INSERT INTO study_domain (domain_name) VALUES ('Other Domains of Study');
 --study_area
-INSERT INTO study_area (study_domain, description) VALUES ('0520','Engineering and engineering trades');
-INSERT INTO study_area (study_domain, description) VALUES ('0525','Motor vehicles, ships and aircraft');
-INSERT INTO study_area (study_domain, description) VALUES ('0481','Computer science');
-INSERT INTO study_area (study_domain, description) VALUES ('0711','Chemical engineering and processes');
-INSERT INTO study_area (study_domain, description) VALUES ('0714','Electronics and automation');
-INSERT INTO study_area (study_domain, description) VALUES ('0715','Mechanics and metal trades');
-INSERT INTO study_area (study_domain, description) VALUES ('0340','Business and Administration');
-INSERT INTO study_area (study_domain, description) VALUES ('0442','Chemistry');
-INSERT INTO study_area (study_domain, description) VALUES ('0710','Engineering and engineering trades');
-INSERT INTO study_area (study_domain, description) VALUES ('0730','Architecture and construction');
-INSERT INTO study_area (study_domain, description) VALUES ('0421','Biology and biochemistry');
-INSERT INTO study_area (study_domain, description) VALUES ('0511','Biology');
-INSERT INTO study_area (study_domain, description) VALUES ('0521','Mechanics and metal work');
-INSERT INTO study_area (study_domain, description) VALUES ('0713','Electricity and energy');
-INSERT INTO study_area (study_domain, description) VALUES ('0700','Engineering, manufacturing and construction');
-INSERT INTO study_area (study_domain, description) VALUES ('0610','Information and communication technologies - ICT');
-INSERT INTO study_area (study_domain, description) VALUES ('0410','Business and Administration');
-INSERT INTO study_area (study_domain, description) VALUES ('0522','Electricity and energy');
-INSERT INTO study_area (study_domain, description) VALUES ('0461','Mathematics');
-INSERT INTO study_area (study_domain, description) VALUES ('0345','Management and administration');
-INSERT INTO study_area (study_domain, description) VALUES ('0530','Physical sciences');
-INSERT INTO study_area (study_domain, description) VALUES ('0581','Architecture and town planning');
-INSERT INTO study_area (study_domain, description) VALUES ('0582','Building and civil engineering');
-INSERT INTO study_area (study_domain, description) VALUES ('0850','Environmental protection');
-INSERT INTO study_area (study_domain, description) VALUES ('0523','Electronics and automation');
-INSERT INTO study_area (study_domain, description) VALUES ('0524','Chemical and process');
-INSERT INTO study_area (study_domain, description) VALUES ('0580','Architecture and building');
-INSERT INTO study_area (study_domain, description) VALUES ('0532','Earth sciences');
-INSERT INTO study_area (study_domain, description) VALUES ('0541','Mathematics');
-INSERT INTO study_area (study_domain, description) VALUES ('0732','Building and civil engineering');
-INSERT INTO study_area (study_domain, description) VALUES ('0418','Business and Administration');
-INSERT INTO study_area (study_domain, description) VALUES ('0731','Architecture and town planning');
-INSERT INTO study_area (study_domain, description) VALUES ('0533','Physics');
-INSERT INTO study_area (study_domain, description) VALUES ('0480','Informatics, computer science');
-INSERT INTO study_area (study_domain, description) VALUES ('0500','Engineering, manufacturing and construction');
-INSERT INTO study_area (study_domain, description) VALUES ('0311','Economics');
-INSERT INTO study_area (study_domain, description) VALUES ('0716','Motor vehicles, ships and aircraft');
-INSERT INTO study_area (study_domain, description) VALUES ('0441','Physics');
-INSERT INTO study_area (study_domain, description) VALUES ('0460','Mathematics and statistics');
-INSERT INTO study_area (study_domain, description) VALUES ('0712','Environmental protection technology');
-INSERT INTO study_area (study_domain, description) VALUES ('0531','Chemistry');
-INSERT INTO study_area (study_domain, description) VALUES ('0400','Mathematics, Informatics');
-INSERT INTO study_area (study_domain, description) VALUES ('0443','Earth sciences');
-INSERT INTO study_area (study_domain, description) VALUES ('0719','Engineering and engineering trades');
-INSERT INTO study_area (study_domain, description) VALUES ('0512','Biochemistry');
-INSERT INTO study_area (study_domain, description) VALUES ('0540','Manufacturing and processing');
-INSERT INTO study_area (study_domain, description) VALUES ('0611','Computer use');
-INSERT INTO study_area (study_domain, description) VALUES ('0510','Biological and related sciences');
-INSERT INTO study_area (study_domain, description) VALUES ('0720','Manufacturing and processing');
-INSERT INTO study_area (study_domain, description) VALUES ('0613','Computer use');
-INSERT INTO study_area (study_domain, description) VALUES ('0724','Mining and extraction');
-INSERT INTO study_area (study_domain, description) VALUES ('0140','Transport services');
-INSERT INTO study_area (study_domain, description) VALUES ('0727','Pharmacy');
-INSERT INTO study_area (study_domain, description) VALUES ('0600','Engineering Technology');
-INSERT INTO study_area (study_domain, description) VALUES ('0722','Materials');
-INSERT INTO study_area (study_domain, description) VALUES ('0914','Biomedical Engineering');
-INSERT INTO study_area (study_domain, description) VALUES ('0413','Management and administration');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0520','Engineering and engineering trades','4');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0525','Motor vehicles, ships and aircraft','4');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0481','Computer science','6');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0711','Chemical engineering and processes','4');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0714','Electronics and automation','4');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0715','Mechanics and metal trades','4');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0340','Business and Administration','2');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0442','Chemistry','11');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0710','Engineering and engineering trades','4');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0730','Architecture and construction','1');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0421','Biology and biochemistry','11');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0511','Biology','11');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0521','Mechanics and metal work','4');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0713','Electricity and energy','4');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0700','Engineering, manufacturing and construction','4');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0610','Information and communication technologies - ICT','6');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0410','Business and Administration','2');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0522','Electricity and energy','4');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0461','Mathematics','5');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0345','Management and administration','2');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0530','Physical sciences','11');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0581','Architecture and town planning','1');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0582','Building and civil engineering','1');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0850','Environmental protection','3');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0523','Electronics and automation','4');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0524','Chemical and process','11');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0580','Architecture and building','1');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0532','Earth sciences','3');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0541','Mathematics','5');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0732','Building and civil engineering','1');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0418','Business and Administration','2');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0731','Architecture and town planning','1');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0533','Physics','11');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0480','Informatics, computer science','6');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0500','Engineering, manufacturing and construction','4');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0311','Economics','13');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0716','Motor vehicles, ships and aircraft','4');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0441','Physics','11');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0460','Mathematics and statistics','5');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0712','Environmental protection technology','3');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0531','Chemistry','11');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0400','Artificial Inteligence','6');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0443','Earth sciences','3');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0719','Engineering and engineering trades','4');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0512','Biochemistry','11');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0540','Manufacturing and processing','4');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0611','Computer use','6');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0510','Biological and related sciences','11');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0720','Manufacturing and processing','4');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0613','Computer use','6');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0724','Mining and extraction','3');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0140','Transport services','14');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0727','Pharmacy','12');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0600','Engineering Technology','4');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0722','Materials','1');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0914','Biomedical Engineering','12');
+INSERT INTO study_area (id,area_name,study_domain_id) VALUES ('0413','Management and administration','2');
 --pwr_faculty
 INSERT INTO pwr_faculty (shortcut, name) VALUES ('W1','Architecture');
 INSERT INTO pwr_faculty (shortcut, name) VALUES ('W2','Civil Engineering');
