@@ -14,7 +14,7 @@ const ProfilePageContainer = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchUserCurrent())
+    dispatch(fetchUserCurrent());
   }, [dispatch]);
 
   const navigateToNotesPage = () => {

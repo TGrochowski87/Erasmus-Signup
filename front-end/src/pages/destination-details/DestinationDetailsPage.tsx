@@ -9,13 +9,13 @@ import InlineItems from "components/InlineItems";
 import TextArea from "antd/lib/input/TextArea";
 import Opinion from "models/Opinion";
 import BlockLabeledTextField from "components/BlockLabeledTextField";
-import GetDestinationDetailsResponse from "api/DTOs/GET/GetDestinationDetailsResponse";
+import GetDestinationDetails from "api/DTOs/GET/GetDestinationDetails";
 import FullViewLoading from "components/FullViewLoading";
 import FavoriteStatusIndicator from "components/FavoriteStatusIndicator";
 import NoteStatusIndicator from "components/NoteStatusIndicator";
 
 interface Props {
-  detailsData: GetDestinationDetailsResponse | undefined;
+  detailsData: GetDestinationDetails | undefined;
   selectedDestId: number;
   setSelectedDestId: React.Dispatch<React.SetStateAction<number>>;
   opinionInput: string;

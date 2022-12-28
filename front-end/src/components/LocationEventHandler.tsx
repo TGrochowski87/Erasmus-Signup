@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "storage/redux/hooks";
-import { logIn, logOut, logOutLocally } from "storage/redux/loginSlice";
+import { logIn, logOut, logOutLocally } from "storage/redux/userSlice";
 import { RootState } from "storage/redux/store";
 import decodeJwt from "utilities/decodeJwt";
 

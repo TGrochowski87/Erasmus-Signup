@@ -1,19 +1,19 @@
 import { default as axios } from "lib/axios";
-import GetDestinationDetailsResponse from "./DTOs/GET/GetDestinationDetailsResponse";
-import GetDestinationsResponse from "./DTOs/GET/GetDestinationsResponse";
+import GetDestinationDetails from "./DTOs/GET/GetDestinationDetails";
+import GetDestinations from "./DTOs/GET/GetDestinations";
 
 const universityApiBaseUrl = "https://localhost:7009";
 
-export const getDestinations = async (page: number, pageSize: number): Promise<GetDestinationsResponse> => {
+export const getDestinations = async (page: number, pageSize: number): Promise<GetDestinations> => {
   return await axios
-    .get<GetDestinationsResponse>(`${universityApiBaseUrl}/universities?pageSize=${pageSize}&page=${page}`)
+    .get<GetDestinations>(`${universityApiBaseUrl}/universities?pageSize=${pageSize}&page=${page}`)
     .then(response => response.data)
     .catch(error => error);
 };
 
-export const getDestinationDetails = async (destinationId: number): Promise<GetDestinationDetailsResponse> => {
+export const getDestinationDetails = async (destinationId: number): Promise<GetDestinationDetails> => {
   return await axios
-    .get<GetDestinationDetailsResponse>(`${universityApiBaseUrl}/universities/${destinationId}`)
+    .get<GetDestinationDetails>(`${universityApiBaseUrl}/universities/${destinationId}`)
     .then(response => response.data)
     .catch(error => error);
 };

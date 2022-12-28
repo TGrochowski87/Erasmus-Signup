@@ -1,6 +1,6 @@
 import SpecialtyDetails from "models/SpecialtyDetails";
 
-interface GetDestinationDetailsResponse {
+interface GetDestinationDetails {
   universityName: string;
   erasmusCode: string;
   country: string;
@@ -12,4 +12,4 @@ interface GetDestinationDetailsResponse {
   destinations: SpecialtyDetails[];
 }
 
-export default GetDestinationDetailsResponse;
+export default GetDestinationDetails;

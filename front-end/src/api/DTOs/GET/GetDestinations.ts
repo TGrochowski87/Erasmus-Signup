@@ -1,8 +1,8 @@
 import DestSpecialty from "models/DestSpecialty";
 
-interface GetDestinationsResponse {
+interface GetDestinations {
   totalRows: number;
   destinations: DestSpecialty[];
 }
 
-export default GetDestinationsResponse;
+export default GetDestinations;

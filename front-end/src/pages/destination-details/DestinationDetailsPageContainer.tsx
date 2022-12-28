@@ -4,12 +4,12 @@ import { useParams } from "react-router-dom";
 // Components
 import Opinion from "models/Opinion";
 import DestinationDetailsPage from "./DestinationDetailsPage";
-import GetDestinationDetailsResponse from "api/DTOs/GET/GetDestinationDetailsResponse";
+import GetDestinationDetails from "api/DTOs/GET/GetDestinationDetails";
 import { getDestinationDetails } from "api/universityApi";
 
 const DestinationDetailsPageContainer = () => {
   const { id } = useParams();
-  const [detailsData, setDetailsData] = useState<GetDestinationDetailsResponse | undefined>(undefined);
+  const [detailsData, setDetailsData] = useState<GetDestinationDetails | undefined>(undefined);
   const [selectedDestId, setSelectedDestId] = useState<number>(0);
   const [loading, setLoading] = useState<{ details: boolean; opinions: boolean }>({
     details: false,

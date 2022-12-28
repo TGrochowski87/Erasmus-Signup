@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 // Redux
 import { useAppDispatch, useAppSelector } from "storage/redux/hooks";
-import { fetchOAuthUrl, logOut, logOutLocally } from "storage/redux/loginSlice";
+import { fetchOAuthUrl, logOut, logOutLocally } from "storage/redux/userSlice";
 import { RootState } from "storage/redux/store";
 import RequestStatus from "storage/redux/RequestStatus";
 // Styles
