@@ -15,8 +15,6 @@ const ListPageContainer = () => {
 
   useEffect(() => {
     handlePageChange(0, 10);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handlePageChange = async (page: number, pageSize: number) => {

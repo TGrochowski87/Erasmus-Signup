@@ -22,8 +22,6 @@ const LocationEventHandler = () => {
     if (oAuthToken && oAuthVerifier) {
       dispatch(logIn({ oAuthToken, oAuthVerifier }));
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   // Handles monitoring JWT expiry
@@ -41,8 +39,6 @@ const LocationEventHandler = () => {
       dispatch(logOut());
       dispatch(logOutLocally());
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
   return <></>;

@@ -9,6 +9,7 @@ import sweep from "assets/sweep.svg";
 import "./NoteViewPage.scss";
 
 interface Props {
+  id: string | undefined;
   text: string;
   setText: React.Dispatch<React.SetStateAction<string>>;
   title: string;
@@ -19,7 +20,7 @@ interface Props {
   deleteNote: () => void;
 }
 
-const NoteViewPage = ({ text, setText, title, setTitle, goBack, clearText, saveNote, deleteNote }: Props) => {
+const NoteViewPage = ({ id, text, setText, title, setTitle, goBack, clearText, saveNote, deleteNote }: Props) => {
   return (
     <div className="note-view-page">
       <div className="button" onClick={goBack}>
@@ -30,6 +31,8 @@ const NoteViewPage = ({ text, setText, title, setTitle, goBack, clearText, saveN
       <div className="block content">
         <Input
           style={{ marginBottom: "2rem" }}
+          showCount
+          maxLength={200}
           placeholder="Title"
           value={title}
           onChange={event => setTitle(event.target.value)}
@@ -49,9 +52,11 @@ const NoteViewPage = ({ text, setText, title, setTitle, goBack, clearText, saveN
         <div className="button" onClick={clearText}>
           <img src={sweep} alt="back button" style={{ width: "48px" }} />
         </div>
-        <div className="button" onClick={deleteNote}>
-          <DeleteOutlined />
-        </div>
+        {id && (
+          <div className="button" onClick={deleteNote}>
+            <DeleteOutlined />
+          </div>
+        )}
       </div>
     </div>
   );

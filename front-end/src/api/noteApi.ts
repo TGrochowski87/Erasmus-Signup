@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import { default as axios } from "lib/axios";
 import CommonNote from "models/notes/CommonNote";
 import HighlightNote from "models/notes/HighlightNote";
@@ -31,7 +32,7 @@ export const postCommonNote = async (body: PostCommonNote) => {
       },
     })
     .then(response => response.data)
-    .catch(error => error);
+    .catch(error => error as AxiosError);
 };
 
 export const putCommonNote = async (id: number, body: PostCommonNote) => {

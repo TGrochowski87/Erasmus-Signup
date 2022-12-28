@@ -16,15 +16,15 @@ const NotesPageContainer = () => {
   const [activeTab, setActiveTab] = useState<"COMMON" | "SPECIALTIES" | "PLANS">("COMMON");
 
   useEffect(() => {
-    if (notes === undefined) {
+    const { common, speciality, plan } = notes;
+    if (common.length === 0 && speciality.length === 0 && plan.length === 0) {
       dispatch(fetchNotesWithContent());
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const chooseNotesToRender = (): CommonNote[] => {
-    if (notes === undefined) {
+    const { common, speciality, plan } = notes;
+    if (common.length === 0 && speciality.length === 0 && plan.length === 0) {
       return [];
     }
 

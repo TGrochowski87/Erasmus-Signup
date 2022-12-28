@@ -45,15 +45,30 @@ const noteSlice = createSlice({
   name: "note",
   initialState,
   reducers: {
+    // TODO: Error feedback
     addCommonNoteLocally(state, action: PayloadAction<PostCommonNote>) {
       const newCommonNote: CommonNote = {
         id: Math.max(...state.notes.common.map(n => n.id)) + 1,
-        createdAt: new Date(),
+        createdAt: new Date(0),
         userId: -1,
         title: action.payload.title,
         content: action.payload.content,
       };
       state.notes.common.push(newCommonNote);
+    },
+    editCommonNoteLocally(state, action: PayloadAction<{ id: number; body: PostCommonNote }>) {
+      state.notes.common = state.notes.common.map(n =>
+        n.id === action.payload.id
+          ? {
+              ...n,
+              title: action.payload.body.title,
+              content: action.payload.body.content,
+            }
+          : n
+      );
+    },
+    deleteCommonNoteLocally(state, action: PayloadAction<number>) {
+      state.notes.common = state.notes.common.filter(note => note.id !== action.payload);
     },
   },
   extraReducers: builder => {
@@ -62,14 +77,12 @@ const noteSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchNotesWithContent.fulfilled, (state, action) => {
-        state = {
-          loading: true,
-          notes: {
-            ...state.notes,
-            common: action.payload.common,
-            speciality: action.payload.speciality,
-            plan: action.payload.plan,
-          },
+        state.loading = false;
+        state.notes = {
+          ...state.notes,
+          common: action.payload.common,
+          speciality: action.payload.speciality,
+          plan: action.payload.plan,
         };
       })
       .addCase(fetchNotesWithContent.rejected, state => {
@@ -78,5 +91,5 @@ const noteSlice = createSlice({
   },
 });
 
-export const { addCommonNoteLocally } = noteSlice.actions;
+export const { addCommonNoteLocally, editCommonNoteLocally, deleteCommonNoteLocally } = noteSlice.actions;
 export default noteSlice.reducer;
