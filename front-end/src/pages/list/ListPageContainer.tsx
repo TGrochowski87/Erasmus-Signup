@@ -1,7 +1,7 @@
 // React
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// API
+// Utilities
 import { getDestinations } from "api/universityApi";
 // Components
 import ListPage from "./ListPage";
@@ -15,8 +15,6 @@ const ListPageContainer = () => {
 
   useEffect(() => {
     handlePageChange(0, 10);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handlePageChange = async (page: number, pageSize: number) => {

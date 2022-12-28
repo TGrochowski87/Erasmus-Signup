@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 // Redux
 import { useAppDispatch, useAppSelector } from "storage/redux/hooks";
-import { fetchOAuthUrl, logOut, logOutLocally } from "storage/redux/loginSlice";
+import { fetchOAuthUrl, logOut, logOutLocally } from "storage/redux/userSlice";
 import { RootState } from "storage/redux/store";
 import RequestStatus from "storage/redux/RequestStatus";
 // Styles
@@ -32,8 +32,6 @@ const Navbar = () => {
       : anonymousUserLinks(dispatch, fetchOAuthUrl);
 
     setLinks(linkList);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userLoggedIn]);
 
   // Handles navbar feedback
@@ -43,7 +41,7 @@ const Navbar = () => {
       return;
     }
 
-    let matchingPaths = links.filter(l => l.path && currentLocation.includes(l.path));
+    const matchingPaths = links.filter(l => l.path && currentLocation.includes(l.path));
 
     if (matchingPaths.length === 0) {
       setActiveId(null);
