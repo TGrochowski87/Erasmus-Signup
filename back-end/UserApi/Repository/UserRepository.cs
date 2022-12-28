@@ -12,29 +12,31 @@ namespace UserApi.Repository
             _context = context;
         }
 
-        public async Task StudentEditAsync(Student student)
+        public async Task ProfileEditAsync(UserProfile profile)
         {
-            var isExists = _context.Students.Any(x => x.UserId == student.UserId);
+            var profileGet = _context.UserProfiles.FirstOrDefault(x => x.UserId == profile.UserId);
 
-            if(isExists)
+            if(profileGet != null)
             {
-                _context.Attach(student);
-                _context.Entry(student).Property("PwrSpeciality").IsModified = true;
-                _context.Entry(student).Property("AverageGrade").IsModified = true;
+                profileGet.AverageGrade = profile.AverageGrade;
+                profileGet.PreferencedStudyDomainId = profile.PreferencedStudyDomainId;
+                _context.Attach(profileGet);
+                _context.Entry(profileGet).Property("PreferencedStudyDomainId").IsModified = true;
+                _context.Entry(profileGet).Property("AverageGrade").IsModified = true;
 
                 await _context.SaveChangesAsync();
 
             }
             else
             {
-                await _context.Students.AddAsync(student);
+                await _context.UserProfiles.AddAsync(profile);
                 await _context.SaveChangesAsync();
             }
         }
 
-        public async Task<Student> GetStudentAsync(int userId)
+        public async Task<UserProfile> GetProfileAsync(int userId)
         {
-            return await _context.Students.FirstOrDefaultAsync(x => x.UserId == userId);
+            return await _context.UserProfiles.FirstOrDefaultAsync(x => x.UserId == userId);
         }
 
     }

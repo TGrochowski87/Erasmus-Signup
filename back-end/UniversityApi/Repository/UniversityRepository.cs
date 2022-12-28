@@ -36,7 +36,7 @@ namespace UniversityApi.Repository
             }
         }
 
-        public async Task<IEnumerable<DestSpeciality>> GetListRecomendedDestinationsAsync(short studyDomainId)
+        public async Task<IEnumerable<DestSpeciality>> GetListRecomendedDestinationsAsync(short? studyDomainId, float? averageGrade)
         {
             var list = await _context.DestSpecialities
                 .Include(x => x.DestUniversityCodeNavigation)
@@ -44,7 +44,11 @@ namespace UniversityApi.Repository
                 .Include(x => x.ContractDetails)
                 .Include(x => x.MinGradeHistories)
                 .Include(x => x.SubjectLanguage)
-                .Where(x => x.StudyArea.StudyDomainId == studyDomainId)
+                .Where(x => studyDomainId == null || x.StudyArea.StudyDomainId == studyDomainId)
+                .Where(x => averageGrade == null ||
+                averageGrade < 2 ||
+                !x.MinGradeHistories.FirstOrDefault().Grade.HasValue ||
+                x.MinGradeHistories.FirstOrDefault().Grade <= averageGrade)
                 .ToListAsync();
 
             return list;

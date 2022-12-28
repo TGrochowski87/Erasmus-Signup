@@ -16,12 +16,12 @@ namespace UserApi.Service
 
         public async Task StudentEdit(StudentEditVM viewModel, int userId)
         {
-            await userRepository.StudentEditAsync(viewModel.ToModel(userId));
+            await userRepository.ProfileEditAsync(viewModel.ToModel(userId));
         }
 
         public async Task<StudentGetVM> GetStudent(int userId)
         {
-            var student = await userRepository.GetStudentAsync(userId);
+            var student = await userRepository.GetProfileAsync(userId);
 
             return new StudentGetVM(student);
         }

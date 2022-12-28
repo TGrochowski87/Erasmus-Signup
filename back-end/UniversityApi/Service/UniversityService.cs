@@ -27,17 +27,23 @@ namespace UniversityApi.Service
             var filterList = list.Skip((page - 1) * pageSize).Take(pageSize);
 
 
-            var recomendedDestinations = await _universityRepository.GetListRecomendedDestinationsAsync(1); //TODO
+            var recomendedDestinations = await _universityRepository.GetListRecomendedDestinationsAsync(null, null); //TODO
             var filterRecomendedDestinations = recomendedDestinations.Take(10);
 
-            return new DestinationResult(filterList.Select(x => new DestinationVM(x)), filterRecomendedDestinations.Select(x => new DestinationVM(x)), new List<DestinationVM>(), totalRows);
+            var recomendedByStudentsDestinations = await _universityRepository.GetListRecomendedDestinationsAsync(null, null); //TODO
+            var filterRecomendedByStudentsDestinations = recomendedByStudentsDestinations.Take(5);
+
+            return new DestinationResult(filterList.Select(x => new DestinationVM(x)),
+                filterRecomendedDestinations.Select(x => new DestinationVM(x)),
+                filterRecomendedByStudentsDestinations.Select(x => new DestinationVM(x)),
+                totalRows);
         }
 
         public async Task<IEnumerable<StudyDomainVM>> GetStudyDomainListAsync()
         {
             var list = await _universityRepository.GetStudyDomainListAsync();
-            
-            return list.Select(x=>new StudyDomainVM(x));
+
+            return list.Select(x => new StudyDomainVM(x));
         }
 
         public async Task<IEnumerable<StudyAreaVM>> GetStudyAreaListAsync()

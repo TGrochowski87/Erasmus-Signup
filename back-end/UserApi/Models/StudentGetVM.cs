@@ -4,13 +4,13 @@ namespace UserApi.Models
 {
     public class StudentGetVM
     {
-        public int? PwrSpeciality { get; set; }
-        public float? AverageGrade { get; set; }
+        public short? PreferencedStudyDomainId { get; set; } 
+        public double? AverageGrade { get; set; }
 
-        public StudentGetVM(Student student)
+        public StudentGetVM(UserProfile profile)
         {
-            PwrSpeciality = student?.PwrSpeciality;
-            AverageGrade = student?.AverageGrade;
+            PreferencedStudyDomainId = profile?.PreferencedStudyDomainId;
+            AverageGrade = profile?.AverageGrade;
         }
     }
 }

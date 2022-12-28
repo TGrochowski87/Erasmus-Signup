@@ -4,14 +4,14 @@ namespace UserApi.Models
 {
     public class StudentEditVM
     {
-        public int PwrSpeciality { get; set; }
-        public float AverageGrade { get; set; }
+        public short PreferencedStudyDomainId { get; set; }
+        public double AverageGrade { get; set; }
 
-        public Student ToModel(int userId)
+        public UserProfile ToModel(int userId)
         {
-            return new Student()
+            return new UserProfile()
             {
-                PwrSpeciality = PwrSpeciality,
+                PreferencedStudyDomainId = PreferencedStudyDomainId,
                 AverageGrade = AverageGrade,
                 UserId = userId
             };

@@ -22,15 +22,15 @@ namespace UserApi.Controllers
 
 
         [AuthorizeUser]
-        [HttpPut("students")]
-        public async Task StudentEdit([FromBody] StudentEditVM edit)
+        [HttpPut("profiles")]
+        public async Task ProfileEdit([FromBody] StudentEditVM edit)
         {
             await userService.StudentEdit(edit,int.Parse(UserToken.UserId));
         }
 
         [AuthorizeUser]
-        [HttpGet("students")]
-        public async Task<StudentGetVM> GetSyudent()
+        [HttpGet("profiles")]
+        public async Task<StudentGetVM> GetProfile()
         {
             return await userService.GetStudent(int.Parse(UserToken.UserId));
         }
