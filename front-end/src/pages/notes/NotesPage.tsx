@@ -2,7 +2,7 @@
 import { NavigateFunction } from "react-router-dom";
 // Ant Design
 import { List, Typography } from "antd";
-import { DeleteFilled, EditFilled } from "@ant-design/icons";
+import { DeleteFilled } from "@ant-design/icons";
 // Styles
 import "./NotesPage.scss";
 // Components
@@ -14,9 +14,33 @@ interface Props {
   activeTab: "COMMON" | "SPECIALTIES" | "PLANS";
   setActiveTab: React.Dispatch<React.SetStateAction<"COMMON" | "SPECIALTIES" | "PLANS">>;
   navigate: NavigateFunction;
+  handleDeleteNote: (id: number) => void;
 }
 
-const NotesPage = ({ notes, loading, activeTab, setActiveTab, navigate }: Props) => {
+const NotesPage = ({ notes, loading, activeTab, setActiveTab, navigate, handleDeleteNote }: Props) => {
+  const rightButton = () => {
+    switch (activeTab) {
+      case "COMMON":
+        return (
+          <div className="tab right-button" onClick={() => navigate(`/notes/edit`)}>
+            <p>NEW NOTE</p>
+          </div>
+        );
+      case "SPECIALTIES":
+        return (
+          <div className="tab right-button" onClick={() => navigate(`/list`)}>
+            <p style={{ fontSize: "1.2rem" }}>VIEW DESTINATIONS</p>
+          </div>
+        );
+      case "PLANS":
+        return (
+          <div className="tab right-button" onClick={() => navigate(`/plans`)}>
+            <p>VIEW PLANS</p>
+          </div>
+        );
+    }
+  };
+
   return (
     <div className="notes-page">
       <div className="tabs">
@@ -31,9 +55,7 @@ const NotesPage = ({ notes, loading, activeTab, setActiveTab, navigate }: Props)
         <div className={`tab ${activeTab === "PLANS" ? "active" : ""}`} onClick={() => setActiveTab("PLANS")}>
           <p>PLANS</p>
         </div>
-        <div className="tab add-note" onClick={() => navigate(`/notes/edit`)}>
-          <EditFilled style={{ fontSize: "1.8rem", color: "#707070" }} />
-        </div>
+        {rightButton()}
       </div>
 
       <div className="block notes-space">
@@ -46,7 +68,15 @@ const NotesPage = ({ notes, loading, activeTab, setActiveTab, navigate }: Props)
               onClick={() => {
                 navigate(`/notes/edit/${item.id}`);
               }}
-              extra={<DeleteFilled style={{ color: "#C00000", fontSize: "1.2rem" }} />}>
+              extra={
+                <DeleteFilled
+                  onClick={event => {
+                    event.stopPropagation();
+                    handleDeleteNote(item.id);
+                  }}
+                  style={{ color: "#C00000", fontSize: "1.2rem" }}
+                />
+              }>
               <Typography.Text strong ellipsis={true}>
                 {item.title}
               </Typography.Text>

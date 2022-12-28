@@ -1,16 +1,21 @@
 // React
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// Redux
+// Redux & Context
 import { useAppDispatch, useAppSelector } from "storage/redux/hooks";
-import { fetchNotesWithContent } from "storage/redux/noteSlice";
+import { deleteCommonNoteLocally, fetchNotesWithContent } from "storage/redux/noteSlice";
 import { RootState } from "storage/redux/store";
+import AppContext from "storage/context/antContext";
+// Utilities
+import { default as axios } from "lib/axios";
+import { deleteCommonNote } from "api/noteApi";
 // Components
 import CommonNote from "models/notes/CommonNote";
 import NotesPage from "./NotesPage";
 
 const NotesPageContainer = () => {
   const navigate = useNavigate();
+  const { messageApi } = useContext(AppContext);
   const { loading, notes } = useAppSelector((state: RootState) => state.note);
   const dispatch = useAppDispatch();
   const [activeTab, setActiveTab] = useState<"COMMON" | "SPECIALTIES" | "PLANS">("COMMON");
@@ -38,6 +43,16 @@ const NotesPageContainer = () => {
     }
   };
 
+  const handleDeleteNote = async (id: number) => {
+    dispatch(deleteCommonNoteLocally(+id));
+    const response = await deleteCommonNote(+id);
+    if (axios.isAxiosError(response)) {
+      messageApi.error({ content: "Something went wrong.", duration: 2 });
+    } else {
+      messageApi.success({ content: "Note deleted.", duration: 2 });
+    }
+  };
+
   return (
     <NotesPage
       notes={chooseNotesToRender()}
@@ -45,6 +60,7 @@ const NotesPageContainer = () => {
       activeTab={activeTab}
       setActiveTab={setActiveTab}
       navigate={navigate}
+      handleDeleteNote={handleDeleteNote}
     />
   );
 };

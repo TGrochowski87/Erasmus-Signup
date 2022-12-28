@@ -1,7 +1,7 @@
 // React
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// API
+// Utilities
 import { getDestinations } from "api/universityApi";
 // Components
 import ListPage from "./ListPage";
