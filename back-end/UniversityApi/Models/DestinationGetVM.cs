@@ -19,7 +19,7 @@ namespace UniversityApi.Models
         {
             Id = dbModel.Id;
             SubjectAreaId = dbModel.StudyAreaId;
-            SubjectAreaName = dbModel.StudyArea?.Description;
+            SubjectAreaName = dbModel.StudyArea?.AreaName;
             InterestedStudents = dbModel.InterestedStudents;
             Vacancies = dbModel.ContractDetails?.VacancyMaxPositions;
             Average = dbModel.MinGradeHistories.FirstOrDefault()?.Grade; 
