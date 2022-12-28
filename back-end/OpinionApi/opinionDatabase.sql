@@ -3,5 +3,5 @@ CREATE TABLE opinion (
     student_id              integer NOT NULL,
     speciality_id           smallint NOT NULL,
     content                 text NOT NULL,
-    rating                  smallint NOT NULL
+    rating                  float NOT NULL
 );

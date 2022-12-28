@@ -15,9 +15,9 @@ namespace UniversityApi.DbModels
         public bool? AcceptingDoctoral { get; set; }
         public DateTime? ConclusionDate { get; set; }
         public DateTime? ExpirationDate { get; set; }
-        public short? SpecificDetailsId { get; set; }
+        public int? VacancyMaxPositions { get; set; }
+        public int? VacancyMonths { get; set; }
 
-        public virtual ContractSpecificDetail? SpecificDetails { get; set; }
         public virtual ICollection<DestSpeciality> DestSpecialities { get; set; }
     }
 }

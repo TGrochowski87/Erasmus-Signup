@@ -13,7 +13,7 @@ namespace OpinionApi.Repository
         }
 
 
-        public async Task<int> CreateAsync(Opinion opinion)
+        public async Task<long> CreateAsync(Opinion opinion)
         {
             await _context.Opinions.AddAsync(opinion);
             await _context.SaveChangesAsync();
@@ -21,7 +21,7 @@ namespace OpinionApi.Repository
             return opinion.Id;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(long id)
         {
             var item = await _context.Opinions.FindAsync(id);
             if (item != null)
@@ -44,7 +44,7 @@ namespace OpinionApi.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Opinion>> GetListAsync(int specId)
+        public async Task<IEnumerable<Opinion>> GetListAsync(long specId)
         {
             return await _context.Opinions.Where(x=>x.SpecialityId == specId).ToListAsync();
         }

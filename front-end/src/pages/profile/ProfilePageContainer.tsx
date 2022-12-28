@@ -21,7 +21,20 @@ const ProfilePageContainer = () => {
     navigate("/notes");
   };
 
-  return <ProfilePage user={currentUser ? currentUser : EmptyUser} navigateToNotesPage={navigateToNotesPage} />;
+  const navigateToPlansPage = () => {
+    navigate("/plans");
+  };
+
+  const navigateToSubjectsPage = () => {
+    navigate("/subjects");
+  };
+
+  return <ProfilePage
+    user={currentUser ? currentUser : EmptyUser}
+    navigateToNotesPage={navigateToNotesPage}
+    navigateToPlansPage={navigateToPlansPage}
+    navigateToSubjectsPage={navigateToSubjectsPage}
+  />;
 };
 
 export default ProfilePageContainer;

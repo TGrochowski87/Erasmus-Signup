@@ -5,12 +5,12 @@ namespace NoteApi.Models
     public class CommonNoteVM
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         public DateTime CreatedAt { get; set; }
         public string Title { get; set; } = null!;
         public string Content { get; set; } = null!;
 
-        public CommonNoteVM(int userId, CommonNotePostVM postVm)
+        public CommonNoteVM(long userId, CommonNotePostVM postVm)
         {
             Id = -1;
             UserId = userId;

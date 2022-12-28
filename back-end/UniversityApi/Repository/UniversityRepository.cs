@@ -17,6 +17,7 @@ namespace UniversityApi.Repository
             return await _context.DestSpecialities
                 .Include(x => x.DestUniversityCodeNavigation)
                 .Include(x => x.StudyArea)
+                .Include(x => x.ContractDetails)
                 .Include(x => x.MinGradeHistories)
                 .Include(x => x.SubjectLanguage).ToListAsync();
         }
@@ -25,6 +26,7 @@ namespace UniversityApi.Repository
         {
             return await _context.Universities
                 .Include(x => x.DestSpecialities).ThenInclude(x=>x.StudyArea)
+                .Include(x => x.DestSpecialities).ThenInclude(x=>x.ContractDetails)
                 .Include(x => x.DestSpecialities).ThenInclude(x=>x.MinGradeHistories)
                 .Include(x => x.DestSpecialities).ThenInclude(x=>x.SubjectLanguage)
                 .FirstAsync(x => x.DestSpecialities.Any(x => x.Id == destId));
@@ -35,6 +37,7 @@ namespace UniversityApi.Repository
             var destSpecialityList = _context.DestSpecialities
                  .Include(x => x.DestUniversityCodeNavigation)
                  .Include(x => x.StudyArea)
+                 .Include(x => x.ContractDetails)
                  .Include(x => x.MinGradeHistories)
                  .Include(x => x.SubjectLanguage);
 

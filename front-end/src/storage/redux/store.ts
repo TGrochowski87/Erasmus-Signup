@@ -6,6 +6,7 @@ import universitySlice from "./universitySlice";
 import loginSlice from "./userSlice";
 import userCurrentSlice from "./userCurrentSlice";
 import noteSlice from "./noteSlice";
+import opinionSlice from "./opinionSlice";
 
 const loginPersistConfig = {
   key: "login",
@@ -19,6 +20,7 @@ export const store = configureStore({
     note: noteSlice,
     login: persistReducer(loginPersistConfig, loginSlice)!,
     userCurrent: userCurrentSlice,
+    opinions: opinionSlice,
   },
   devTools: process.env.NODE_ENV !== "production",
   middleware: getDefaultMiddleware =>

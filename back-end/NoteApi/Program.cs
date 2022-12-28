@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using NoteApi.Service;
 using NoteApi.DbModels;
 using NoteApi.Repository;
-using Communication;
+using ErasmusRabbitContracts;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using System.Net.Http.Headers;
@@ -101,6 +101,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseRouting();
 app.UseSession();
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 app.MapControllers();

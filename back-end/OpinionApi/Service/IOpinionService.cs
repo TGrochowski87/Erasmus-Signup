@@ -4,9 +4,9 @@ namespace OpinionApi.Service
 {
     public interface IOpinionService
     {
-        Task<int> CreateAsync(OpinionCreateVM opinion, int userId);
-        Task<bool> DeleteAsync(int id);
-        Task EditAsync(OpinionEditVM opinion, int id);
-        Task<OpinionResult> GetListAsync(OpinionCriteria criteria, int? userId);
+        Task<long> CreateAsync(OpinionCreateVM opinion, long userId);
+        Task<bool> DeleteAsync(long id);
+        Task EditAsync(OpinionEditVM opinion, long id);
+        Task<OpinionResult> GetListAsync(OpinionCriteria criteria, long? userId);
     }
 }
