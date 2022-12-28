@@ -161,18 +161,18 @@ namespace UniversityApi.DbModels
 
             modelBuilder.Entity<StudyArea>(entity =>
             {
-                entity.HasKey(e => e.StudyDomain)
+                entity.HasKey(e => e.AreaId)
                     .HasName("study_area_pkey");
 
                 entity.ToTable("study_area");
 
-                entity.Property(e => e.StudyDomain)
+                entity.Property(e => e.AreaId)
                     .HasMaxLength(4)
-                    .HasColumnName("study_domain");
+                    .HasColumnName("id");
 
-                entity.Property(e => e.Description)
+                entity.Property(e => e.AreaName)
                     .HasMaxLength(200)
-                    .HasColumnName("description");
+                    .HasColumnName("area_name");
             });
 
             modelBuilder.Entity<SubjectLanguage>(entity =>

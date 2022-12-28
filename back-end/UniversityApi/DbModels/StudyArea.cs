@@ -7,8 +7,8 @@
             DestSpecialities = new HashSet<DestSpeciality>();
         }
 
-        public string StudyDomain { get; set; } = null!;
-        public string? Description { get; set; }
+        public string AreaId { get; set; } = null!;
+        public string? AreaName { get; set; }
 
         public virtual ICollection<DestSpeciality> DestSpecialities { get; set; }
     }
