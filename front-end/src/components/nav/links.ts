@@ -1,6 +1,11 @@
+/* eslint-disable @typescript-eslint/ban-types */
+import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
 import NavLinkData from "./NavLinkData";
 
-export const anonymousUserLinks = (dispatch: Function, fetchOAuthUrl: Function): NavLinkData[] => [
+export const anonymousUserLinks = (
+  dispatch: ThunkDispatch<object, undefined, AnyAction>,
+  fetchOAuthUrl: Function
+): NavLinkData[] => [
   {
     id: 0,
     text: "Home",
@@ -21,7 +26,11 @@ export const anonymousUserLinks = (dispatch: Function, fetchOAuthUrl: Function):
   },
 ];
 
-export const loggedInUserLinks = (dispatch: Function, logOut: Function, logOutLocally: Function): NavLinkData[] => [
+export const loggedInUserLinks = (
+  dispatch: ThunkDispatch<object, undefined, AnyAction>,
+  logOut: Function,
+  logOutLocally: Function
+): NavLinkData[] => [
   {
     id: 0,
     text: "Home",
