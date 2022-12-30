@@ -1,12 +1,13 @@
 // React
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+// API
+import { createOpinion, getOpinion } from "api/opinionApi";
+import { getDestinationDetails } from "api/universityApi";
 // Components
 import { OpinionResponse } from "models/Opinion";
 import DestinationDetailsPage from "./DestinationDetailsPage";
 import GetDestinationDetails from "api/DTOs/GET/GetDestinationDetails";
-import { getDestinationDetails } from "api/universityApi";
-import { createOpinion, getOpinion } from "api/opinionApi";
 
 const DestinationDetailsPageContainer = () => {
   const { id } = useParams();
@@ -84,4 +85,3 @@ const DestinationDetailsPageContainer = () => {
 };
 
 export default DestinationDetailsPageContainer;
-

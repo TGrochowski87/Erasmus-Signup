@@ -2,18 +2,17 @@
 import { Avatar, Button, Divider, List, Rate, Table } from "antd";
 import Column from "antd/lib/table/Column";
 import { CompassOutlined, UserOutlined } from "@ant-design/icons";
+import TextArea from "antd/lib/input/TextArea";
 // Styles
 import "./DestinationDetailsPage.scss";
 // Components
+import GetDestinationDetails from "api/DTOs/GET/GetDestinationDetails";
 import InlineItems from "components/InlineItems";
-import TextArea from "antd/lib/input/TextArea";
 import { Opinion } from "models/Opinion";
 import BlockLabeledTextField from "components/BlockLabeledTextField";
-import GetDestinationDetails from "api/DTOs/GET/GetDestinationDetails";
 import FullViewLoading from "components/FullViewLoading";
 import FavoriteStatusIndicator from "components/FavoriteStatusIndicator";
 import NoteStatusIndicator from "components/NoteStatusIndicator";
-import { createOpinion } from "api/opinionApi";
 
 interface Props {
   detailsData: GetDestinationDetails | undefined;
@@ -85,7 +84,7 @@ const DestinationDetailsPage = ({
             })}
             onRow={record => {
               return {
-                onClick: event => {
+                onClick: () => {
                   setSelectedDestId(record.id);
                 },
               };

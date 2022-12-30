@@ -45,7 +45,6 @@ const noteSlice = createSlice({
   name: "note",
   initialState,
   reducers: {
-    // TODO: Error feedback
     addCommonNoteLocally(state, action: PayloadAction<PostCommonNote>) {
       const newCommonNote: CommonNote = {
         id: Math.max(...state.notes.common.map(n => n.id)) + 1,

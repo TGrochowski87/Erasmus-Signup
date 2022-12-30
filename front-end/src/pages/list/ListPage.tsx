@@ -1,5 +1,5 @@
 // Ant Design
-import { HeartFilled, HeartOutlined, LineChartOutlined, MessageOutlined, TeamOutlined } from "@ant-design/icons";
+import { LineChartOutlined, MessageOutlined, TeamOutlined } from "@ant-design/icons";
 import { Button, List, Rate } from "antd";
 // Components
 import InlineItems from "components/InlineItems";

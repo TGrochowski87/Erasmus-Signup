@@ -3,7 +3,7 @@ import { persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } fro
 import storage from "redux-persist/lib/storage";
 // Slices
 import universitySlice from "./universitySlice";
-import loginSlice from "./userSlice";
+import loginSlice from "./loginSlice";
 import userCurrentSlice from "./userCurrentSlice";
 import noteSlice from "./noteSlice";
 import opinionSlice from "./opinionSlice";

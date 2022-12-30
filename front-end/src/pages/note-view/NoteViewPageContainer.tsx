@@ -1,15 +1,20 @@
-import PostCommonNote from "api/DTOs/POST/PostCommonNote";
-import { deleteCommonNote, postCommonNote, putCommonNote } from "api/noteApi";
-import CommonNote from "models/notes/CommonNote";
+// React
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+// Storage
 import { useAppDispatch, useAppSelector } from "storage/redux/hooks";
 import { addCommonNoteLocally, deleteCommonNoteLocally, editCommonNoteLocally } from "storage/redux/noteSlice";
 import { RootState } from "storage/redux/store";
-import NoteViewPage from "./NoteViewPage";
-import { default as axios } from "lib/axios";
 import AppContext from "storage/context/antContext";
+// Ant Design
 import { message } from "antd";
+// API
+import { default as axios } from "lib/axios";
+import { deleteCommonNote, postCommonNote, putCommonNote } from "api/noteApi";
+// Components
+import PostCommonNote from "api/DTOs/POST/PostCommonNote";
+import CommonNote from "models/notes/CommonNote";
+import NoteViewPage from "./NoteViewPage";
 
 const NoteViewPageContainer = () => {
   const { id } = useParams();

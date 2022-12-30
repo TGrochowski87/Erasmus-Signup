@@ -1,6 +1,7 @@
 import { default as axios } from "lib/axios";
 import OAuthData from "models/OAuthData";
 import { User } from "models/User";
+import UserPreferences from "models/UserPreferences";
 import GetAccessTokenQueryParams from "./DTOs/GET/GetAccessTokenQueryParams";
 
 const userApiBaseUrl = "https://localhost:7077";
@@ -37,6 +38,28 @@ export const revokeAccessToken = async () => {
 export const getCurrentUserData = async (): Promise<User> => {
   return await axios
     .get<User>(`${userApiBaseUrl}/user/current`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access-token")}`,
+      },
+    })
+    .then(response => response.data)
+    .catch(error => error);
+};
+
+export const getUserPreferences = async (): Promise<UserPreferences> => {
+  return await axios
+    .get<UserPreferences>(`${userApiBaseUrl}/user/profiles`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access-token")}`,
+      },
+    })
+    .then(response => response.data)
+    .catch(error => error);
+};
+
+export const putUserPreferences = async (body: UserPreferences) => {
+  return await axios
+    .put(`${userApiBaseUrl}/user/profiles`, body, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access-token")}`,
       },
