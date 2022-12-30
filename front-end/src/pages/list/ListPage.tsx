@@ -1,138 +1,83 @@
 // Ant Design
-import { LineChartOutlined, MessageOutlined, TeamOutlined } from "@ant-design/icons";
-import { Button, List, Rate } from "antd";
-// Components
-import InlineItems from "components/InlineItems";
-import DestSpecialty from "models/DestSpecialty";
+import { Input } from "antd";
 // Styles
 import "./ListPage.scss";
-import openInNewTab from "utilities/openInNewTab";
-import FavoriteStatusIndicator from "components/FavoriteStatusIndicator";
+// Components
+import DestSpecialty from "models/DestSpecialty";
+import SelectFilter from "./SelectFilter";
+import MainList from "./MainList";
+import SideList from "./SideList";
 
 interface Props {
   destinations: DestSpecialty[];
+  recommended: DestSpecialty[];
+  recommendedByStudent: DestSpecialty[];
   handlePageChange: (page: number, pageSize: number) => void;
   totalAmount: number;
   loading: boolean;
   handleOnClick: (id: number) => void;
 }
 
-const ListPage = ({ destinations, handlePageChange, totalAmount, loading, handleOnClick }: Props) => {
+const countries = [
+  {
+    value: "poland",
+    label: "Poland",
+  },
+  {
+    value: "austria",
+    label: "Austria",
+  },
+  {
+    value: "germany",
+    label: "Germany",
+  },
+];
+
+const { Search } = Input;
+
+const ListPage = ({
+  destinations,
+  recommended,
+  recommendedByStudent,
+  handlePageChange,
+  totalAmount,
+  loading,
+  handleOnClick,
+}: Props) => {
+  const onSearch = (value: string) => console.log(value);
+
   return (
-    <div>
-      <div
-        style={{
-          marginTop: 64,
-          width: "70%",
-          marginLeft: "auto",
-        }}>
-        <div className="site-layout-background" style={{ padding: 24, minHeight: 380 }}>
-          <List
+    <div className="list-page">
+      <div className="block filter-section">
+        <p className="header-font">FITLERS</p>
+        <div className="filters">
+          <SelectFilter label="Country" placeholder="Select country" options={countries} />
+          <SelectFilter label="Subject area" placeholder="Select subject area" options={countries} />
+          <SelectFilter label="Sort by" placeholder="Select sorting option" options={countries} />
+          <div className="filter" style={{ marginLeft: "auto" }}>
+            <p className="header-font">University name</p>
+            <Search style={{ width: "350px" }} size="large" placeholder="input search text" onSearch={onSearch} />
+          </div>
+        </div>
+      </div>
+      <div className="lists">
+        <div className="left-section">
+          <div className="block list-space side-list">
+            <p className="header-font">Recommended destinations</p>
+            <SideList destinations={recommended} loading={loading} handleOnClick={handleOnClick} />
+          </div>
+          <div className="block list-space side-list">
+            <p className="header-font">Students like you chose</p>
+            <SideList destinations={recommendedByStudent} loading={loading} handleOnClick={handleOnClick} />
+          </div>
+        </div>
+        <div className="block list-space main-list">
+          <MainList
+            destinations={destinations}
             loading={loading}
-            bordered
-            itemLayout="vertical"
-            dataSource={destinations}
-            footer={
-              <div>
-                <b>Erasmus Sign up</b> destinations
-              </div>
-            }
-            pagination={{
-              position: "both",
-              total: totalAmount,
-              pageSize: 10,
-              onChange: (page, pageSize) => {
-                handlePageChange(page, pageSize);
-              },
-            }}
-            renderItem={item => (
-              <List.Item
-                key={item.destinationSpecialityId}
-                className="university-list-item"
-                style={{
-                  borderBottomColor: "rgb(184, 184, 184)",
-                  paddingLeft: "0.5rem",
-                }}
-                onClick={() => {
-                  handleOnClick(item.destinationSpecialityId);
-                }}>
-                <div className="university-list-item-content">
-                  <div className="country-flag-space">
-                    <img src={item.flagUrl} alt="country flag" />
-                  </div>
-                  <div className="university-data-space">
-                    <div className="university-information">
-                      <div className="top-row">
-                        <h2
-                          style={{
-                            display: "inline",
-                            marginRight: "10px",
-                          }}>
-                          {item.universityName}
-                        </h2>
-                        <h3
-                          style={{
-                            display: "inline",
-                            color: "grey",
-                          }}>
-                          {item.country}
-                        </h3>
-                        <Rate
-                          disabled
-                          allowHalf
-                          defaultValue={item.rating}
-                          style={{
-                            margin: "0 auto",
-                            position: "relative",
-                            top: "-10px",
-                          }}
-                        />
-                        <FavoriteStatusIndicator active={item.isObserved} />
-                      </div>
-
-                      <p style={{ marginTop: "0.5rem" }}>
-                        {item.subjectAreaName} | {item.subjectAreaId}
-                      </p>
-                    </div>
-
-                    <div className="text-icons">
-                      <InlineItems>
-                        <TeamOutlined />
-                        {item.places}
-                      </InlineItems>
-
-                      <InlineItems>
-                        <LineChartOutlined />
-                        {item.average}
-                      </InlineItems>
-
-                      <InlineItems>
-                        <MessageOutlined />
-                        {item.opinions}
-                      </InlineItems>
-                    </div>
-                  </div>
-
-                  <div className="buttons">
-                    <Button size="large" type="primary">
-                      Show on map
-                    </Button>
-                    <Button
-                      size="large"
-                      type="primary"
-                      onClick={() => {
-                        if (item.link !== null) {
-                          openInNewTab(item.link);
-                        } else {
-                          alert("No website for this university.");
-                        }
-                      }}>
-                      Visit website
-                    </Button>
-                  </div>
-                </div>
-              </List.Item>
-            )}
+            totalAmount={totalAmount}
+            handleOnClick={handleOnClick}
+            handlePageChange={handlePageChange}
           />
         </div>
       </div>

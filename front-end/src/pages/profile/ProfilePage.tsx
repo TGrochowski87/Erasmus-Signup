@@ -64,14 +64,14 @@ const ProfilePage = ({
           </div>
         </div>
         <div className="block preferences">
-          <p>MY PREFERENCES</p>
+          <p className="header-font">MY PREFERENCES</p>
           <div className="input-space">
             {loadingPreferences ? (
               <Spin />
             ) : (
               <div className="inputs">
                 <InlineItems>
-                  <p>Study area: </p>
+                  <p className="header-font">Study area: </p>
                   <Select
                     style={{ flexGrow: "1" }}
                     showSearch
@@ -96,7 +96,7 @@ const ProfilePage = ({
                   />
                 </InlineItems>
                 <InlineItems>
-                  <p>Min. grade: </p>
+                  <p className="header-font">Min. grade: </p>
                   <InputNumber
                     min={2.0}
                     max={5.5}

@@ -6,7 +6,7 @@ interface DestSpecialty {
   subjectAreaName: string;
   subjectAreaId: string;
   flagUrl: string;
-  places: number;
+  vacancies: number;
   average: number;
   opinions: number;
   rating: number;

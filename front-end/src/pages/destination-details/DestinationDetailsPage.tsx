@@ -69,9 +69,9 @@ const DestinationDetailsPage = ({
         </div>
 
         <div className="block specialty-list">
-          <h2 className="header">
+          <p className="header-font" style={{ fontSize: "1.3rem" }}>
             AVAILABLE DESTINATIONS <CompassOutlined style={{ marginLeft: "0.5rem" }} />
-          </h2>
+          </p>
           <Table
             dataSource={detailsData.destinations.map<DestMicro>(dest => {
               return {
@@ -120,7 +120,7 @@ const DestinationDetailsPage = ({
       )}
 
       <div className="block opinions">
-        <Divider className="header">OPINIONS</Divider>
+        <Divider className="header header-font">OPINIONS</Divider>
         <div className="input-space">
           <Rate style={{ marginBottom: "5px" }} allowHalf value={ratingInput} onChange={setRatingInput} />
           <TextArea
