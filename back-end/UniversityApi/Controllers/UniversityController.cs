@@ -24,6 +24,24 @@ namespace UniversityApi.Controllers
             return await universityService.GetListAsync(criteria);
         }
 
+        [HttpGet("universities-recommended")]
+        public async Task<IEnumerable<DestinationVM>> GetRecommendedDestinations()
+        {
+            return await universityService.GetRecommendedDestinations();
+        }
+
+        [HttpGet("universities-recommended-by-students")]
+        public async Task<IEnumerable<DestinationVM>> GetRecommendedByStudentsDestinations()
+        {
+            return await universityService.GetRecommendedByStudentsDestinations();
+        }
+
+        [HttpGet("countries")]
+        public ActionResult<IEnumerable<string>> GetCountries()
+        {
+            return Ok(universityService.GetCountries());
+        }
+
         [HttpGet("study-domains")]
         public async Task<IEnumerable<StudyDomainVM>> GetStudyDomainList()
         {

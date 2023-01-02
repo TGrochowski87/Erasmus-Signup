@@ -25,18 +25,22 @@ namespace UniversityApi.Repository
                 .Where(x=> string.IsNullOrEmpty(criteria.SubjectAreaId) || x.StudyArea.Id == criteria.SubjectAreaId)
                 .ToListAsync();
 
-            switch (criteria.OrderByInterestedStudents)
+            switch (criteria.OrderBy)
             {
-                case "asc":
-                    return list.OrderBy(x=>x.InterestedStudents);
-                case "desc":
+                case "InterestedStudents Asc":
+                    return list.OrderBy(x => x.InterestedStudents);
+                case "InterestedStudents Desc":
                     return list.OrderByDescending(x => x.InterestedStudents);
+                case "Average Asc":
+                    return list.OrderBy(x => x.MinGradeHistories.FirstOrDefault()?.Grade);
+                case "Average Desc":
+                    return list.OrderByDescending(x => x.MinGradeHistories.FirstOrDefault()?.Grade);
                 default:
                     return list;
             }
         }
 
-        public async Task<IEnumerable<DestSpeciality>> GetListRecomendedDestinationsAsync(short? studyDomainId, float? averageGrade)
+        public async Task<IEnumerable<DestSpeciality>> GetListRecommendedDestinationsAsync(short? studyDomainId, float? averageGrade)
         {
             var list = await _context.DestSpecialities
                 .Include(x => x.DestUniversityCodeNavigation)
