@@ -1,16 +1,20 @@
 ﻿using FluentResults;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
+using UniversityApi.Attributes;
 using UniversityApi.Models;
 using UniversityApi.Service;
 
 namespace UniversityApi.Controllers
 {
     [ApiController]
-    public class UniversityController : Controller
+    public class UniversityController : Controller, IUniversityApiController
     {
         private readonly IUniversityService universityService;
         private readonly IPublishEndpoint publishEndpoint;
+
+        public UserJWT? UserToken { get; set; }
+
 
         public UniversityController(IUniversityService universityService)
         {
@@ -24,12 +28,14 @@ namespace UniversityApi.Controllers
             return await universityService.GetListAsync(criteria);
         }
 
+        [AuthorizeUser]
         [HttpGet("universities-recommended")]
         public async Task<IEnumerable<DestinationVM>> GetRecommendedDestinations()
         {
             return await universityService.GetRecommendedDestinations();
         }
 
+        [AuthorizeUser]
         [HttpGet("universities-recommended-by-students")]
         public async Task<IEnumerable<DestinationVM>> GetRecommendedByStudentsDestinations()
         {
