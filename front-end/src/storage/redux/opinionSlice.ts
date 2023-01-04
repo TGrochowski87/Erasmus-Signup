@@ -15,8 +15,8 @@ const initialState: State = {
 
 export const fetchOpinion = createAsyncThunk<
   OpinionResponse,
-  { PageSize: string | number; Page: string | number; SpecId: string | number }
->("getOpinions", async ({ PageSize, Page, SpecId }) => {
+  { pageSize: string | number; page: string | number; specId: string | number }
+>("getOpinions", async ({ pageSize: PageSize, page: Page, specId: SpecId }) => {
   //TODO: Add error handling
   const response = await getOpinion(PageSize, Page, SpecId);
   return response;

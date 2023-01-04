@@ -14,7 +14,7 @@ const SelectFilter = ({ label, placeholder, options }: Props) => {
     <div className="filter">
       <p className="header-font">{label}</p>
       <Select
-        style={{ width: "200px" }}
+        style={{ minWidth: "250px" }}
         showSearch
         placeholder={placeholder}
         optionFilterProp="label"

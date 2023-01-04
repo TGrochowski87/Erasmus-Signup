@@ -1,10 +1,8 @@
 import DestSpecialty from "models/DestSpecialty";
 
-interface DestinationLists {
+interface DestinationList {
   totalRows: number;
   destinations: DestSpecialty[];
-  recomendedDestinations: DestSpecialty[];
-  recommendedByStudentsDestinations: DestSpecialty[];
 }
 
-export default DestinationLists;
+export default DestinationList;

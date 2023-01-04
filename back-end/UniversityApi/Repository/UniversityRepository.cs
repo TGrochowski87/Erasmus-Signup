@@ -27,13 +27,13 @@ namespace UniversityApi.Repository
 
             switch (criteria.OrderBy)
             {
-                case "InterestedStudents Asc":
+                case "InterestedStudentsAsc":
                     return list.OrderBy(x => x.InterestedStudents);
-                case "InterestedStudents Desc":
+                case "InterestedStudentsDesc":
                     return list.OrderByDescending(x => x.InterestedStudents);
-                case "Average Asc":
+                case "AverageAsc":
                     return list.OrderBy(x => x.MinGradeHistories.FirstOrDefault()?.Grade);
-                case "Average Desc":
+                case "AverageDesc":
                     return list.OrderByDescending(x => x.MinGradeHistories.FirstOrDefault()?.Grade);
                 default:
                     return list;
