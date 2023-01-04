@@ -1,4 +1,5 @@
 ﻿using UniversityApi.DbModels;
+using UniversityApi.Helpers;
 using UniversityApi.Models;
 using UniversityApi.Repository;
 
@@ -26,17 +27,28 @@ namespace UniversityApi.Service
             totalRows = list.Count();
             var filterList = list.Skip((page - 1) * pageSize).Take(pageSize);
 
+            return new DestinationResult(filterList.Select(x => new DestinationVM(x)), totalRows);
+        }
 
-            var recomendedDestinations = await _universityRepository.GetListRecomendedDestinationsAsync(null, null); //TODO
+        public async Task<IEnumerable<DestinationVM>> GetRecommendedDestinations()
+        {
+            var recomendedDestinations = await _universityRepository.GetListRecommendedDestinationsAsync(null, null); //TODO
             var filterRecomendedDestinations = recomendedDestinations.Take(10);
 
-            var recomendedByStudentsDestinations = await _universityRepository.GetListRecomendedDestinationsAsync(null, null); //TODO
+            return filterRecomendedDestinations.Select(x => new DestinationVM(x));
+        }
+
+        public async Task<IEnumerable<DestinationVM>> GetRecommendedByStudentsDestinations()
+        {
+            var recomendedByStudentsDestinations = await _universityRepository.GetListRecommendedDestinationsAsync(null, null); //TODO
             var filterRecomendedByStudentsDestinations = recomendedByStudentsDestinations.Take(5);
 
-            return new DestinationResult(filterList.Select(x => new DestinationVM(x)),
-                filterRecomendedDestinations.Select(x => new DestinationVM(x)),
-                filterRecomendedByStudentsDestinations.Select(x => new DestinationVM(x)),
-                totalRows);
+            return filterRecomendedByStudentsDestinations.Select(x => new DestinationVM(x));
+        }
+
+        public IEnumerable<string> GetCountries()
+        {
+            return CountryDictionary.Flags.Select(x => x.Key);
         }
 
         public async Task<IEnumerable<StudyDomainVM>> GetStudyDomainListAsync()

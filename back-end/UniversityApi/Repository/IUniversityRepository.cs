@@ -10,7 +10,7 @@ namespace UniversityApi.Repository
         Task UpdateInterestedStudentsCountAsync(int id, bool increment);
         Task<IEnumerable<StudyDomain>> GetStudyDomainListAsync();
         Task<IEnumerable<StudyArea>> GetStudyAreaListAsync();
-        Task<IEnumerable<DestSpeciality>> GetListRecomendedDestinationsAsync(short? studyDomainId, float? averageGrade);
+        Task<IEnumerable<DestSpeciality>> GetListRecommendedDestinationsAsync(short? studyDomainId, float? averageGrade);
         Task<DestSpeciality> GetRecommendedByStudentsDestinationsAsync(short destId);
     }
 }
