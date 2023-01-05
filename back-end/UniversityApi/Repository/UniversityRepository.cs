@@ -23,6 +23,7 @@ namespace UniversityApi.Repository
                 .Include(x => x.SubjectLanguage)
                 .Where(x => string.IsNullOrEmpty(criteria.Country) || x.DestUniversityCodeNavigation.Country == criteria.Country)
                 .Where(x=> string.IsNullOrEmpty(criteria.SubjectAreaId) || x.StudyArea.Id == criteria.SubjectAreaId)
+                .Where(x=> string.IsNullOrEmpty(criteria.UniversityName) || x.DestUniversityCodeNavigation.Name.Contains(criteria.UniversityName))
                 .ToListAsync();
 
             switch (criteria.OrderBy)
