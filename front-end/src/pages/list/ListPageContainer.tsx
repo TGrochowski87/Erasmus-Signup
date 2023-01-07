@@ -28,17 +28,16 @@ const ListPageContainer = () => {
   const [destinations, setDestinations] = useState<DestSpecialty[]>([]);
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
+  const [universityNameSearch, setUniversityNameSearch] = useState<string>("");
   const [filters, setFilters] = useState<DestFiltering>({
     country: undefined,
     subjectAreaId: undefined,
     orderBy: undefined,
-    universityName: undefined,
   });
   const [currentFilters, setCurrentFilters] = useState<DestFiltering>({
     country: undefined,
     subjectAreaId: undefined,
     orderBy: undefined,
-    universityName: undefined,
   });
   const sortingOptionsList = useRef(
     Object.keys(sortingOptions).map(key => {
@@ -58,8 +57,6 @@ const ListPageContainer = () => {
   }, [userLoggedIn]);
 
   useEffect(() => {
-    fetchRecommendations();
-
     if (countries.length === 0) {
       dispatch(fetchCountries());
     }
@@ -83,7 +80,7 @@ const ListPageContainer = () => {
     setLoading(true);
     setPageNum(1);
     setCurrentFilters({ ...filters });
-    const currentPage = await getDestinations(0, 10, filters);
+    const currentPage = await getDestinations(1, 10, filters);
     setDestinations(currentPage.destinations);
     setTotalAmount(currentPage.totalRows);
     setLoading(false);
@@ -93,6 +90,15 @@ const ListPageContainer = () => {
     setLoading(true);
     setPageNum(page);
     const currentPage = await getDestinations(page, pageSize, currentFilters);
+    setDestinations(currentPage.destinations);
+    setTotalAmount(currentPage.totalRows);
+    setLoading(false);
+  };
+
+  const handleSearch = async () => {
+    setLoading(true);
+    setPageNum(1);
+    const currentPage = await getDestinations(1, 10, currentFilters, universityNameSearch);
     setDestinations(currentPage.destinations);
     setTotalAmount(currentPage.totalRows);
     setLoading(false);
@@ -108,6 +114,8 @@ const ListPageContainer = () => {
       filters={filters}
       setFilters={setFilters}
       currentFilters={currentFilters}
+      universityNameSearch={universityNameSearch}
+      setUniversityNameSearch={setUniversityNameSearch}
       pageNum={pageNum}
       destinations={destinations}
       recommended={destinationsRecommended}
@@ -120,6 +128,7 @@ const ListPageContainer = () => {
       loading={loading}
       handleOnClick={handleOnClick}
       applyFilters={applyFilters}
+      handleSearch={handleSearch}
     />
   );
 };

@@ -19,6 +19,8 @@ interface Props {
   filters: DestFiltering;
   setFilters: React.Dispatch<React.SetStateAction<DestFiltering>>;
   currentFilters: DestFiltering;
+  universityNameSearch: string;
+  setUniversityNameSearch: React.Dispatch<React.SetStateAction<string>>;
   pageNum: number;
   destinations: DestSpecialty[];
   recommended: DestSpecialty[] | undefined;
@@ -31,6 +33,7 @@ interface Props {
   loading: boolean;
   handleOnClick: (id: number) => void;
   applyFilters: () => Promise<void>;
+  handleSearch: () => void;
 }
 
 const { Search } = Input;
@@ -40,6 +43,8 @@ const ListPage = ({
   filters,
   setFilters,
   currentFilters,
+  universityNameSearch,
+  setUniversityNameSearch,
   pageNum,
   destinations,
   recommended,
@@ -52,9 +57,8 @@ const ListPage = ({
   loading,
   handleOnClick,
   applyFilters,
+  handleSearch,
 }: Props) => {
-  const onSearch = (value: string) => console.log(value);
-
   const renderSideListContent = (items: DestSpecialty[] | undefined) => {
     if (items !== undefined && userLoggedIn) {
       return items.length !== 0 ? (
@@ -125,28 +129,22 @@ const ListPage = ({
             <Search
               style={{ width: "350px" }}
               size="large"
-              value={filters.universityName}
+              value={universityNameSearch}
               onChange={event => {
-                setFilters(prevState => {
-                  const newValue = event.target.value;
-                  return {
-                    ...prevState,
-                    universityName: newValue === "" ? undefined : newValue,
-                  };
-                });
+                setUniversityNameSearch(event.target.value);
               }}
               placeholder="input search text"
-              onSearch={onSearch}
+              onSearch={handleSearch}
             />
           </div>
         </div>
-        {isEqual(filters, currentFilters) === false && (
-          <div className="button-space">
+        <div className="button-space">
+          {isEqual(filters, currentFilters) === false && (
             <Button type="primary" size="large" onClick={() => applyFilters()}>
               Apply filters
             </Button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
       <div className="lists">
         <div className="left-section">

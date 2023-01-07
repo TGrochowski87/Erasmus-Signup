@@ -106,9 +106,6 @@ const ProfilePage = ({
                     defaultValue={undefined}
                     status={preferencesInput?.averageGrade === undefined ? "warning" : ""}
                     value={preferencesInput?.averageGrade}
-                    onMouseEnter={() => {
-                      console.log(preferencesInput);
-                    }}
                     onChange={value => {
                       const newValue = value ?? undefined;
                       setPreferencesInput(prevState => {

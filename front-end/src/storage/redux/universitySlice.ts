@@ -3,6 +3,7 @@ import {
   getCountries,
   getDestinations,
   getDestinationsRecommended,
+  getDestinationsRecommendedByStudents,
   getStudyAreas,
   getStudyDomains,
 } from "api/universityApi";
@@ -64,7 +65,7 @@ export const fetchDestinationsRecommended = createAsyncThunk<DestSpecialty[]>("d
 export const fetchDestinationsRecommendedByStudents = createAsyncThunk<DestSpecialty[]>(
   "destinations_recommended_by_students",
   async () => {
-    const response = await getDestinationsRecommended();
+    const response = await getDestinationsRecommendedByStudents();
     return response;
   }
 );

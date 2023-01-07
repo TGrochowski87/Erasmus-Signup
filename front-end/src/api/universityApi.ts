@@ -11,7 +11,8 @@ const universityApiBaseUrl = "https://localhost:7009";
 export const getDestinations = async (
   page: number,
   pageSize: number,
-  filters?: DestFiltering
+  filters?: DestFiltering,
+  universityName?: string
 ): Promise<DestinationList> => {
   let url = `${universityApiBaseUrl}/universities?pageSize=${pageSize}&page=${page}`;
 
@@ -20,6 +21,10 @@ export const getDestinations = async (
     if (value !== undefined) {
       url = url.concat(`&${filter}=${value}`);
     }
+  }
+
+  if (universityName) {
+    url += `&universityName=${universityName}`;
   }
 
   return await axios
