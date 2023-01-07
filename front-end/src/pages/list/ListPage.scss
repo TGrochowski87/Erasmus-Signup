@@ -20,6 +20,14 @@
         margin: 0;
       }
     }
+
+    .button-space {
+      position: relative;
+      text-align: end;
+      .ant-btn{
+        margin: 1rem 2rem 0 0;
+      }
+    }
   }
 
   .lists {
@@ -82,6 +90,10 @@
               gap: 20px;
             }
           }
+        }
+
+        &:hover{
+          background-color: #0000002d;
         }
       }
     }

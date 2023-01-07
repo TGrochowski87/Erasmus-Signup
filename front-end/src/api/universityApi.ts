@@ -2,28 +2,24 @@ import { default as axios } from "lib/axios";
 import StudyDomain from "models/StudyDomain";
 import GetDestinationDetails from "./DTOs/GET/GetDestinationDetails";
 import DestinationList from "../models/DestinationList";
-import SortingOptions from "./DTOs/GET/SortingOptions";
 import DestSpecialty from "models/DestSpecialty";
 import StudyArea from "models/StudyArea";
+import DestFiltering from "models/DestFiltering";
 
 const universityApiBaseUrl = "https://localhost:7009";
 
 export const getDestinations = async (
   page: number,
   pageSize: number,
-  country?: string,
-  subjectAreaId?: number,
-  sortingOption?: SortingOptions
+  filters?: DestFiltering
 ): Promise<DestinationList> => {
   let url = `${universityApiBaseUrl}/universities?pageSize=${pageSize}&page=${page}`;
-  if (country) {
-    url = url.concat(`&country=${country}`);
-  }
-  if (subjectAreaId) {
-    url = url.concat(`&subjectAreaId=${subjectAreaId}`);
-  }
-  if (sortingOption) {
-    url = url.concat(`&orderBy=${sortingOption}`);
+
+  for (const filter in filters) {
+    const value = filters[filter as keyof DestFiltering];
+    if (value !== undefined) {
+      url = url.concat(`&${filter}=${value}`);
+    }
   }
 
   return await axios

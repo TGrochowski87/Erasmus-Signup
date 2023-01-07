@@ -14,7 +14,8 @@ import {
   fetchDestinationsRecommendedByStudents,
   fetchStudyAreas,
 } from "storage/redux/universitySlice";
-import SortingOptions from "api/DTOs/GET/SortingOptions";
+import sortingOptions, { SortingOptions } from "api/DTOs/GET/SortingOptions";
+import DestFiltering from "models/DestFiltering";
 
 const ListPageContainer = () => {
   const navigate = useNavigate();
@@ -23,24 +24,41 @@ const ListPageContainer = () => {
     (state: RootState) => state.university
   );
   const { userLoggedIn } = useAppSelector((state: RootState) => state.login);
+  const [pageNum, setPageNum] = useState<number>(1);
   const [destinations, setDestinations] = useState<DestSpecialty[]>([]);
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
-  const sortingOptions = useRef(Object.values(SortingOptions));
+  const [filters, setFilters] = useState<DestFiltering>({
+    country: undefined,
+    subjectAreaId: undefined,
+    orderBy: undefined,
+    universityName: undefined,
+  });
+  const [currentFilters, setCurrentFilters] = useState<DestFiltering>({
+    country: undefined,
+    subjectAreaId: undefined,
+    orderBy: undefined,
+    universityName: undefined,
+  });
+  const sortingOptionsList = useRef(
+    Object.keys(sortingOptions).map(key => {
+      return {
+        value: key,
+        label: sortingOptions[key as keyof SortingOptions],
+      };
+    })
+  );
 
   useEffect(() => {
-    handlePageChange(0, 10);
+    handlePageChange(1, 10);
   }, []);
 
   useEffect(() => {
-    if (userLoggedIn) {
-      if (destinationsRecommended === undefined) {
-        dispatch(fetchDestinationsRecommended());
-      }
-      if (destinationsRecommendedByStudents === undefined) {
-        dispatch(fetchDestinationsRecommendedByStudents());
-      }
-    }
+    fetchRecommendations();
+  }, [userLoggedIn]);
+
+  useEffect(() => {
+    fetchRecommendations();
 
     if (countries.length === 0) {
       dispatch(fetchCountries());
@@ -50,9 +68,31 @@ const ListPageContainer = () => {
     }
   }, []);
 
+  const fetchRecommendations = () => {
+    if (userLoggedIn) {
+      if (destinationsRecommended === undefined) {
+        dispatch(fetchDestinationsRecommended());
+      }
+      if (destinationsRecommendedByStudents === undefined) {
+        dispatch(fetchDestinationsRecommendedByStudents());
+      }
+    }
+  };
+
+  const applyFilters = async () => {
+    setLoading(true);
+    setPageNum(1);
+    setCurrentFilters({ ...filters });
+    const currentPage = await getDestinations(0, 10, filters);
+    setDestinations(currentPage.destinations);
+    setTotalAmount(currentPage.totalRows);
+    setLoading(false);
+  };
+
   const handlePageChange = async (page: number, pageSize: number) => {
     setLoading(true);
-    const currentPage = await getDestinations(page, pageSize);
+    setPageNum(page);
+    const currentPage = await getDestinations(page, pageSize, currentFilters);
     setDestinations(currentPage.destinations);
     setTotalAmount(currentPage.totalRows);
     setLoading(false);
@@ -65,16 +105,21 @@ const ListPageContainer = () => {
   return (
     <ListPage
       userLoggedIn={userLoggedIn}
+      filters={filters}
+      setFilters={setFilters}
+      currentFilters={currentFilters}
+      pageNum={pageNum}
       destinations={destinations}
       recommended={destinationsRecommended}
       recommendedByStudent={destinationsRecommendedByStudents}
       countries={countries}
       studyAreas={studyAreas}
-      sortingOptions={sortingOptions.current}
+      sortingOptions={sortingOptionsList.current}
       handlePageChange={handlePageChange}
       totalAmount={totalAmount}
       loading={loading}
       handleOnClick={handleOnClick}
+      applyFilters={applyFilters}
     />
   );
 };

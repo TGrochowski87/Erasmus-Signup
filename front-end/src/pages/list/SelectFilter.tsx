@@ -7,15 +7,21 @@ interface Props {
     value: string;
     label: string;
   }[];
+  handleSelect: (value: { value: string; label: string } | undefined) => void;
 }
 
-const SelectFilter = ({ label, placeholder, options }: Props) => {
+const SelectFilter = ({ label, placeholder, options, handleSelect }: Props) => {
   return (
     <div className="filter">
       <p className="header-font">{label}</p>
       <Select
+        onChange={handleSelect}
+        onClear={() => {
+          handleSelect(undefined);
+        }}
         style={{ minWidth: "250px" }}
         showSearch
+        labelInValue
         placeholder={placeholder}
         optionFilterProp="label"
         allowClear

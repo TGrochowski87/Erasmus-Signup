@@ -11,9 +11,10 @@ interface Props {
   totalAmount: number;
   loading: boolean;
   handleOnClick: (id: number) => void;
+  pageNum: number;
 }
 
-const MainList = ({ destinations, loading, totalAmount, handlePageChange, handleOnClick }: Props) => {
+const MainList = ({ destinations, loading, totalAmount, handlePageChange, handleOnClick, pageNum }: Props) => {
   return (
     <List
       loading={loading}
@@ -22,6 +23,7 @@ const MainList = ({ destinations, loading, totalAmount, handlePageChange, handle
       pagination={{
         position: "both",
         total: totalAmount,
+        current: pageNum,
         pageSize: 10,
         onChange: (page, pageSize) => {
           handlePageChange(page, pageSize);

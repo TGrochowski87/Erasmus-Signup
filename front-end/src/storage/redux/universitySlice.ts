@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import SortingOptions from "api/DTOs/GET/SortingOptions";
 import {
   getCountries,
   getDestinations,
@@ -7,6 +6,7 @@ import {
   getStudyAreas,
   getStudyDomains,
 } from "api/universityApi";
+import DestFiltering from "models/DestFiltering";
 import DestinationList from "models/DestinationList";
 import DestSpecialty from "models/DestSpecialty";
 import StudyArea from "models/StudyArea";
@@ -50,9 +50,9 @@ export const fetchCountries = createAsyncThunk<string[]>("countries", async () =
 
 export const fetchDestinations = createAsyncThunk<
   DestinationList,
-  { pageSize: number; page: number; country?: string; subjectAreaId?: number; sortingOption?: SortingOptions }
->("destinations", async ({ page, pageSize, country, subjectAreaId, sortingOption }) => {
-  const response = await getDestinations(page, pageSize, country, subjectAreaId, sortingOption);
+  { pageSize: number; page: number; filters?: DestFiltering }
+>("destinations", async ({ page, pageSize, filters }) => {
+  const response = await getDestinations(page, pageSize, filters);
   return response;
 });
 
@@ -101,5 +101,4 @@ const universitySlice = createSlice({
       });
   },
 });
-
 export default universitySlice.reducer;

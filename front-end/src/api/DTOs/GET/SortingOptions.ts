@@ -1,8 +1,15 @@
-enum SortingOptions {
-  InterestedStudentsAsc = "Interested students ascending",
-  InterestedStudentsDesc = "Interested students descending",
-  AverageAsc = "Min. average grade ascending",
-  AverageDesc = "Min. average grade descending",
+export interface SortingOptions {
+  InterestedStudentsAsc: string;
+  InterestedStudentsDesc: string;
+  AverageAsc: string;
+  AverageDesc: string;
 }
 
-export default SortingOptions;
+const sortingOptions: SortingOptions = {
+  InterestedStudentsAsc: "Interested students ascending",
+  InterestedStudentsDesc: "Interested students descending",
+  AverageAsc: "Min. average grade ascending",
+  AverageDesc: "Min. average grade descending",
+};
+
+export default sortingOptions;
