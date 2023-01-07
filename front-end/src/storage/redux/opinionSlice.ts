@@ -4,7 +4,7 @@ import { OpinionResponse } from "models/Opinion";
 import RequestStatus from "./RequestStatus";
 
 interface State {
-  value: OpinionResponse|undefined;
+  value: OpinionResponse | undefined;
   status: RequestStatus;
 }
 
@@ -13,29 +13,29 @@ const initialState: State = {
   status: RequestStatus.idle,
 };
 
-export const fetchOpinion = createAsyncThunk
-    <OpinionResponse, {PageSize: string|number, Page: string|number, SpecId: string|number}>
-    ("getOpinions", async ({PageSize, Page, SpecId}) => {
-            //TODO: Add error handling
-            const response = await getOpinion(PageSize, Page, SpecId);
-            return response;
-        }
-    );
+export const fetchOpinion = createAsyncThunk<
+  OpinionResponse,
+  { PageSize: string | number; Page: string | number; SpecId: string | number }
+>("getOpinions", async ({ PageSize, Page, SpecId }) => {
+  //TODO: Add error handling
+  const response = await getOpinion(PageSize, Page, SpecId);
+  return response;
+});
 
 const opinionSlice = createSlice({
   name: "opinions",
   initialState,
-  reducers: { },
-  extraReducers: (builder) => {
+  reducers: {},
+  extraReducers: builder => {
     builder
-      .addCase(fetchOpinion.pending, (state) => {
+      .addCase(fetchOpinion.pending, state => {
         state.status = RequestStatus.loading;
       })
       .addCase(fetchOpinion.fulfilled, (state, action) => {
         state.status = RequestStatus.idle;
         state.value = action.payload;
       })
-      .addCase(fetchOpinion.rejected, (state) => {
+      .addCase(fetchOpinion.rejected, state => {
         state.status = RequestStatus.failed;
       });
   },

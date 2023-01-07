@@ -33,15 +33,11 @@ const NavbarLink = ({ text, path = "", active, customOnClick }: Props) => {
         if (active === false) {
           setHoveredOver(false);
         }
-      }}
-    >
-      <Link to={path} onClick={customOnClick ?? (() => {})}>
+      }}>
+      <Link to={path} onClick={customOnClick ?? undefined}>
         {text}
       </Link>
-      <div
-        className="underline"
-        style={{ width: determineUnderLineWidth() }}
-      ></div>
+      <div className="underline" style={{ width: determineUnderLineWidth() }}></div>
     </span>
   );
 };

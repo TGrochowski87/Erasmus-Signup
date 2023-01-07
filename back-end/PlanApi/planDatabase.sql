@@ -1,28 +1,20 @@
-CREATE TABLE status (
-    id                      serial PRIMARY KEY,
-    content                 varchar(50) NOT NULL
-);
-
 CREATE TABLE plan (
     id                      serial PRIMARY KEY,
-    student_id              integer NOT NULL,
-    speciality_id           smallint NOT NULL,
-    status_id               integer REFERENCES status
+    student_id              bigint NOT NULL,
+    name                    text NOT NULL
 );
 
+CREATE TABLE home_subject (
+    id                      serial PRIMARY KEY,
+    student_id              bigint NOT NULL,
+    name                    text NOT NULL,
+    ects                    smallint NOT NULL
+);
 
 CREATE TABLE subject (
     id                      serial PRIMARY KEY,
-    plan_id                 integer REFERENCES plan,
-    name                    text NOT NULL,
-    ects                    smallint NOT NULL,
-    plan_mapping_row        smallint,
-    is_pwr                  boolean NOT NULL
-);
-
-CREATE TABLE user_home_subject (
-    id                      serial PRIMARY KEY,
-    student_id              integer NOT NULL,
+    plan_id                 integer REFERENCES plan ON DELETE CASCADE,
+    mapped_subject          integer REFERENCES home_subject ON DELETE CASCADE,
     name                    text NOT NULL,
     ects                    smallint NOT NULL
 );

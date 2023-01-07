@@ -25,7 +25,7 @@ interface Props {
   setRatingInput: React.Dispatch<React.SetStateAction<number>>;
   opinions: Opinion[];
   loading: { details: boolean; opinions: boolean };
-  submitOpinionHandler: () => void
+  submitOpinionHandler: () => void;
 }
 
 // TODO: Remove from here
@@ -47,9 +47,9 @@ const DestinationDetailsPage = ({
   setRatingInput,
   opinions,
   loading,
-  submitOpinionHandler
+  submitOpinionHandler,
 }: Props) => {
-  const specialty = detailsData?.destinations.find(d => d.id === selectedDestId)!;
+  const specialty = detailsData?.destinations.find(d => d.id === selectedDestId);
 
   return detailsData ? (
     <div className="details-page">
@@ -102,21 +102,23 @@ const DestinationDetailsPage = ({
         </div>
       </div>
 
-      <div className="block specialty-data" style={{ position: "relative" }}>
-        <h1>{`${specialty?.subjectAreaName} | ${specialty.subjectAreaId}`}</h1>
+      {specialty !== undefined && (
+        <div className="block specialty-data" style={{ position: "relative" }}>
+          <h1>{`${specialty?.subjectAreaName} | ${specialty.subjectAreaId}`}</h1>
 
-        <div className="grid">
-          <BlockLabeledTextField label="Vacancy" text={specialty.vacancies} />
-          <BlockLabeledTextField label="Rating" text={specialty.rating} />
-          <BlockLabeledTextField label="Previous min. grade" text={specialty.average} />
-          <BlockLabeledTextField label="Currently interested" text={specialty.interestedStudents} />
-        </div>
+          <div className="grid">
+            <BlockLabeledTextField label="Vacancy" text={specialty.vacancies} />
+            <BlockLabeledTextField label="Rating" text={specialty.rating} />
+            <BlockLabeledTextField label="Previous min. grade" text={specialty.average} />
+            <BlockLabeledTextField label="Currently interested" text={specialty.interestedStudents} />
+          </div>
 
-        <div className="icon-space">
-          <NoteStatusIndicator active={specialty.isNote} />
-          <FavoriteStatusIndicator active={specialty.isObserved} />
+          <div className="icon-space">
+            <NoteStatusIndicator active={specialty.isNote} />
+            <FavoriteStatusIndicator active={specialty.isObserved} />
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="block opinions">
         <Divider className="header">OPINIONS</Divider>
@@ -132,8 +134,13 @@ const DestinationDetailsPage = ({
             onChange={event => {
               setOpinionInput(event.target.value);
             }}
-          />.
-          <Button style={{ marginTop: "10px", padding: "0 2rem" }} onClick={submitOpinionHandler} size="large" type="primary">
+          />
+          .
+          <Button
+            style={{ marginTop: "10px", padding: "0 2rem" }}
+            onClick={submitOpinionHandler}
+            size="large"
+            type="primary">
             Share opinion
           </Button>
         </div>
@@ -151,7 +158,9 @@ const DestinationDetailsPage = ({
               dataSource={opinions}
               renderItem={item => (
                 <List.Item style={{ position: "relative" }} key={item.id}>
-                  <List.Item.Meta avatar={<Avatar size={64} style={{marginBottom: "1.5rem"}} icon={<UserOutlined />} />} />
+                  <List.Item.Meta
+                    avatar={<Avatar size={64} style={{ marginBottom: "1.5rem" }} icon={<UserOutlined />} />}
+                  />
                   <Rate className="rate" allowHalf value={item.rating} disabled />
                   {item.content}
                 </List.Item>
