@@ -6,7 +6,6 @@ using ErasmusRabbitContracts;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using System.Net.Http.Headers;
-using UserApi.Service;
 using FluentAssertions.Common;
 using NoteApi.Models;
 
@@ -75,8 +74,6 @@ builder.Services.AddSwaggerGen(c =>
         }
      });
 });
-builder.Services.AddSingleton<IUserService, UserService>();
-builder.Services.AddSingleton<IAuthorizedService, AuthorizedService>();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddScoped(sp => ActivatorUtilities.CreateInstance<PlanNoteVM>(sp));
 builder.Services.AddSession(options =>

@@ -1,39 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NoteApi.Models;
 using NoteApi.Service;
-using UserApi.Models;
-using UserApi.Service;
-using UserApi.Attributes;
-using Newtonsoft.Json.Linq;
-using UserApi.Controllers;
-using NoteApi.DbModels;
+using NoteApi.Attributes;
 
 namespace NoteApi.Controllers
 {
     [ApiController]
     [Route("note")]
-    public class NoteController : Controller, IUserApiController
+    public class NoteController : Controller, INoteController
     {
         private readonly INoteService noteService;
-        private readonly IUserService userService;
         public UserJWT? UserToken { get; set; }
 
-        public NoteController(INoteService noteService, IUserService userService)
+        public NoteController(INoteService noteService)
         {
             this.noteService = noteService;
-            this.userService = userService;
         }
 
         [AuthorizeUser]
         [HttpGet("common")]
         public async Task<ActionResult<IEnumerable<CommonNoteVM>>> GetCommon()
         {
-            if (UserToken == null)
-            {
-                return Unauthorized();
-            }
-
-            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
+            var userId = GetUserId();
             return Ok(await noteService.GetCommonNotesAsync(userId));
         }
 
@@ -41,12 +29,7 @@ namespace NoteApi.Controllers
         [HttpPost("common")]
         public async Task<ActionResult<int>> CreateCommonNote([FromBody] CommonNotePostVM note)
         {
-            if (UserToken == null)
-            {
-                return Unauthorized();
-            }
-
-            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
+            var userId = GetUserId();
             return Ok(await noteService.AddCommonNoteAsync(new CommonNoteVM(userId, note)));
         }
 
@@ -54,11 +37,6 @@ namespace NoteApi.Controllers
         [HttpPut("common/{noteId}")]
         public async Task<ActionResult> UpdateCommonNote(int noteId, [FromBody] CommonNotePostVM note)
         {
-            if (UserToken == null)
-            {
-                return Unauthorized();
-            }
-
             await noteService.UpdateCommonNote(noteId, note);
             return Ok();
         }
@@ -67,11 +45,6 @@ namespace NoteApi.Controllers
         [HttpDelete("common/{noteId}")]
         public async Task<ActionResult> DeleteCommonNote(int noteId)
         {
-            if (UserToken == null)
-            {
-                return Unauthorized();
-            }
-
             await noteService.DeleteCommonNoteAsync(noteId);
             return Ok();
         }
@@ -90,12 +63,7 @@ namespace NoteApi.Controllers
         [HttpGet("plan")]
         public async Task<ActionResult<IEnumerable<PlanNoteVM>>> GetPlan()
         {
-            if (UserToken == null)
-            {
-                return Unauthorized();
-            }
-
-            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
+            var userId = GetUserId();
             return Ok(await noteService.GetPlanNotesAsync(userId));
         }
 
@@ -103,12 +71,7 @@ namespace NoteApi.Controllers
         [HttpPost("plan")]
         public async Task<ActionResult<int>> CreatePlanNote([FromBody] PlanNotePostVM note)
         {
-            if (UserToken == null)
-            {
-                return Unauthorized();
-            }
-
-            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
+            var userId = GetUserId();
             return Ok(await noteService.AddPlanNoteAsync(new PlanNoteVM(userId, note)));
         }
 
@@ -116,11 +79,6 @@ namespace NoteApi.Controllers
         [HttpPut("plan/{noteId}")]
         public async Task<ActionResult> UpdatePlanNote(int noteId, [FromBody] PlanNotePostVM note)
         {
-            if (UserToken == null)
-            {
-                return Unauthorized();
-            }
-
             await noteService.UpdatePlanNote(noteId, note);
             return Ok();
         }
@@ -129,11 +87,6 @@ namespace NoteApi.Controllers
         [HttpDelete("plan/{noteId}")]
         public async Task<ActionResult> DeletePlanNote(int noteId)
         {
-            if (UserToken == null)
-            {
-                return Unauthorized();
-            }
-
             await noteService.DeletePlanNoteAsync(noteId);
             return Ok();
         }
@@ -152,12 +105,7 @@ namespace NoteApi.Controllers
         [HttpGet("speciality")]
         public async Task<ActionResult<IEnumerable<SpecialityNoteVM>>> GetSpeciality()
         {
-            if (UserToken == null)
-            {
-                return Unauthorized();
-            }
-
-            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
+            var userId = GetUserId();
             return Ok(await noteService.GetSpecialityNotesAsync(userId));
         }
 
@@ -165,12 +113,7 @@ namespace NoteApi.Controllers
         [HttpPost("speciality")]
         public async Task<ActionResult<int>> CreateSpecialityNote([FromBody] SpecialityNotePostVM note)
         {
-            if (UserToken == null)
-            {
-                return Unauthorized();
-            }
-
-            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
+            var userId = GetUserId();
             return Ok(await noteService.AddSpecialityNoteAsync(new SpecialityNoteVM(userId, note)));
         }
 
@@ -212,12 +155,7 @@ namespace NoteApi.Controllers
         [HttpGet("highlight")]
         public async Task<ActionResult<IEnumerable<SpecialityHighlightNoteVM>>> GetHighlight()
         {
-            if (UserToken == null)
-            {
-                return Unauthorized();
-            }
-
-            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
+            var userId = GetUserId();
             return Ok(await noteService.GetSpecialityHighlightNotesAsync(userId));
         }
 
@@ -225,12 +163,7 @@ namespace NoteApi.Controllers
         [HttpPost("highlight")]
         public async Task<ActionResult<int>> CreateSpecialityHighlightNote([FromBody] SpecialityHighlightNotePostVM note)
         {
-            if (UserToken == null)
-            {
-                return Unauthorized();
-            }
-
-            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
+            var userId = GetUserId();
             return Ok(await noteService.AddSpecialityHighlightNoteAsync(new SpecialityHighlightNoteVM(userId, note)));
         }
 
@@ -238,11 +171,6 @@ namespace NoteApi.Controllers
         [HttpPut("highlight/{noteId}")]
         public async Task<ActionResult> UpdateSpecialityHighlightNote(int noteId, [FromBody] SpecialityHighlightNotePostVM note)
         {
-            if (UserToken == null)
-            {
-                return Unauthorized();
-            }
-
             await noteService.UpdateSpecialityHighlightNote(noteId, note);
             return Ok();
         }
@@ -267,12 +195,7 @@ namespace NoteApi.Controllers
         [HttpGet("priority")]
         public async Task<ActionResult<IEnumerable<SpecialityPriorityNoteVM>>> GetPriority()
         {
-            if (UserToken == null)
-            {
-                return Unauthorized();
-            }
-
-            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
+            var userId = GetUserId();
             return Ok(await noteService.GetSpecialityPriorityNotesAsync(userId));
         }
 
@@ -280,12 +203,7 @@ namespace NoteApi.Controllers
         [HttpPost("priority")]
         public async Task<ActionResult<int>> CreateSpecialityPriorityNote([FromBody] SpecialityPriorityNotePostVM note)
         {
-            if (UserToken == null)
-            {
-                return Unauthorized();
-            }
-
-            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
+            var userId = GetUserId();
             return Ok(await noteService.AddSpecialityPriorityNoteAsync(new SpecialityPriorityNoteVM(userId, note)));
         }
 
@@ -293,11 +211,6 @@ namespace NoteApi.Controllers
         [HttpDelete("priority/{noteId}")]
         public async Task<ActionResult> DeletePriorityHighlightNote(int noteId, [FromBody] int specialityId)
         {
-            if (UserToken == null)
-            {
-                return Unauthorized();
-            }
-
             await noteService.DeleteSpecialityPriorityNoteAsync(noteId, specialityId);
             return Ok();
         }
@@ -306,31 +219,18 @@ namespace NoteApi.Controllers
         [HttpGet("user_rating")]
         public async Task<ActionResult<IEnumerable<SpecialityRatingVM>>> GetSpecialityRatingNotes()
         {
-            if (UserToken == null)
-            {
-                return Unauthorized();
-            }
-
-            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
+            var userId = GetUserId();
             return Ok(await noteService.GetSpecialityRatingNoteAsync(userId));
         }
 
-        private long GetUserId(string access_token, string access_token_secret)
+        private long GetUserId()
         {
-            HttpResponseMessage responseMessageUserId = userService.GetCurrentUserId(access_token, access_token_secret);
-
-            if (responseMessageUserId.IsSuccessStatusCode)
-            {
-                string resultUserId = responseMessageUserId.Content.ReadAsStringAsync().Result;
-                JObject jUserId = JObject.Parse(resultUserId);
-
-                if (jUserId.Count > 0)
-                {
-                    return Convert.ToInt64(jUserId["id"]!.ToString());
-                }
+            if (UserToken == null)
+            { 
+                throw new BadHttpRequestException("authorization error: UserToken is null");
             }
 
-            throw new BadHttpRequestException("authorization error: " + responseMessageUserId.ReasonPhrase);
+            return long.Parse(UserToken.UserId);
         }
     }
 }
