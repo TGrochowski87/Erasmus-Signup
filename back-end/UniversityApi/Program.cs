@@ -12,6 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
+bool compressionEnable = true;
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
@@ -64,22 +66,27 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddTransient<IUniversityService, UniversityService>();
 builder.Services.AddTransient<IUniversityRepository, UniversityRepository>();
 
-
-builder.Services.AddResponseCompression(options =>
+if (compressionEnable)
 {
-    options.EnableForHttps = true;
-    options.Providers.Add<GzipCompressionProvider>();
-});
+    builder.Services.AddResponseCompression(options =>
+    {
+        options.EnableForHttps = true;
+        options.Providers.Add<GzipCompressionProvider>();
+    });
 
 
-builder.Services.Configure<GzipCompressionProviderOptions>(options =>
-{
-    options.Level = CompressionLevel.Fastest;
-});
+    builder.Services.Configure<GzipCompressionProviderOptions>(options =>
+    {
+        options.Level = CompressionLevel.Fastest;
+    });
+}
 
 var app = builder.Build();
 
-app.UseResponseCompression();
+if (compressionEnable)
+{
+    app.UseResponseCompression();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

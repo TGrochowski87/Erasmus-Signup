@@ -1,4 +1,5 @@
-﻿using UniversityApi.DbModels;
+﻿using System.Runtime.Caching;
+using UniversityApi.DbModels;
 using UniversityApi.Helpers;
 using UniversityApi.Models;
 using UniversityApi.Repository;
@@ -14,15 +15,32 @@ namespace UniversityApi.Service
             _universityRepository = universityRepository;
         }
 
-
-
         public async Task<DestinationResult> GetListAsync(DestinationCriteria criteria)
         {
+            string cacheKey = "Destinations";
+            bool cachEnable = false;
+
             var page = criteria.Page ?? 1;
             var pageSize = criteria.PageSize ?? 10;
             var totalRows = 0;
+            IEnumerable<DestSpeciality> list = new List<DestSpeciality>();
 
-            var list = await _universityRepository.GetListAsync(criteria);
+            ObjectCache cache = System.Runtime.Caching.MemoryCache.Default;
+
+            if (cachEnable && cache.Contains(cacheKey))
+                list = (IEnumerable<DestSpeciality>)cache.Get(cacheKey);
+            else
+            {
+                list = await _universityRepository.GetListAsync(criteria);
+
+                if (cachEnable)
+                {
+                    CacheItemPolicy cacheItemPolicy = new CacheItemPolicy();
+                    cacheItemPolicy.AbsoluteExpiration = DateTime.Now.AddHours(2.0);
+                    cache.Add(cacheKey, list, cacheItemPolicy);
+                }
+            }
+
 
             totalRows = list.Count();
             var filterList = list.Skip((page - 1) * pageSize).Take(pageSize);
