@@ -7,6 +7,7 @@ using UserApi.Attributes;
 using Microsoft.EntityFrameworkCore;
 using UserApi.Repository;
 using UserApi.DbModels;
+using ErasmusRabbitContracts;
 
 using HttpClient client = new();
 client.DefaultRequestHeaders.Accept.Clear();
@@ -40,6 +41,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<UserdbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("UserDb")));
+
+builder.Services.AddRabbitMqServices();
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

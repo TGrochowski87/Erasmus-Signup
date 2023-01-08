@@ -1,4 +1,6 @@
-﻿using UniversityApi.DbModels;
+﻿using ErasmusRabbitContracts.UniversityContracts;
+using MassTransit;
+using UniversityApi.DbModels;
 using UniversityApi.Helpers;
 using UniversityApi.Models;
 using UniversityApi.Repository;
@@ -8,10 +10,15 @@ namespace UniversityApi.Service
     public class UniversityService : IUniversityService
     {
         private readonly IUniversityRepository _universityRepository;
+        private readonly IPublishEndpoint _publishEndpoint;
+        IRequestClient<ProfileGet> _client;
 
-        public UniversityService(IUniversityRepository universityRepository)
+        public UniversityService(IUniversityRepository universityRepository,
+            IPublishEndpoint publishEndpoint, IRequestClient<ProfileGet> client)
         {
             _universityRepository = universityRepository;
+            _publishEndpoint = publishEndpoint;
+            _client = client;
         }
 
 
@@ -30,8 +37,11 @@ namespace UniversityApi.Service
             return new DestinationResult(filterList.Select(x => new DestinationVM(x)), totalRows);
         }
 
-        public async Task<IEnumerable<DestinationVM>> GetRecommendedDestinations()
+        public async Task<IEnumerable<DestinationVM>> GetRecommendedDestinations(int userId)
         {
+            //var profile = await _publishEndpoint.Publish(new ProfileGet(userId));
+            var response = await _client.GetResponse<ProfileGetResult>(new ProfileGet(userId));
+
             var recomendedDestinations = await _universityRepository.GetListRecommendedDestinationsAsync(null, null); //TODO
             var filterRecomendedDestinations = recomendedDestinations.Take(10);
 

@@ -32,7 +32,7 @@ namespace UniversityApi.Controllers
         [HttpGet("universities-recommended")]
         public async Task<IEnumerable<DestinationVM>> GetRecommendedDestinations()
         {
-            return await universityService.GetRecommendedDestinations();
+            return await universityService.GetRecommendedDestinations(int.Parse(UserToken.UserId));
         }
 
         [AuthorizeUser]
