@@ -5,6 +5,8 @@ using UniversityApi.Service;
 using ErasmusRabbitContracts;
 using Microsoft.OpenApi.Models;
 using Microsoft.Net.Http.Headers;
+using Microsoft.AspNetCore.ResponseCompression;
+using System.IO.Compression;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,7 +65,21 @@ builder.Services.AddTransient<IUniversityService, UniversityService>();
 builder.Services.AddTransient<IUniversityRepository, UniversityRepository>();
 
 
+builder.Services.AddResponseCompression(options =>
+{
+    options.EnableForHttps = true;
+    options.Providers.Add<GzipCompressionProvider>();
+});
+
+
+builder.Services.Configure<GzipCompressionProviderOptions>(options =>
+{
+    options.Level = CompressionLevel.Fastest;
+});
+
 var app = builder.Build();
+
+app.UseResponseCompression();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
