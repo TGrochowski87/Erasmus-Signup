@@ -89,13 +89,14 @@ const PlansPage = ({ plans, currentPlan, setCurrentPlan, loadPlan, isCoordinator
               renderItem={item => (
                 <List.Item className="plan-subject-row" key={item.id}>
                   <div className="plan-subject-home">
-                    <h2>{item.homeSubject.name}</h2>
-                    <p>ECTS: {item.homeSubject.ects}</p>
+                      {item.homeSubject.name}
+                      <span> (ECTS: {item.homeSubject.ects}) </span>
                   </div>
                   <div className="plan-subject-destination">
                     <Input
+                      addonBefore="Subject name:"
                       className="subject-text-input"
-                      placeholder="Subject name"
+                      placeholder="subject"
                       maxLength={100}
                       value={item.name}
                       onChange={event => {
@@ -108,8 +109,11 @@ const PlansPage = ({ plans, currentPlan, setCurrentPlan, loadPlan, isCoordinator
                           return newPlan;
                         });
                       }}
+                      disabled={isCoordinator}
+                      name={"nema"}
                     />
                     <InputNumber
+                      addonBefore="ECTS:"
                       min={1}
                       max={30}
                       defaultValue={1}
@@ -123,6 +127,7 @@ const PlansPage = ({ plans, currentPlan, setCurrentPlan, loadPlan, isCoordinator
                           return newPlan;
                         });
                       }}
+                      disabled={isCoordinator}
                     />
                   </div>
                 </List.Item>

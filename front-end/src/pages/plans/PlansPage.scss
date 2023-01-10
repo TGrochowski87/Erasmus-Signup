@@ -77,15 +77,24 @@
         }
         
         .plan-subject-row {
-            display: flex;
-
+            display:block;
+            
             .plan-subject-home {
-                flex:1;
+                width: 100%;
+                font-weight: bold;
+                margin: 0.5rem;
+                // font-size: 1rem;
+                // flex:1;
+
+                span {
+                    font-weight: normal;
+                }
+                
             }
 
             .plan-subject-destination {
-                flex: 1;
-                // display: flex;
+                // flex: 1;
+                display: flex;
                 text-align: right;
                 justify-content:center;
                 gap: 0.25rem;
@@ -93,6 +102,10 @@
                 .subject-text-input {
                     flex: 1;
                 }
+            }
+            input[disabled] {
+                background-color: #dfdfdf;
+                color: black;
             }
         }
     }

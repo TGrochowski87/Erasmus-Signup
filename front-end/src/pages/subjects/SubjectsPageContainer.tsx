@@ -8,7 +8,6 @@ const SubjectsPageContainer = () => {
     const [subjects, setSubjects] = useState<HomeSubject[]>([]);
 
     useEffect(() => {
-        console.log("use effect");
         if(subjects.length === 0){
             setSubjects([
                 {

@@ -5,11 +5,15 @@ import { useParams } from "react-router-dom";
 import Plan from "models/Plan";
 import PlansPage from "./PlansPage";
 
-const PlansPageContainer = () => {
+interface Props {
+    isCoordinator: boolean;
+  }
+
+const PlansPageContainer = ({isCoordinator}: Props) => {
     const { id } = useParams();
     const [plans, setPlans] = useState<Plan[]>([]);
     const [currentPlan, setCurrentPlan] = useState<Plan | undefined>(undefined);
-    const [isCoordinator, setIsCoordinator] = useState<boolean>(false);
+    // const [isCoordinator, setIsCoordinator] = useState<boolean>(true);
 
     useEffect(() => {
         if(plans.length === 0){
@@ -41,12 +45,12 @@ const PlansPageContainer = () => {
             loadPlan(id);
         }
         
-        setIsCoordinator(false);
+        // setIsCoordinator(true);
     }, [plans, currentPlan, id]);
     
     const loadPlan = (id: string|undefined) => {
         if(id){
-            window.history.replaceState({}, "", "/plans/" + id);
+            window.history.replaceState({}, "", (isCoordinator ? "/plans/coordinator/" : "/plans/") + id);
             setCurrentPlan({
                 id: 4,
                 specialtyId: 3,
