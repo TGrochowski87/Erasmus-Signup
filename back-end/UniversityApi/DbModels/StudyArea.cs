@@ -1,15 +1,17 @@
-﻿namespace UniversityApi.DbModels
+﻿using System;
+using System.Collections.Generic;
+
+namespace UniversityApi.DbModels;
+
+public partial class StudyArea
 {
-    public partial class StudyArea
-    {
-        public StudyArea()
-        {
-            DestSpecialities = new HashSet<DestSpeciality>();
-        }
+    public string Id { get; set; } = null!;
 
-        public string StudyDomain { get; set; } = null!;
-        public string? Description { get; set; }
+    public string? AreaName { get; set; }
 
-        public virtual ICollection<DestSpeciality> DestSpecialities { get; set; }
-    }
+    public short? StudyDomainId { get; set; }
+
+    public virtual ICollection<DestSpeciality> DestSpecialities { get; } = new List<DestSpeciality>();
+
+    public virtual StudyDomain? StudyDomain { get; set; }
 }

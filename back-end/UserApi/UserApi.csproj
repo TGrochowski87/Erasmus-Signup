@@ -11,16 +11,23 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ErasmusRabbitContracts" Version="1.0.6" />
     <PackageReference Include="FluentResults.Extensions.FluentAssertions" Version="2.1.0" />
     <PackageReference Include="Json.Net" Version="1.0.33" />
     <PackageReference Include="Microsoft.AspNet.SessionState.SessionStateModule" Version="1.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Repository\" />
+    <Folder Include="DbModels\" />
   </ItemGroup>
 
   <ItemGroup>

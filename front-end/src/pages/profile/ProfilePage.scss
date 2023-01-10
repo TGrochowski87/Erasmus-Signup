@@ -1,6 +1,7 @@
 .user-page{
   margin: auto;
   padding: 1rem;
+  padding-bottom: 15rem;
   max-width: 1240px;
 
   display: flex;
@@ -39,6 +40,45 @@
         margin-top: 1rem;
         flex-grow: 1;
         min-width: 180px;
+      }
+    }
+
+    .preferences{
+      position: relative;
+
+      h3{
+        position: relative;
+        top: 20px;
+        color: #dfae29;
+      }
+
+      .button-space{
+        text-align: end;
+        padding-right: 1rem;
+
+        .ant-btn{
+          width: 7rem;
+        }
+      }
+
+      .input-space{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .inputs {
+          width: 100%;
+          padding: 0.5rem;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          gap: 1.5rem;
+
+          p {
+            font-size: 0.9rem;
+          }
+        }
       }
     }
   }

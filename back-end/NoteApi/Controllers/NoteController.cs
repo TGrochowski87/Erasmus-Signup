@@ -1,29 +1,52 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NoteApi.Models;
 using NoteApi.Service;
-using UserApi.Models;
-using UserApi.Service;
-using UserApi.Attributes;
-using Newtonsoft.Json.Linq;
-using UserApi.Controllers;
+using NoteApi.Attributes;
 
 namespace NoteApi.Controllers
 {
     [ApiController]
     [Route("note")]
-    public class NoteController : Controller, IUserApiController
+    public class NoteController : Controller, INoteController
     {
         private readonly INoteService noteService;
-        private IUserService userService;
-        private IAuthorizedService authorizedService;
         public UserJWT? UserToken { get; set; }
 
-        public NoteController(INoteService noteService, IUserService userService,
-            IAuthorizedService authorizedService)
+        public NoteController(INoteService noteService)
         {
             this.noteService = noteService;
-            this.userService = userService;
-            this.authorizedService = authorizedService;
+        }
+
+        [AuthorizeUser]
+        [HttpGet("common")]
+        public async Task<ActionResult<IEnumerable<CommonNoteVM>>> GetCommon()
+        {
+            var userId = GetUserId();
+            return Ok(await noteService.GetCommonNotesAsync(userId));
+        }
+
+        [AuthorizeUser]
+        [HttpPost("common")]
+        public async Task<ActionResult<int>> CreateCommonNote([FromBody] CommonNotePostVM note)
+        {
+            var userId = GetUserId();
+            return Ok(await noteService.AddCommonNoteAsync(new CommonNoteVM(userId, note)));
+        }
+
+        [AuthorizeUser]
+        [HttpPut("common/{noteId}")]
+        public async Task<ActionResult> UpdateCommonNote(int noteId, [FromBody] CommonNotePostVM note)
+        {
+            await noteService.UpdateCommonNote(noteId, note);
+            return Ok();
+        }
+
+        [AuthorizeUser]
+        [HttpDelete("common/{noteId}")]
+        public async Task<ActionResult> DeleteCommonNote(int noteId)
+        {
+            await noteService.DeleteCommonNoteAsync(noteId);
+            return Ok();
         }
 
         /*
@@ -40,39 +63,31 @@ namespace NoteApi.Controllers
         [HttpGet("plan")]
         public async Task<ActionResult<IEnumerable<PlanNoteVM>>> GetPlan()
         {
-            if (UserToken == null)
-            {
-                return Unauthorized();
-            }
-
-            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
+            var userId = GetUserId();
             return Ok(await noteService.GetPlanNotesAsync(userId));
         }
 
         [AuthorizeUser]
         [HttpPost("plan")]
-        public async Task<ActionResult<int>> CreatePlanNote(int planId, string content)
+        public async Task<ActionResult<int>> CreatePlanNote([FromBody] PlanNotePostVM note)
         {
-            if (UserToken == null)
-            {
-                return Unauthorized();
-            }
-
-            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
-            return Ok(await noteService.AddPlanNoteAsync(new PlanNoteVM(userId, planId, content)));
+            var userId = GetUserId();
+            return Ok(await noteService.AddPlanNoteAsync(new PlanNoteVM(userId, note)));
         }
 
         [AuthorizeUser]
-        [HttpDelete("plan")]
-        public async Task<ActionResult<int>> DeletePlanNote()
+        [HttpPut("plan/{noteId}")]
+        public async Task<ActionResult> UpdatePlanNote(int noteId, [FromBody] PlanNotePostVM note)
         {
-            if (UserToken == null)
-            {
-                return Unauthorized();
-            }
+            await noteService.UpdatePlanNote(noteId, note);
+            return Ok();
+        }
 
-            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
-            await noteService.DeletePlanNoteAsync(userId);
+        [AuthorizeUser]
+        [HttpDelete("plan/{noteId}")]
+        public async Task<ActionResult> DeletePlanNote(int noteId)
+        {
+            await noteService.DeletePlanNoteAsync(noteId);
             return Ok();
         }
 
@@ -90,39 +105,41 @@ namespace NoteApi.Controllers
         [HttpGet("speciality")]
         public async Task<ActionResult<IEnumerable<SpecialityNoteVM>>> GetSpeciality()
         {
-            if (UserToken == null)
-            {
-                return Unauthorized();
-            }
-
-            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
+            var userId = GetUserId();
             return Ok(await noteService.GetSpecialityNotesAsync(userId));
         }
 
         [AuthorizeUser]
         [HttpPost("speciality")]
-        public async Task<ActionResult<int>> CreateSpecialityNote(int specialityId, string content)
+        public async Task<ActionResult<int>> CreateSpecialityNote([FromBody] SpecialityNotePostVM note)
         {
-            if (UserToken == null)
-            {
-                return Unauthorized();
-            }
-
-            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
-            return Ok(await noteService.AddSpecialityNoteAsync(new SpecialityNoteVM(userId, specialityId, content)));
+            var userId = GetUserId();
+            return Ok(await noteService.AddSpecialityNoteAsync(new SpecialityNoteVM(userId, note)));
         }
 
         [AuthorizeUser]
-        [HttpDelete("speciality")]
-        public async Task<ActionResult<int>> DeleteSpecialityNote()
+        [HttpPut("speciality/{noteId}")]
+        public async Task<ActionResult> UpdateSpecialityNote(int noteId, [FromBody] SpecialityNotePostVM note)
         {
             if (UserToken == null)
             {
                 return Unauthorized();
             }
 
-            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
-            await noteService.DeleteSpecialityNoteAsync(userId);
+            await noteService.UpdateSpecialityNote(noteId, note);
+            return Ok();
+        }
+
+        [AuthorizeUser]
+        [HttpDelete("speciality/{noteId}")]
+        public async Task<ActionResult> DeleteSpecialityNote(int noteId)
+        {
+            if (UserToken == null)
+            {
+                return Unauthorized();
+            }
+
+            await noteService.DeleteSpecialityNoteAsync(noteId);
             return Ok();
         }
 
@@ -138,35 +155,31 @@ namespace NoteApi.Controllers
         [HttpGet("highlight")]
         public async Task<ActionResult<IEnumerable<SpecialityHighlightNoteVM>>> GetHighlight()
         {
-            if (UserToken == null)
-            {
-                return Unauthorized();
-            }
-
-            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
+            var userId = GetUserId();
             return Ok(await noteService.GetSpecialityHighlightNotesAsync(userId));
         }
 
         [AuthorizeUser]
         [HttpPost("highlight")]
-        public async Task<ActionResult<int>> CreateSpecialityHighlightNote(int specialityId, bool positive)
+        public async Task<ActionResult<int>> CreateSpecialityHighlightNote([FromBody] SpecialityHighlightNotePostVM note)
         {
-            if (UserToken == null)
-            {
-                return Unauthorized();
-            }
-
-            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
-            return Ok(await noteService.AddSpecialityHighlightNoteAsync(
-                new SpecialityHighlightNoteVM(userId, specialityId, positive)));
+            var userId = GetUserId();
+            return Ok(await noteService.AddSpecialityHighlightNoteAsync(new SpecialityHighlightNoteVM(userId, note)));
         }
 
         [AuthorizeUser]
-        [HttpDelete("highlight")]
-        public async Task<ActionResult> DeletePriorityHighlightNote(
-            int noteId, bool positive, int specialityId)
+        [HttpPut("highlight/{noteId}")]
+        public async Task<ActionResult> UpdateSpecialityHighlightNote(int noteId, [FromBody] SpecialityHighlightNotePostVM note)
         {
-            await noteService.DeleteSpecialityHighlightNoteAsync(noteId, positive, specialityId);
+            await noteService.UpdateSpecialityHighlightNote(noteId, note);
+            return Ok();
+        }
+
+        [AuthorizeUser]
+        [HttpDelete("highlight/{noteId}")]
+        public async Task<ActionResult> DeleteSpecialityHighlightNote(int noteId, [FromBody] SpecialityHighlightNotePostVM note)
+        {
+            await noteService.DeleteSpecialityHighlightNoteAsync(noteId, note.Positive, note.SpecialityId);
             return Ok();
         }
 
@@ -182,52 +195,42 @@ namespace NoteApi.Controllers
         [HttpGet("priority")]
         public async Task<ActionResult<IEnumerable<SpecialityPriorityNoteVM>>> GetPriority()
         {
-            if (UserToken == null)
-            {
-                return Unauthorized();
-            }
-
-            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
+            var userId = GetUserId();
             return Ok(await noteService.GetSpecialityPriorityNotesAsync(userId));
         }
 
         [AuthorizeUser]
         [HttpPost("priority")]
-        public async Task<ActionResult<int>> CreatePriorityHighlightNote(int specialityId, short priority)
+        public async Task<ActionResult<int>> CreateSpecialityPriorityNote([FromBody] SpecialityPriorityNotePostVM note)
         {
-            if (UserToken == null)
-            {
-                return Unauthorized();
-            }
-
-            var userId = GetUserId(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
-            return Ok(await noteService.AddSpecialityPriorityNoteAsync(
-                new SpecialityPriorityNoteVM(userId, specialityId, priority)));
+            var userId = GetUserId();
+            return Ok(await noteService.AddSpecialityPriorityNoteAsync(new SpecialityPriorityNoteVM(userId, note)));
         }
 
         [AuthorizeUser]
-        [HttpDelete("priority")]
-        public async Task<ActionResult> DeletePriorityHighlightNote(int noteId, int specialityId)
+        [HttpDelete("priority/{noteId}")]
+        public async Task<ActionResult> DeletePriorityHighlightNote(int noteId, [FromBody] int specialityId)
         {
             await noteService.DeleteSpecialityPriorityNoteAsync(noteId, specialityId);
             return Ok();
         }
-        private int GetUserId(string access_token, string access_token_secret)
+
+        [AuthorizeUser]
+        [HttpGet("user_rating")]
+        public async Task<ActionResult<IEnumerable<SpecialityRatingVM>>> GetSpecialityRatingNotes()
         {
-            HttpResponseMessage responseMessageUserId = userService.GetCurrentUserId(access_token, access_token_secret);
+            var userId = GetUserId();
+            return Ok(await noteService.GetSpecialityRatingNoteAsync(userId));
+        }
 
-            if (responseMessageUserId.IsSuccessStatusCode)
-            {
-                string resultUserId = responseMessageUserId.Content.ReadAsStringAsync().Result;
-                JObject jUserId = JObject.Parse(resultUserId);
-
-                if (jUserId.Count > 0)
-                {
-                    return Convert.ToInt32(jUserId["id"]!.ToString());
-                }
+        private long GetUserId()
+        {
+            if (UserToken == null)
+            { 
+                throw new BadHttpRequestException("authorization error: UserToken is null");
             }
 
-            throw new BadHttpRequestException("authorization error: " + responseMessageUserId.ReasonPhrase);
+            return long.Parse(UserToken.UserId);
         }
     }
 }

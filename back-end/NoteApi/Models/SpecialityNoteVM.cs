@@ -7,18 +7,19 @@ namespace NoteApi.Models
     public class SpecialityNoteVM
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         public DateTime? CreatedAt { get; set; }
         public int SpecialityId { get; set; }
+        public string Title { get; set; } = null!;
         public string Content { get; set; } = null!;
 
-        [JsonConstructor]
-        public SpecialityNoteVM(int userId, int specialityId, string content)
+        public SpecialityNoteVM(long userId, SpecialityNotePostVM postVm)
         {
             Id = -1;
             UserId = userId;
-            SpecialityId = specialityId;
-            Content = content;
+            SpecialityId = postVm.SpecialityId;
+            Title = postVm.Title;
+            Content = postVm.Content;
         }
 
         public SpecialityNoteVM(SpecialityNote dbModel)
@@ -27,6 +28,7 @@ namespace NoteApi.Models
             UserId = dbModel.Note.UserId;
             CreatedAt = dbModel.Note.CreatedAt;
             SpecialityId = dbModel.SpecialityId;
+            Title = dbModel.Title;
             Content = dbModel.Content;
         }
     }

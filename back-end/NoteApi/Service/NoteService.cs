@@ -1,5 +1,5 @@
 ﻿using MassTransit;
-using Communication.NoteContracts;
+using ErasmusRabbitContracts.NoteContracts;
 using NoteApi.Models;
 using NoteApi.Repository;
 
@@ -15,6 +15,17 @@ namespace NoteApi.Service
             _noteRepository = noteRepository;
             _publishEndpoint = publishEndpoint;
         }
+        public async Task<IEnumerable<CommonNoteVM>> GetCommonNotesAsync()
+        {
+            var list = await _noteRepository.GetCommonNotesAsync();
+            return list.Select(x => new CommonNoteVM(x));
+        }
+
+        public async Task<IEnumerable<CommonNoteVM>> GetCommonNotesAsync(long userId)
+        {
+            var list = await _noteRepository.GetCommonNotesAsync(userId);
+            return list.Select(x => new CommonNoteVM(x));
+        }
 
         public async Task<IEnumerable<PlanNoteVM>> GetPlanNotesAsync()
         {
@@ -22,7 +33,7 @@ namespace NoteApi.Service
             return list.Select(x => new PlanNoteVM(x));
         }
 
-        public async Task<IEnumerable<PlanNoteVM>> GetPlanNotesAsync(int userId)
+        public async Task<IEnumerable<PlanNoteVM>> GetPlanNotesAsync(long userId)
         {
             var list = await _noteRepository.GetPlanNotesAsync(userId);
             return list.Select(x => new PlanNoteVM(x));
@@ -34,7 +45,7 @@ namespace NoteApi.Service
             return list.Select(x => new SpecialityNoteVM(x));
         }
 
-        public async Task<IEnumerable<SpecialityNoteVM>> GetSpecialityNotesAsync(int userId)
+        public async Task<IEnumerable<SpecialityNoteVM>> GetSpecialityNotesAsync(long userId)
         {
             var list = await _noteRepository.GetSpecialityNotesAsync(userId);
             return list.Select(x => new SpecialityNoteVM(x));
@@ -46,7 +57,7 @@ namespace NoteApi.Service
             return list.Select(x => new SpecialityHighlightNoteVM(x));
         }
 
-        public async Task<IEnumerable<SpecialityHighlightNoteVM>> GetSpecialityHighlightNotesAsync(int userId)
+        public async Task<IEnumerable<SpecialityHighlightNoteVM>> GetSpecialityHighlightNotesAsync(long userId)
         {
             var list = await _noteRepository.GetSpecialityHighlightNotesAsync(userId);
             return list.Select(x => new SpecialityHighlightNoteVM(x));
@@ -58,10 +69,15 @@ namespace NoteApi.Service
             return list.Select(x => new SpecialityPriorityNoteVM(x));
         }
 
-        public async Task<IEnumerable<SpecialityPriorityNoteVM>> GetSpecialityPriorityNotesAsync(int userId)
+        public async Task<IEnumerable<SpecialityPriorityNoteVM>> GetSpecialityPriorityNotesAsync(long userId)
         {
             var list = await _noteRepository.GetSpecialityPriorityNotesAsync(userId);
             return list.Select(x => new SpecialityPriorityNoteVM(x));
+        }
+
+        public async Task<int> AddCommonNoteAsync(CommonNoteVM note)
+        {
+            return await _noteRepository.AddCommonNoteAsync(note);
         }
 
         public async Task<int> AddPlanNoteAsync(PlanNoteVM note)
@@ -104,6 +120,36 @@ namespace NoteApi.Service
             return id;
         }
 
+        public async Task UpdateCommonNote(int noteId, CommonNotePostVM noteVm)
+        {
+            await _noteRepository.UpdateCommonNote(noteId, noteVm);
+        }
+
+        public async Task UpdatePlanNote(int noteId, PlanNotePostVM noteVm)
+        {
+            await _noteRepository.UpdatePlanNote(noteId, noteVm);
+        }
+
+        public async Task UpdateSpecialityNote(int noteId, SpecialityNotePostVM noteVm)
+        {
+            await _noteRepository.UpdateSpecialityNote(noteId, noteVm);
+        }
+
+        public async Task UpdateSpecialityHighlightNote(int noteId, SpecialityHighlightNotePostVM noteVm)
+        {
+            bool modify = await _noteRepository.UpdateSpecialityHighlightNote(noteId, noteVm);
+            if (modify)
+            {
+                await _publishEndpoint.Publish(
+                    new SpecialityInterestNote(noteVm.SpecialityId, noteVm.Positive, 0));
+            }
+        }
+
+        public async Task DeleteCommonNoteAsync(int noteId)
+        {
+            await _noteRepository.DeleteCommonNoteAsync(noteId);
+        }
+
         public async Task DeletePlanNoteAsync(int noteId)
         {
             await _noteRepository.DeletePlanNoteAsync(noteId);
@@ -112,6 +158,15 @@ namespace NoteApi.Service
         public async Task DeleteSpecialityNoteAsync(int noteId)
         {
             await _noteRepository.DeleteSpecialityNoteAsync(noteId);
+        }
+
+        public async Task<IEnumerable<SpecialityRatingVM>> GetSpecialityRatingNoteAsync(long userId)
+        {
+            var highlights = await _noteRepository.GetSpecialityHighlightNotesAsync();
+            var priorities = await _noteRepository.GetSpecialityPriorityNotesAsync();
+            var hRatings = highlights.Select(x => new SpecialityRatingVM(x));
+            var pRatings = priorities.Select(x => new SpecialityRatingVM(x));
+            return hRatings.Concat(pRatings);
         }
 
         public async Task DeleteSpecialityHighlightNoteAsync(

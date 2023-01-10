@@ -101,12 +101,12 @@ namespace UserApi.Utilities
 
         }
 
-        public static string GenerateToken(string userId, string accessToken, string accesTokenSecret)
+        public static string GenerateToken(string userId, string accessToken, string accessTokenSecret)
         {
             var claims = new[] {
                         new Claim("UserId", userId),
                         new Claim("OAuthAccessToken", accessToken),
-                        new Claim("OAuthAccessTokenSecret", accesTokenSecret),
+                        new Claim("OAuthAccessTokenSecret", accessTokenSecret),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Secrets.JwtKey));

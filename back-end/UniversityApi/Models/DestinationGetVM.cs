@@ -8,7 +8,7 @@ namespace UniversityApi.Models
         public string? SubjectAreaName { get; set; }
         public string? SubjectAreaId { get; set; }
         public int? InterestedStudents { get; set; }
-        public int? Places { get; set; }
+        public int? Vacancies { get; set; }
         public float? Average { get; set; }
         public decimal Rating { get; set; }
         public bool IsObserved { get; set; }
@@ -19,9 +19,9 @@ namespace UniversityApi.Models
         {
             Id = dbModel.Id;
             SubjectAreaId = dbModel.StudyAreaId;
-            SubjectAreaName = dbModel.StudyArea?.Description;
+            SubjectAreaName = dbModel.StudyArea?.AreaName;
             InterestedStudents = dbModel.InterestedStudents;
-            Places = 0; //TODO
+            Vacancies = dbModel.ContractDetails?.VacancyMaxPositions;
             Average = dbModel.MinGradeHistories.FirstOrDefault()?.Grade; 
             Rating = 0;  //TODO
             IsObserved = false;  //TODO

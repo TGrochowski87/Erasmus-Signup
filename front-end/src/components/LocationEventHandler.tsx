@@ -1,8 +1,11 @@
+// React
 import { useEffect } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
+// Redux
 import { useAppDispatch, useAppSelector } from "storage/redux/hooks";
 import { logIn, logOut, logOutLocally } from "storage/redux/loginSlice";
 import { RootState } from "storage/redux/store";
+// Utilities
 import decodeJwt from "utilities/decodeJwt";
 
 const LocationEventHandler = () => {
@@ -22,8 +25,6 @@ const LocationEventHandler = () => {
     if (oAuthToken && oAuthVerifier) {
       dispatch(logIn({ oAuthToken, oAuthVerifier }));
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   // Handles monitoring JWT expiry
@@ -41,8 +42,6 @@ const LocationEventHandler = () => {
       dispatch(logOut());
       dispatch(logOutLocally());
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
   return <></>;

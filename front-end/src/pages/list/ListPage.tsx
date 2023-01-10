@@ -1,138 +1,170 @@
+// React
+import { Link } from "react-router-dom";
 // Ant Design
-import { HeartFilled, HeartOutlined, LineChartOutlined, MessageOutlined, TeamOutlined } from "@ant-design/icons";
-import { Button, List, Rate } from "antd";
-// Components
-import InlineItems from "components/InlineItems";
-import DestSpecialty from "models/DestSpecialty";
+import { Button, Input } from "antd";
 // Styles
 import "./ListPage.scss";
-import openInNewTab from "utilities/openInNewTab";
-import FavoriteStatusIndicator from "components/FavoriteStatusIndicator";
+// Components
+import DestSpecialty from "models/DestSpecialty";
+import SelectFilter from "./SelectFilter";
+import MainList from "./MainList";
+import SideList from "./SideList";
+import StudyArea from "models/StudyArea";
+import DestFiltering from "models/DestFiltering";
+// Utilities
+import isEqual from "lodash.isequal";
 
 interface Props {
+  userLoggedIn: boolean;
+  filters: DestFiltering;
+  setFilters: React.Dispatch<React.SetStateAction<DestFiltering>>;
+  currentFilters: DestFiltering;
+  universityNameSearch: string;
+  setUniversityNameSearch: React.Dispatch<React.SetStateAction<string>>;
+  pageNum: number;
   destinations: DestSpecialty[];
+  recommended: DestSpecialty[] | undefined;
+  recommendedByStudent: DestSpecialty[] | undefined;
+  countries: string[];
+  studyAreas: StudyArea[];
+  sortingOptions: { value: string; label: string }[];
   handlePageChange: (page: number, pageSize: number) => void;
   totalAmount: number;
   loading: boolean;
   handleOnClick: (id: number) => void;
+  applyFilters: () => Promise<void>;
+  handleSearch: () => void;
 }
 
-const ListPage = ({ destinations, handlePageChange, totalAmount, loading, handleOnClick }: Props) => {
+const { Search } = Input;
+
+const ListPage = ({
+  userLoggedIn,
+  filters,
+  setFilters,
+  currentFilters,
+  universityNameSearch,
+  setUniversityNameSearch,
+  pageNum,
+  destinations,
+  recommended,
+  recommendedByStudent,
+  countries,
+  studyAreas,
+  sortingOptions,
+  handlePageChange,
+  totalAmount,
+  loading,
+  handleOnClick,
+  applyFilters,
+  handleSearch,
+}: Props) => {
+  const renderSideListContent = (items: DestSpecialty[] | undefined) => {
+    if (items !== undefined && userLoggedIn) {
+      return items.length !== 0 ? (
+        <SideList destinations={items} loading={loading} handleOnClick={handleOnClick} />
+      ) : (
+        <>
+          <p>
+            {`You haven't yet provided your preferences. `}
+            <Link to="/profile">Do it here.</Link>
+          </p>
+        </>
+      );
+    } else {
+      return <p>Log in to see helpful recommendations!</p>;
+    }
+  };
+
   return (
-    <div>
-      <div
-        style={{
-          marginTop: 64,
-          width: "70%",
-          marginLeft: "auto",
-        }}>
-        <div className="site-layout-background" style={{ padding: 24, minHeight: 380 }}>
-          <List
-            loading={loading}
-            bordered
-            itemLayout="vertical"
-            dataSource={destinations}
-            footer={
-              <div>
-                <b>Erasmus Sign up</b> destinations
-              </div>
+    <div className="list-page">
+      <div className="block filter-section">
+        <p className="header-font">FITLERS</p>
+        <div className="filters">
+          <SelectFilter
+            handleSelect={(value: { value: string; label: string } | undefined) =>
+              setFilters(prevState => {
+                return {
+                  ...prevState,
+                  country: value?.label,
+                };
+              })
             }
-            pagination={{
-              position: "both",
-              total: totalAmount,
-              pageSize: 10,
-              onChange: (page, pageSize) => {
-                handlePageChange(page, pageSize);
-              },
-            }}
-            renderItem={item => (
-              <List.Item
-                key={item.destinationSpecialityId}
-                className="university-list-item"
-                style={{
-                  borderBottomColor: "rgb(184, 184, 184)",
-                  paddingLeft: "0.5rem",
-                }}
-                onClick={() => {
-                  handleOnClick(item.destinationSpecialityId);
-                }}>
-                <div className="university-list-item-content">
-                  <div className="country-flag-space">
-                    <img src={item.flagUrl} alt="country flag" />
-                  </div>
-                  <div className="university-data-space">
-                    <div className="university-information">
-                      <div className="top-row">
-                        <h2
-                          style={{
-                            display: "inline",
-                            marginRight: "10px",
-                          }}>
-                          {item.universityName}
-                        </h2>
-                        <h3
-                          style={{
-                            display: "inline",
-                            color: "grey",
-                          }}>
-                          {item.country}
-                        </h3>
-                        <Rate
-                          disabled
-                          allowHalf
-                          defaultValue={item.rating}
-                          style={{
-                            margin: "0 auto",
-                            position: "relative",
-                            top: "-10px",
-                          }}
-                        />
-                        <FavoriteStatusIndicator active={item.isObserved} />
-                      </div>
-
-                      <p style={{ marginTop: "0.5rem" }}>
-                        {item.subjectAreaName} | {item.subjectAreaId}
-                      </p>
-                    </div>
-
-                    <div className="text-icons">
-                      <InlineItems>
-                        <TeamOutlined />
-                        {item.places}
-                      </InlineItems>
-
-                      <InlineItems>
-                        <LineChartOutlined />
-                        {item.average}
-                      </InlineItems>
-
-                      <InlineItems>
-                        <MessageOutlined />
-                        {item.opinions}
-                      </InlineItems>
-                    </div>
-                  </div>
-
-                  <div className="buttons">
-                    <Button size="large" type="primary">
-                      Show on map
-                    </Button>
-                    <Button
-                      size="large"
-                      type="primary"
-                      onClick={() => {
-                        if (item.link !== null) {
-                          openInNewTab(item.link);
-                        } else {
-                          alert("No website for this university.");
-                        }
-                      }}>
-                      Visit website
-                    </Button>
-                  </div>
-                </div>
-              </List.Item>
-            )}
+            label="Country"
+            placeholder="Select country"
+            options={countries.map(c => {
+              return { value: crypto.randomUUID(), label: c };
+            })}
+          />
+          <SelectFilter
+            handleSelect={(value: { value: string; label: string } | undefined) =>
+              setFilters(prevState => {
+                return {
+                  ...prevState,
+                  subjectAreaId: value?.value,
+                };
+              })
+            }
+            label="Subject area"
+            placeholder="Select subject area"
+            options={studyAreas.map(s => {
+              return { value: s.id.toString(), label: s.areaName };
+            })}
+          />
+          <SelectFilter
+            handleSelect={(value: { value: string; label: string } | undefined) =>
+              setFilters(prevState => {
+                return {
+                  ...prevState,
+                  orderBy: value?.value,
+                };
+              })
+            }
+            label="Sort by"
+            placeholder="Select sorting option"
+            options={sortingOptions}
+          />
+          <div className="filter" style={{ marginLeft: "auto" }}>
+            <p className="header-font">University name</p>
+            <Search
+              style={{ width: "350px" }}
+              size="large"
+              value={universityNameSearch}
+              onChange={event => {
+                setUniversityNameSearch(event.target.value);
+              }}
+              placeholder="input search text"
+              onSearch={handleSearch}
+            />
+          </div>
+        </div>
+        <div className="button-space">
+          {isEqual(filters, currentFilters) === false && (
+            <Button type="primary" size="large" onClick={() => applyFilters()}>
+              Apply filters
+            </Button>
+          )}
+        </div>
+      </div>
+      <div className="lists">
+        <div className="left-section">
+          <div className="block list-space side-list">
+            <p className="header-font">Recommended destinations</p>
+            {renderSideListContent(recommended)}
+          </div>
+          <div className="block list-space side-list">
+            <p className="header-font">Students like you chose</p>
+            {renderSideListContent(recommendedByStudent)}
+          </div>
+        </div>
+        <div className="block list-space main-list">
+          <MainList
+            destinations={destinations}
+            loading={loading}
+            totalAmount={totalAmount}
+            handleOnClick={handleOnClick}
+            handlePageChange={handlePageChange}
+            pageNum={pageNum}
           />
         </div>
       </div>

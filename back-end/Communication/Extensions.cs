@@ -2,7 +2,7 @@
 using System.Reflection;
 using MassTransit;
 
-namespace Communication
+namespace ErasmusRabbitContracts
 {
     public static class Extensions
     {

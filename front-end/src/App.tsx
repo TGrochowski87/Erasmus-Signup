@@ -4,6 +4,7 @@ import { useAppSelector } from "storage/redux/hooks";
 import { RootState } from "storage/redux/store";
 // Ant Design
 import { Footer } from "antd/lib/layout/layout";
+import { message } from "antd";
 // Styles
 import "./App.scss";
 // Components
@@ -17,30 +18,46 @@ import HomePage from "pages/home/HomePage";
 import DestinationDetailsPageContainer from "pages/destination-details/DestinationDetailsPageContainer";
 import NotesPageContainer from "pages/notes/NotesPageContainer";
 import NoteViewPageContainer from "pages/note-view/NoteViewPageContainer";
+import PlansPageContainer from "pages/plans/PlansPageContainer";
+import SubjectsPageContainer from "pages/subjects/SubjectsPageContainer";
+import AppContext, { AppContextState } from "storage/context/antContext";
 
 function App() {
   const { userLoggedIn } = useAppSelector((state: RootState) => state.login);
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const appContextState: AppContextState = {
+    messageApi,
+  };
 
   return (
     <div className="app">
-      <Router>
-        <Navbar />
-        <div className="layout">
-          <Routes>
-            <Route path="/" element={<Navigate replace to="/home" />} />
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/list" element={<ListPageContainer />} />
-            <Route path="/list/:id" element={<DestinationDetailsPageContainer />} />
-            <Route path="/profile" element={userLoggedIn ? <ProfilePageContainer /> : <Unauthorized />} />
-            <Route path="/notes" element={userLoggedIn ? <NotesPageContainer /> : <Unauthorized />} />
-            <Route path="/notes/edit" element={userLoggedIn ? <NoteViewPageContainer /> : <Unauthorized />} />
-            <Route path="/notes/edit/:id" element={userLoggedIn ? <NoteViewPageContainer /> : <Unauthorized />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <Footer style={{ textAlign: "center" }}>Szampon Inc. Erasmus Sign-up</Footer>
-        </div>
-        <LocationEventHandler />
-      </Router>
+      {contextHolder}
+      <AppContext.Provider value={appContextState}>
+        <Router>
+          <Navbar />
+          <div className="layout">
+            <Routes>
+              <Route path="/" element={<Navigate replace to="/home" />} />
+              <Route path="/home" element={<HomePage />} />
+              <Route path="/list" element={<ListPageContainer />} />
+              <Route path="/list/:id" element={<DestinationDetailsPageContainer />} />
+              <Route path="/profile" element={userLoggedIn ? <ProfilePageContainer /> : <Unauthorized />} />
+              <Route path="/notes" element={userLoggedIn ? <NotesPageContainer /> : <Unauthorized />} />
+              <Route path="/notes/edit" element={userLoggedIn ? <NoteViewPageContainer /> : <Unauthorized />} />
+              <Route path="/notes/edit/:id" element={userLoggedIn ? <NoteViewPageContainer /> : <Unauthorized />} />
+              <Route path="/plans/" element={userLoggedIn ? <PlansPageContainer /> : <Unauthorized />} />
+              <Route path="/plans/:id" element={userLoggedIn ? <PlansPageContainer /> : <Unauthorized />} />
+              <Route path="/plans/coordinator/" element={userLoggedIn ? <PlansPageContainer /> : <Unauthorized />} />
+              <Route path="/plans/coordinator/:id" element={userLoggedIn ? <PlansPageContainer /> : <Unauthorized />} />
+              <Route path="/subjects" element={userLoggedIn ? <SubjectsPageContainer /> : <Unauthorized />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            <Footer style={{ textAlign: "center" }}>Szampon Inc. Erasmus Sign-up</Footer>
+          </div>
+          <LocationEventHandler />
+        </Router>
+      </AppContext.Provider>
     </div>
   );
 }

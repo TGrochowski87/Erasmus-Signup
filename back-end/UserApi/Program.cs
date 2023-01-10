@@ -4,6 +4,9 @@ using System.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using Microsoft.Net.Http.Headers;
 using UserApi.Attributes;
+using Microsoft.EntityFrameworkCore;
+using UserApi.Repository;
+using UserApi.DbModels;
 
 using HttpClient client = new();
 client.DefaultRequestHeaders.Accept.Clear();
@@ -35,6 +38,9 @@ builder.Services.AddCors(options =>
 
 
 builder.Services.AddControllers();
+
+builder.Services.AddDbContext<UserdbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("UserDb")));
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -65,8 +71,9 @@ builder.Services.AddSwaggerGen(c =>
         }
      });
 });
-builder.Services.AddSingleton<IUserService, UserService>();
-builder.Services.AddSingleton<IAuthorizedService, AuthorizedService>();
+builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IAuthorizedService, AuthorizedService>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession( options =>
 {

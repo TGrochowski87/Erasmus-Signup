@@ -2,11 +2,12 @@ using Microsoft.EntityFrameworkCore;
 using NoteApi.Service;
 using NoteApi.DbModels;
 using NoteApi.Repository;
-using Communication;
+using ErasmusRabbitContracts;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using System.Net.Http.Headers;
-using UserApi.Service;
+using FluentAssertions.Common;
+using NoteApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -73,9 +74,8 @@ builder.Services.AddSwaggerGen(c =>
         }
      });
 });
-builder.Services.AddSingleton<IUserService, UserService>();
-builder.Services.AddSingleton<IAuthorizedService, AuthorizedService>();
 builder.Services.AddDistributedMemoryCache();
+builder.Services.AddScoped(sp => ActivatorUtilities.CreateInstance<PlanNoteVM>(sp));
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromHours(2);
@@ -99,10 +99,13 @@ if (app.Environment.IsDevelopment())
 app.UseRouting();
 app.UseSession();
 
+app.UseCors(MyAllowSpecificOrigins);
+
 app.UseHttpsRedirection();
 app.MapControllers();
 app.UseCookiePolicy();
 app.UseAuthorization();
+app.UseCors(MyAllowSpecificOrigins);
 
 app.Run();
 

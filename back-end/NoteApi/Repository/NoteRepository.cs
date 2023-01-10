@@ -13,13 +13,26 @@ namespace NoteApi.Repository
             _notedbContext = notedbContext;
         }
 
+        public async Task<IEnumerable<CommonNote>> GetCommonNotesAsync()
+        {
+            return await _notedbContext.CommonNotes
+                .Include(note => note.Note).ToListAsync();
+        }
+
+        public async Task<IEnumerable<CommonNote>> GetCommonNotesAsync(long userId)
+        {
+            return await _notedbContext.CommonNotes
+                .Where(n => n.Note.UserId == userId)
+                .Include(note => note.Note).ToListAsync();
+        }
+
         public async Task<IEnumerable<PlanNote>> GetPlanNotesAsync()
         {
             return await _notedbContext.PlanNotes
                 .Include(note => note.Note).ToListAsync();
         }
 
-        public async Task<IEnumerable<PlanNote>> GetPlanNotesAsync(int userId)
+        public async Task<IEnumerable<PlanNote>> GetPlanNotesAsync(long userId)
         {
             return await _notedbContext.PlanNotes
                 .Where(n => n.Note.UserId == userId)
@@ -32,7 +45,7 @@ namespace NoteApi.Repository
                 .Include(note => note.Note).ToListAsync();
         }
 
-        public async Task<IEnumerable<SpecialityNote>> GetSpecialityNotesAsync(int userId)
+        public async Task<IEnumerable<SpecialityNote>> GetSpecialityNotesAsync(long userId)
         {
             return await _notedbContext.SpecialityNotes
                 .Where(n => n.Note.UserId == userId)
@@ -45,7 +58,7 @@ namespace NoteApi.Repository
                 .Include(note => note.Note).ToListAsync();
         }
 
-        public async Task<IEnumerable<SpecialityHighlightNote>> GetSpecialityHighlightNotesAsync(int userId)
+        public async Task<IEnumerable<SpecialityHighlightNote>> GetSpecialityHighlightNotesAsync(long userId)
         {
             return await _notedbContext.SpecialityHighlightNotes
                 .Where(n => n.Note.UserId == userId)
@@ -58,11 +71,24 @@ namespace NoteApi.Repository
                 .Include(note => note.Note).ToListAsync();
         }
 
-        public async Task<IEnumerable<SpecialityPriorityNote>> GetSpecialityPriorityNotesAsync(int userId)
+        public async Task<IEnumerable<SpecialityPriorityNote>> GetSpecialityPriorityNotesAsync(long userId)
         {
             return await _notedbContext.SpecialityPriorityNotes
                 .Where(n => n.Note.UserId == userId)
                 .Include(note => note.Note).ToListAsync();
+        }
+
+        public async Task<int> AddCommonNoteAsync(CommonNoteVM noteVm)
+        {
+            return await AddNoteAsync(noteVm.UserId, (note) =>
+            {
+                return new CommonNote
+                {
+                    NoteId = note.Id,
+                    Title = noteVm.Title,
+                    Content = noteVm.Content
+                };
+            });
         }
 
         public async Task<int> AddPlanNoteAsync(PlanNoteVM noteVm)
@@ -73,6 +99,7 @@ namespace NoteApi.Repository
                 {
                     NoteId = note.Id,
                     PlanId = noteVm.PlanId,
+                    Title = noteVm.Title,
                     Content = noteVm.Content
                 };
             });
@@ -85,6 +112,7 @@ namespace NoteApi.Repository
             return new SpecialityNote
             {
                 NoteId = note.Id,
+                Title = noteVm.Title,
                 Content = noteVm.Content,
                 SpecialityId = noteVm.SpecialityId
             };
@@ -123,6 +151,55 @@ namespace NoteApi.Repository
             }
 
             return (id, removed, updated);
+        }
+
+        public async Task UpdateCommonNote(int noteId, CommonNotePostVM noteVm)
+        {
+            var note = await _notedbContext.Notes
+                .Include(note => note.CommonNote)
+                .SingleOrDefaultAsync(x => x.Id == noteId);
+            note.CommonNote.Title = noteVm.Title;
+            note.CommonNote.Content = noteVm.Content;
+            await _notedbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdatePlanNote(int noteId, PlanNotePostVM noteVm)
+        {
+            var note = await _notedbContext.Notes
+                .Include(note => note.PlanNote)
+                .SingleOrDefaultAsync(x => x.Id == noteId);
+            note.PlanNote.Title = noteVm.Title;
+            note.PlanNote.Content = noteVm.Content;
+            await _notedbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateSpecialityNote(int noteId, SpecialityNotePostVM noteVm)
+        {
+            var note = await _notedbContext.Notes
+                .Include(note => note.SpecialityNote)
+                .SingleOrDefaultAsync(x => x.Id == noteId);
+            note.SpecialityNote.Title = noteVm.Title;
+            note.SpecialityNote.Content = noteVm.Content;
+            await _notedbContext.SaveChangesAsync();
+        }
+
+        public async Task<bool> UpdateSpecialityHighlightNote(int noteId, SpecialityHighlightNotePostVM noteVm)
+        {
+            var note = await _notedbContext.Notes
+                .Include(note => note.SpecialityHighlightNote)
+                .SingleOrDefaultAsync(x => x.Id == noteId);
+            var modify = false;
+            if (note.SpecialityHighlightNote.Positive != noteVm.Positive)
+            {
+                if (!await IsPrioritized(noteId))
+                {
+                    modify = true;
+                }
+            }
+
+            note.SpecialityHighlightNote.Positive = noteVm.Positive;
+            await _notedbContext.SaveChangesAsync();
+            return modify;
         }
 
         private async Task<(int removed, int existed)> UpdateExistingPriorityNotes(
@@ -173,7 +250,7 @@ namespace NoteApi.Repository
             return -1;
         }
 
-        private async Task<bool> IsLiked(int id, int userId)
+        private async Task<bool> IsLiked(int id, long userId)
         {
             var liked = await (
                 from note in _notedbContext.Notes
@@ -241,7 +318,7 @@ namespace NoteApi.Repository
             return (id, existingHighlight is not null);
         }
 
-        private async Task<bool> IsPrioritized(int specialityId, int userId)
+        private async Task<bool> IsPrioritized(int specialityId, long userId)
         {
             var prioritized = await (
                 from note in _notedbContext.Notes
@@ -252,7 +329,7 @@ namespace NoteApi.Repository
             return prioritized is not null;
         }
 
-        private async Task<int> AddNoteAsync<T>(int userId, Func<Note, T> Provider)
+        private async Task<int> AddNoteAsync<T>(long userId, Func<Note, T> Provider)
             where T : class
         {
             var note = new Note
@@ -268,6 +345,11 @@ namespace NoteApi.Repository
             await _notedbContext.SaveChangesAsync();
 
             return note.Id;
+        }
+
+        public async Task DeleteCommonNoteAsync(int noteId)
+        {
+            await CascadeDeleteNote(noteId);
         }
 
         public async Task DeletePlanNoteAsync(int noteId)

@@ -1,18 +1,12 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
-import {
-  persistReducer,
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
-} from "redux-persist";
+import { persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 // Slices
 import universitySlice from "./universitySlice";
 import loginSlice from "./loginSlice";
 import userCurrentSlice from "./userCurrentSlice";
+import noteSlice from "./noteSlice";
+import opinionSlice from "./opinionSlice";
 
 const loginPersistConfig = {
   key: "login",
@@ -23,11 +17,13 @@ const loginPersistConfig = {
 export const store = configureStore({
   reducer: {
     university: universitySlice,
+    note: noteSlice,
     login: persistReducer(loginPersistConfig, loginSlice)!,
-    userCurrent: userCurrentSlice, 
+    userCurrent: userCurrentSlice,
+    opinions: opinionSlice,
   },
   devTools: process.env.NODE_ENV !== "production",
-  middleware: (getDefaultMiddleware) =>
+  middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
@@ -37,9 +33,4 @@ export const store = configureStore({
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
-export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  RootState,
-  unknown,
-  Action<string>
->;
+export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, Action<string>>;

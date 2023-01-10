@@ -7,6 +7,7 @@ namespace NoteApi.DbModels
     {
         public int NoteId { get; set; }
         public int PlanId { get; set; }
+        public string Title { get; set; } = null!;
         public string Content { get; set; } = null!;
 
         public virtual Note Note { get; set; } = null!;

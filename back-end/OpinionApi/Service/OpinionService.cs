@@ -12,24 +12,24 @@ namespace OpinionApi.Service
             _optionRepository = optionRepository;
         }
 
-        public async Task<int> CreateAsync(OpinionCreateVM opinion, int userId)
+        public async Task<long> CreateAsync(OpinionCreateVM opinion, long userId)
         {
             var model = opinion.ToModel(userId);
             return await _optionRepository.CreateAsync(model);
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(long id)
         {
             return await _optionRepository.DeleteAsync(id);
         }
 
-        public async Task EditAsync(OpinionEditVM opinion, int id)
+        public async Task EditAsync(OpinionEditVM opinion, long id)
         {
             var model = opinion.ToModel(id);
             await _optionRepository.EditAsync(model);
         }
 
-        public async Task<OpinionResult> GetListAsync(OpinionCriteria criteria, int? userId)
+        public async Task<OpinionResult> GetListAsync(OpinionCriteria criteria, long? userId)
         {
             var page = criteria.Page ?? 1;
             var pageSize = criteria.PageSize ?? 10;

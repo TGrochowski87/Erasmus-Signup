@@ -1,6 +1,8 @@
-﻿namespace UniversityApi.DbModels
+﻿using System;
+using System.Collections.Generic;
+
+namespace UniversityApi.DbModels;
+
+public partial class PwrFaculty
 {
-    public partial class PwrFaculty
-    {
-    }
 }

@@ -20,6 +20,21 @@ namespace UserApi.Controllers
             this.authorizedService = authorizedService;
         }
 
+
+        [AuthorizeUser]
+        [HttpPut("profiles")]
+        public async Task ProfileEdit([FromBody] StudentEditVM edit)
+        {
+            await userService.StudentEdit(edit,int.Parse(UserToken.UserId));
+        }
+
+        [AuthorizeUser]
+        [HttpGet("profiles")]
+        public async Task<StudentGetVM> GetProfile()
+        {
+            return await userService.GetStudent(int.Parse(UserToken.UserId));
+        }
+
         [HttpGet("ping")]
         public IActionResult Ping()
         {

@@ -32,8 +32,6 @@ const Navbar = () => {
       : anonymousUserLinks(dispatch, fetchOAuthUrl);
 
     setLinks(linkList);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userLoggedIn]);
 
   // Handles navbar feedback
@@ -43,7 +41,7 @@ const Navbar = () => {
       return;
     }
 
-    let matchingPaths = links.filter(l => l.path && currentLocation.includes(l.path));
+    const matchingPaths = links.filter(l => l.path && currentLocation.includes(l.path));
 
     if (matchingPaths.length === 0) {
       setActiveId(null);

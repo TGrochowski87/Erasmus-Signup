@@ -1,5 +1,6 @@
-// Styles
+// Ant Design
 import { Spin } from "antd";
+// Styles
 import "./Components.scss";
 
 const FullViewLoading = () => {
