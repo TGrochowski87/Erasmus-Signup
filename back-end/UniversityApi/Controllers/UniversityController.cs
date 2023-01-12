@@ -65,5 +65,11 @@ namespace UniversityApi.Controllers
         {
             return await universityService.GetAsync(destId);
         }
+
+        [HttpGet("universities/users")]
+        public async Task<DestinationResult> GetListForUser([FromQuery] UserDestinationCriteria criteria)
+        {
+            return await universityService.GetListForUserAsync(criteria);
+        }
     }
 }

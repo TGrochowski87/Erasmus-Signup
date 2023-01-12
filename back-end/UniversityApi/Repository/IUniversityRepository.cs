@@ -12,5 +12,6 @@ namespace UniversityApi.Repository
         Task<IEnumerable<StudyArea>> GetStudyAreaListAsync();
         Task<IEnumerable<DestSpeciality>> GetListRecommendedDestinationsAsync(short? studyDomainId, float? averageGrade);
         Task<DestSpeciality> GetRecommendedByStudentsDestinationsAsync(short destId);
+        Task<IEnumerable<DestSpeciality>> GetListForUserAsync(UserDestinationCriteria criteria);
     }
 }
