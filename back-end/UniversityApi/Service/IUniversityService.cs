@@ -11,5 +11,6 @@ namespace UniversityApi.Service
         IEnumerable<string> GetCountries();
         Task<IEnumerable<DestinationVM>> GetRecommendedDestinations();
         Task<IEnumerable<DestinationVM>> GetRecommendedByStudentsDestinations();
+        Task<DestinationResult> GetListForUserAsync(UserDestinationCriteria criteria);
     }
 }

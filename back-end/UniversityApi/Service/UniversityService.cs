@@ -71,5 +71,12 @@ namespace UniversityApi.Service
 
             return new UniversityGetVM(university, destId);
         }
+
+        public async Task<DestinationResult> GetListForUserAsync(UserDestinationCriteria criteria)
+        {
+            var list = await _universityRepository.GetListForUserAsync(criteria);
+
+            return new DestinationResult(list.Select(x => new DestinationVM(x)), list.Count());
+        }
     }
 }
