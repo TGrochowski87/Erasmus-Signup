@@ -79,9 +79,11 @@ const PlansPageContainer = ({ isCoordinator }: Props) => {
     }
   };
 
-  const switchCurrentPlan = (id: number) => {
+  const switchCurrentPlan = (id: number|undefined) => {
     setCurrentPlanId(id);
-    window.history.replaceState({}, "", (isCoordinator ? "/plans/coordinator/" : "/plans/") + (id == -1 ? "new" : id));
+    if(id){
+      window.history.replaceState({}, "", (isCoordinator ? "/plans/coordinator/" : "/plans/") + (id == -1 ? "new" : id));
+    }
   }
 
   const setIsEditedTo = (state: boolean, id: number) => {
