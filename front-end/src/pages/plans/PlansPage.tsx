@@ -1,60 +1,101 @@
 // Ant Design
 import { Button, InputNumber, List } from "antd";
 import Input from "antd/lib/input/Input";
+import { EditFilled, PlusOutlined } from '@ant-design/icons';
 // Components
-import Plan from "models/Plan";
+import { Plan } from "models/Plan";
 // Styles
 import "./PlansPage.scss";
+import React from "react";
 
 interface Props {
-  plans: Plan[];
-  currentPlan: Plan | undefined;
+  plans: Map<number, Plan>;
+  newPlan: Plan;
+  currentPlanId: number|undefined;
+  isEdited: Map<number, boolean>;
   isCoordinator: boolean;
-  setCurrentPlan: React.Dispatch<React.SetStateAction<Plan | undefined>>;
-  loadPlan: (id: string) => void;
+  loading: { plans: boolean, subjects: boolean };
+  switchCurrentPlan: (id: number) => void;
+  changeCurrentPlanName: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  changeSubjectName: (event: React.ChangeEvent<HTMLInputElement> , id: number) => void;
+  changeSubjectEcts: (event: number|null, id: number) => void;
+  publishPlan: () => void;
+  savePlanChanges: () => void;
+  deletePlan: () => void;
 }
 
-const PlansPage = ({ plans, currentPlan, setCurrentPlan, loadPlan, isCoordinator }: Props) => {
+const PlansPage = ({
+  plans,
+  newPlan,
+  currentPlanId,
+  isEdited,
+  isCoordinator,
+  loading,
+  switchCurrentPlan,
+  changeCurrentPlanName,
+  changeSubjectName,
+  changeSubjectEcts,
+  publishPlan,
+  savePlanChanges,
+  deletePlan,
+}: Props) => {
+  const currentPlan: Plan|undefined = currentPlanId === -1
+      ? newPlan
+      : ( currentPlanId === undefined ? undefined : plans.get(currentPlanId));
+  
   return (
     <div id="plan-page-container">
-      <div id="plan-list" className="block">
+      <div id="plan-list-panel" className="block">
         <h1>Plans:</h1>
         <List
-          dataSource={plans}
+          id="plan-list"
+          dataSource={Array.from(plans.values())}
+          loading={loading.plans}
           renderItem={item => (
             <List.Item
               onClick={() => {
-                loadPlan(item.id.toString());
+                switchCurrentPlan(item.id);
               }}
               style={{ display: "block", margin: "0" }}
-              key={item.id}>
-              <h2 style={{ margin: "0" }}>{item.name}</h2>
-              <p style={{ margin: "0 0.5rem" }}>{item.specialtyId}</p>
+              key={item.id}
+            >
+              <h2 style={{ margin: "0" }}>{item.name.trim().length > 0 ? item.name : "(untitlled)"}</h2>
+              {/* <p style={{ margin: "0 0.5rem" }}>{item.specialtyId}</p> */}
             </List.Item>
           )}
         />
+        {isCoordinator ? 
+          ""
+        :
+          <button id="create-new-plan-button" onClick={() => {switchCurrentPlan(-1);}}>
+            Create new plan
+          </button>
+        }
       </div>
       <div id="plan-subjects-panel" className="block">
         {currentPlan ? (
           <div id="plan" className="block ">
             <div id="plan-headder">
-              <Input
-                className="plan-name-input"
-                placeholder="(untitled plan)"
-                maxLength={100}
-                value={currentPlan.name}
-                onChange={event => {
-                  setCurrentPlan(prevState => {
-                    const newPlan: Plan = {
-                      ...prevState!,
-                      name: event.target.value,
-                      planSubjects: [...prevState!.planSubjects!],
-                    };
-
-                    return newPlan;
-                  });
-                }}
-              />
+              {isCoordinator ?
+                <React.Fragment>
+                  <div className="plan-name">
+                    {currentPlan.name}
+                  </div>
+                  <div className="user-full-name">
+                    <span>Plan owner: </span>
+                    {currentPlan.studentName + " " + currentPlan.studentSurname}
+                  </div>
+                </React.Fragment>
+              :
+                <Input
+                  className="plan-name-input"
+                  placeholder="(untitled plan)"
+                  prefix={<EditFilled />}
+                  maxLength={100}
+                  value={currentPlan.name}
+                  onChange={changeCurrentPlanName}
+                />
+              }
               {isCoordinator ? (
                 <div className="plan-buttons-panel">
                   <Button className="accept-button" size="large" type="primary">
@@ -66,31 +107,54 @@ const PlansPage = ({ plans, currentPlan, setCurrentPlan, loadPlan, isCoordinator
                 </div>
               ) : (
                 <div className="plan-buttons-panel">
-                  <Button className="save-button" size="large" type="primary">
-                    Save changes
-                  </Button>
-                  <Button className="send-button" size="large" type="primary">
-                    Send to coordinator
-                  </Button>
-                  <Button
-                    className="delete-button"
-                    size="large"
-                    type="primary"
-                    onClick={() => {
-                      // TODO handler
-                    }}>
-                    Delete
-                  </Button>
+                  { currentPlanId == -1 ? 
+                    <Button 
+                      className="publish-button"
+                      size="large"
+                      type="primary"
+                      onClick={publishPlan}
+                      disabled={!isEdited.get(-1)}
+                    >
+                      Publish new plan
+                    </Button>
+                   :
+                    <React.Fragment>
+                      <Button
+                        className="save-button"
+                        size="large" type="primary"
+                        onClick={savePlanChanges}
+                        disabled={!isEdited.get(currentPlanId!)}
+                      >
+                        Save changes
+                      </Button>
+                      <Button 
+                        className="send-button" 
+                        size="large" 
+                        type="primary"
+                      >
+                        Send to coordinator
+                      </Button>
+                      <Button
+                        className="delete-button"
+                        size="large"
+                        type="primary"
+                        onClick={deletePlan}
+                      >
+                        Delete
+                      </Button>
+                    </React.Fragment>
+                  }
                 </div>
               )}
             </div>
             <List
-              dataSource={currentPlan.planSubjects}
+              dataSource={currentPlan.subjects}
+              loading={loading.subjects}
               renderItem={item => (
                 <List.Item className="plan-subject-row" key={item.id}>
                   <div className="plan-subject-home">
-                      {item.homeSubject.name}
-                      <span> (ECTS: {item.homeSubject.ects}) </span>
+                      {item.mappedSubject.name}
+                      <span> (ECTS: {item.mappedSubject.ects}) </span>
                   </div>
                   <div className="plan-subject-destination">
                     <Input
@@ -99,18 +163,8 @@ const PlansPage = ({ plans, currentPlan, setCurrentPlan, loadPlan, isCoordinator
                       placeholder="subject"
                       maxLength={100}
                       value={item.name}
-                      onChange={event => {
-                        setCurrentPlan(prevState => {
-                          const newPlan: Plan = { ...prevState!, planSubjects: [...prevState!.planSubjects!] };
-                          newPlan.planSubjects!.find(x => {
-                            return x.id === item.id;
-                          })!.name = event.target.value;
-                          // item.name = event.target.value;
-                          return newPlan;
-                        });
-                      }}
+                      onChange={event => {changeSubjectName(event, item.id)}}
                       disabled={isCoordinator}
-                      name={"nema"}
                     />
                     <InputNumber
                       addonBefore="ECTS:"
@@ -118,22 +172,14 @@ const PlansPage = ({ plans, currentPlan, setCurrentPlan, loadPlan, isCoordinator
                       max={30}
                       defaultValue={1}
                       value={item.ects}
-                      onChange={event => {
-                        setCurrentPlan(prevState => {
-                          const newPlan: Plan = { ...prevState!, planSubjects: [...prevState!.planSubjects!] };
-                          newPlan.planSubjects!.find(x => {
-                            return x.id === item.id;
-                          })!.ects = event!;
-                          return newPlan;
-                        });
-                      }}
+                      onChange={event => {changeSubjectEcts(event, item.id)}}
                       disabled={isCoordinator}
                     />
                   </div>
                 </List.Item>
               )}
             />
-            {isCoordinator ? (
+            {/* {isCoordinator ? (
               <div className="plan-buttons-panel">
                 <Button className="accept-button" size="large" type="primary">
                   Accept
@@ -160,7 +206,7 @@ const PlansPage = ({ plans, currentPlan, setCurrentPlan, loadPlan, isCoordinator
                   Delete
                 </Button>
               </div>
-            )}
+            )} */}
           </div>
         ) : (
           <div id="select-plan-info">
