@@ -6,7 +6,7 @@ import DestSpecialty from "models/DestSpecialty";
 import StudyArea from "models/StudyArea";
 import DestFiltering from "models/DestFiltering";
 
-const universityApiBaseUrl = "https://localhost:7009";
+const universityApiBaseUrl = "https://universityapiservice.azure-api.net/";
 
 export const getDestinations = async (
   page: number,
