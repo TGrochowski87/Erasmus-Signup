@@ -31,7 +31,8 @@ builder.Services.AddCors(options =>
                       {
                           policy.AllowAnyMethod().AllowAnyHeader().WithOrigins(
                             "http://localhost:3000",
-                            "http://localhost:3001"
+                            "http://localhost:3001",
+                            "https://universityapiservice.azure-api.net"
                           );
                       });
 });

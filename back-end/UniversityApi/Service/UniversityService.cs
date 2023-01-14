@@ -19,7 +19,7 @@ namespace UniversityApi.Service
             _universityRepository = universityRepository;
 
             _httpClientUser = new HttpClient();
-            _httpClientUser.BaseAddress = new Uri("https://localhost:7077/");
+            _httpClientUser.BaseAddress = new Uri("https://userapiservice.azure-api.net/");  
             _httpClientUser.Timeout = new TimeSpan(0, 2, 0);
 
             _httpClientNote = new HttpClient();
