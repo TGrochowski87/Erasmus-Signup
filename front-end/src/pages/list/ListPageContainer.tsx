@@ -22,6 +22,7 @@ const ListPageContainer = () => {
   const dispatch = useAppDispatch();
   const { userPreferencesFilled, destinationsRecommended, destinationsRecommendedByStudents, countries, studyAreas } =
     useAppSelector((state: RootState) => state.university);
+  const { preferences } = useAppSelector((state: RootState) => state.userCurrent);
   const { userLoggedIn } = useAppSelector((state: RootState) => state.login);
   const [pageNum, setPageNum] = useState<number>(1);
   const [destinations, setDestinations] = useState<DestSpecialty[]>([]);
@@ -53,7 +54,7 @@ const ListPageContainer = () => {
 
   useEffect(() => {
     fetchRecommendations();
-  }, [userLoggedIn]);
+  }, [userLoggedIn, preferences]);
 
   useEffect(() => {
     if (countries.length === 0) {
@@ -66,12 +67,8 @@ const ListPageContainer = () => {
 
   const fetchRecommendations = () => {
     if (userLoggedIn) {
-      if (destinationsRecommended === undefined) {
-        dispatch(fetchDestinationsRecommended());
-      }
-      if (destinationsRecommendedByStudents === undefined) {
-        dispatch(fetchDestinationsRecommendedByStudents());
-      }
+      dispatch(fetchDestinationsRecommended());
+      dispatch(fetchDestinationsRecommendedByStudents());
     }
   };
 
