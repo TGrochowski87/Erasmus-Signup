@@ -4,7 +4,7 @@ import { User } from "models/User";
 import UserPreferences from "models/UserPreferences";
 import GetAccessTokenQueryParams from "./DTOs/GET/GetAccessTokenQueryParams";
 
-const userApiBaseUrl = "https://localhost:7077";
+const userApiBaseUrl = "https://userapiservice.azure-api.net";
 /* oauth */
 export const getOAuthUrl = async (): Promise<OAuthData> => {
   return await axios

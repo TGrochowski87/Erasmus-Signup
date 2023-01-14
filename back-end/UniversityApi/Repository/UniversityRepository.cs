@@ -22,8 +22,8 @@ namespace UniversityApi.Repository
                 .Include(x => x.MinGradeHistories)
                 .Include(x => x.SubjectLanguage)
                 .Where(x => string.IsNullOrEmpty(criteria.Country) || x.DestUniversityCodeNavigation.Country == criteria.Country)
-                .Where(x=> string.IsNullOrEmpty(criteria.SubjectAreaId) || x.StudyArea.Id == criteria.SubjectAreaId)
-                .Where(x=> string.IsNullOrEmpty(criteria.UniversityName) || x.DestUniversityCodeNavigation.Name.Contains(criteria.UniversityName))
+                .Where(x => string.IsNullOrEmpty(criteria.SubjectAreaId) || x.StudyArea.Id == criteria.SubjectAreaId)
+                .Where(x => string.IsNullOrEmpty(criteria.UniversityName) || x.DestUniversityCodeNavigation.Name.Contains(criteria.UniversityName))
                 .ToListAsync();
 
             switch (criteria.OrderBy)
@@ -102,6 +102,20 @@ namespace UniversityApi.Repository
                  .Include(x => x.SubjectLanguage);
 
             return destSpecialityList;
+        }
+
+        public async Task<IEnumerable<DestSpeciality>> GetListForUserAsync(UserDestinationCriteria criteria)
+        {
+            var list = await _context.DestSpecialities
+                .Include(x => x.DestUniversityCodeNavigation)
+                .Include(x => x.StudyArea)
+                .Include(x => x.ContractDetails)
+                .Include(x => x.MinGradeHistories)
+                .Include(x => x.SubjectLanguage)
+                .Where(x => criteria.DestSpecialityIds.Contains(x.Id))
+                .ToListAsync();
+
+            return list;
         }
 
         public async Task UpdateInterestedStudentsCountAsync(int id, bool increment)

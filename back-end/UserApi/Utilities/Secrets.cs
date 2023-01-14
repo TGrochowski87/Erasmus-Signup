@@ -6,15 +6,16 @@ namespace UserApi.Utilities
 {
     static class Secrets
     {
+
         #region variables
         private const string SecretsFilePath = @"secrets.json";
-        static private string serviceUrl = "";
-        static private string oauthHostUrl = "";
-        static private string oauthApiConsumerKey = "";
-        static private string oauthApiConsumerSecret = "";
-        static private string oauthTokenMethod = "";
-        static private string oauthAuthMethod = "";
-        static private string jwtKey = "";
+        static private string serviceUrl = "http://localhost:3000/";
+        static private string oauthHostUrl = "https://apps.usos.pwr.edu.pl/";
+        static private string oauthApiConsumerKey = "E6PSSxPABSJgyGhpDthM";
+        static private string oauthApiConsumerSecret = "xXEVHG9VTwpNGrKsP9WexjKUxzL9SRtXVk3gLfjD";
+        static private string oauthTokenMethod = "services/oauth/request_token";
+        static private string oauthAuthMethod = "services/oauth/authorize";
+        static private string jwtKey = "Yh2k7QSu4l8CZg5p6X3Pna9L0Miy4D3Bvt0JVr87UcOj69Kqw5R2Nmf4FWs03Hdx";
         #endregion
 
         #region Setters and getters

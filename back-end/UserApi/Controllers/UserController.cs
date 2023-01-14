@@ -35,6 +35,13 @@ namespace UserApi.Controllers
             return await userService.GetStudent(int.Parse(UserToken.UserId));
         }
 
+        [AuthorizeUser]
+        [HttpGet("study-domain/{studyDomainId}")]
+        public async Task<IEnumerable<int>> GetUsersByStudyDomain([FromRoute]short studyDomainId)
+        {
+            return await userService.GetUsersByStudyDomain(studyDomainId);
+        }
+
         [HttpGet("ping")]
         public IActionResult Ping()
         {

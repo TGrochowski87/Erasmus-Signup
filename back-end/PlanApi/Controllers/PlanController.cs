@@ -51,7 +51,7 @@ namespace PlanApi.Controllers
         [HttpPut("plan/{id}")]
         public async Task UpdatePlan(int id, [FromBody] PlanCreateVM plan)
         {
-            await planService.UpdatePlanAsync(id, plan);
+            await planService.UpdatePlanAsync(id, plan, GetUserId());
         }
 
         [AuthorizeUser]

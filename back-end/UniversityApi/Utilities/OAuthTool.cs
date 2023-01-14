@@ -26,7 +26,7 @@ namespace UniversityApi.Utilities
 
                 ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(token, validationParameters, out validatedToken);
 
-                return new UserJWT(principal.FindFirst("UserId")?.Value ?? "", principal.FindFirst("OAuthAccessToken")?.Value ?? "", principal.FindFirst("OAuthAccessTokenSecret")?.Value ?? "", true);
+                return new UserJWT(token, principal.FindFirst("UserId")?.Value ?? "", principal.FindFirst("OAuthAccessToken")?.Value ?? "", principal.FindFirst("OAuthAccessTokenSecret")?.Value ?? "", true);
             }
             catch
             {

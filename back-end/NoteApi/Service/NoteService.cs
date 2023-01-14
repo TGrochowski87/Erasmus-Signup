@@ -189,5 +189,14 @@ namespace NoteApi.Service
                     new SpecialityInterestNote(specialityId, false, 0));
             }
         }
+
+        public async Task<IEnumerable<int>> GetFavoriteSpec(long userId)
+        {
+            var noteList =  await _noteRepository.GetNotesByUserId(userId);
+
+            var specList = noteList.Select(x => x.SpecialityHighlightNote);
+
+            return specList != null ? specList.Select(x=>x.SpecialityId): new List<int>(); 
+        }
     }
 }

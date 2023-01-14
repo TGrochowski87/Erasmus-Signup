@@ -16,6 +16,7 @@ const initialState: State = {
 export const fetchOAuthUrl = createAsyncThunk<OAuthData>("oauth_url", async () => {
   //TODO: Add error handling
   const response = await getOAuthUrl();
+  console.log(response);
   return response;
 });
 

@@ -26,6 +26,13 @@ namespace UserApi.Service
             return new StudentGetVM(student);
         }
 
+        public async Task<IEnumerable<int>> GetUsersByStudyDomain(short studyDomainId)
+        {
+            var users = await userRepository.GetUsersByStudyDomain(studyDomainId);
+
+            return users != null ? users.Select(x => x.UserId) : new List<int>();
+        }
+
         public HttpResponseMessage GetCurrentUser(string access_token, string access_token_secret)
         {
             List<KeyValuePair<string, string>> urlParams = new List<KeyValuePair<string, string>>();

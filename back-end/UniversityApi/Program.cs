@@ -17,46 +17,24 @@ builder.Services.AddCors(options =>
                       {
                           policy.AllowAnyMethod().AllowAnyHeader().WithOrigins(
                             "http://localhost:3000",
-                            "http://localhost:3001"
+                            "http://localhost:3001",
+                            "https://localhost:7169",
+                            "https://userapiservice.azure-api.net"
                           );
                       });
 });
 
 builder.Services.AddControllers();
 
-builder.Services.AddDbContext<UniversitydbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("UniversityDb")));
+builder.Services.AddDbContext<UniversitydbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("university")));
 
 builder.Services.AddRabbitMqServices();
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiPlayground", Version = "v1" });
-    c.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme
-    {
-        Name = HeaderNames.Authorization,
-        Type = SecuritySchemeType.Http,
-        In = ParameterLocation.Header,
-        Scheme = "bearer",
-        BearerFormat = "JWT",
-        Description = "JWT Authorization header using the Bearer scheme.",
-    });
-
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "bearerAuth"
-                }
-            },
-            new string[] {}
-        }
-     });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "UniversityAPI", Version = "v1" });
 });
 
 builder.Services.AddTransient<IUniversityService, UniversityService>();
@@ -65,11 +43,11 @@ builder.Services.AddTransient<IUniversityRepository, UniversityRepository>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseSwagger();
+
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "UniversityApi v1"));
 }
 
 app.UseHttpsRedirection();
