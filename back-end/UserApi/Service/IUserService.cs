@@ -9,6 +9,7 @@ namespace UserApi.Service
         HttpResponseMessage GetCurrentUserId(string access_token, string access_token_secret);
         Task StudentEdit(StudentEditVM viewModel, int userId);
         Task<StudentGetVM> GetStudent(int userId);
+        Task<IEnumerable<int>> GetUsersByStudyDomain(short studyDomainId);
         //HttpResponseMessage GetStudentProgrammes(string userId, string access_token, string access_token_secret);
         //HttpResponseMessage GetCoordinatorCourses(string userId, string access_token, string access_token_secret);
     }

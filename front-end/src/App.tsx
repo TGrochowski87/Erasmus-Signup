@@ -21,6 +21,7 @@ import NoteViewPageContainer from "pages/note-view/NoteViewPageContainer";
 import PlansPageContainer from "pages/plans/PlansPageContainer";
 import SubjectsPageContainer from "pages/subjects/SubjectsPageContainer";
 import AppContext, { AppContextState } from "storage/context/antContext";
+import EasterEggContainer from "pages/easter-egg/EasterEggContainer";
 
 function App() {
   const { userLoggedIn } = useAppSelector((state: RootState) => state.login);
@@ -46,11 +47,12 @@ function App() {
               <Route path="/notes" element={userLoggedIn ? <NotesPageContainer /> : <Unauthorized />} />
               <Route path="/notes/edit" element={userLoggedIn ? <NoteViewPageContainer /> : <Unauthorized />} />
               <Route path="/notes/edit/:id" element={userLoggedIn ? <NoteViewPageContainer /> : <Unauthorized />} />
-              <Route path="/plans/" element={userLoggedIn ? <PlansPageContainer /> : <Unauthorized />} />
-              <Route path="/plans/:id" element={userLoggedIn ? <PlansPageContainer /> : <Unauthorized />} />
-              <Route path="/plans/coordinator/" element={userLoggedIn ? <PlansPageContainer /> : <Unauthorized />} />
-              <Route path="/plans/coordinator/:id" element={userLoggedIn ? <PlansPageContainer /> : <Unauthorized />} />
+              <Route path="/plans/" element={userLoggedIn ? <PlansPageContainer isCoordinator={false} /> : <Unauthorized />} />
+              <Route path="/plans/:id" element={userLoggedIn ? <PlansPageContainer isCoordinator={false} /> : <Unauthorized />} />
+              <Route path="/plans/coordinator/" element={userLoggedIn ? <PlansPageContainer isCoordinator={true} /> : <Unauthorized />} />
+              <Route path="/plans/coordinator/:id" element={userLoggedIn ? <PlansPageContainer isCoordinator={true} /> : <Unauthorized />} />
               <Route path="/subjects" element={userLoggedIn ? <SubjectsPageContainer /> : <Unauthorized />} />
+              <Route path="/easter-egg" element={userLoggedIn ? <EasterEggContainer /> : <Unauthorized />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <Footer style={{ textAlign: "center" }}>Szampon Inc. Erasmus Sign-up</Footer>

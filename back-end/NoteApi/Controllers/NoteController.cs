@@ -223,6 +223,13 @@ namespace NoteApi.Controllers
             return Ok(await noteService.GetSpecialityRatingNoteAsync(userId));
         }
 
+        [AuthorizeUser]
+        [HttpGet("favorite-spec/{userId}")]
+        public async Task<IEnumerable<int>> GetFavoriteSpec([FromRoute] long userId)
+        {
+            return await noteService.GetFavoriteSpec(userId);
+        }
+
         private long GetUserId()
         {
             if (UserToken == null)

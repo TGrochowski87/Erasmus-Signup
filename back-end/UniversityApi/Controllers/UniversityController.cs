@@ -30,16 +30,16 @@ namespace UniversityApi.Controllers
 
         [AuthorizeUser]
         [HttpGet("universities-recommended")]
-        public async Task<IEnumerable<DestinationVM>> GetRecommendedDestinations()
+        public async Task<RecommendedDestination> GetRecommendedDestinations()
         {
-            return await universityService.GetRecommendedDestinations();
+            return await universityService.GetRecommendedDestinations(UserToken);
         }
 
         [AuthorizeUser]
         [HttpGet("universities-recommended-by-students")]
-        public async Task<IEnumerable<DestinationVM>> GetRecommendedByStudentsDestinations()
+        public async Task<RecommendedDestination> GetRecommendedByStudentsDestinations()
         {
-            return await universityService.GetRecommendedByStudentsDestinations();
+            return await universityService.GetRecommendedByStudentsDestinations(UserToken);
         }
 
         [HttpGet("countries")]
@@ -64,6 +64,12 @@ namespace UniversityApi.Controllers
         public async Task<UniversityGetVM> Get(short destId)
         {
             return await universityService.GetAsync(destId);
+        }
+
+        [HttpGet("universities/users")]
+        public async Task<DestinationResult> GetListForUser([FromQuery] UserDestinationCriteria criteria)
+        {
+            return await universityService.GetListForUserAsync(criteria);
         }
     }
 }

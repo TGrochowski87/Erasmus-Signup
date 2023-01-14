@@ -405,5 +405,13 @@ namespace NoteApi.Repository
                 select highlight).SingleOrDefaultAsync();
             return liked is not null;
         }
+
+        public async Task<IEnumerable<Note>> GetNotesByUserId(long userId)
+        {
+            return await _notedbContext.Notes
+                .Where(x => x.UserId == userId && x.SpecialityHighlightNote != null && x.SpecialityHighlightNote.Positive == true)
+                .Include(x=>x.SpecialityHighlightNote)
+                .ToListAsync();
+        }
     }
 }

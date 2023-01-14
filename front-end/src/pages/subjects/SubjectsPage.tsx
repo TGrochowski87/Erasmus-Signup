@@ -2,90 +2,65 @@
 import { Button, InputNumber, List } from "antd";
 import Input from "antd/lib/input/Input";
 // Components
-import HomeSubject from "models/HomeSubject";
+import { UserSubject } from "models/UserSubject";
 // Styles
 import "./SubjectsPage.scss";
 
 interface Props {
-  subjects: HomeSubject[];
-  setSubjects: React.Dispatch<React.SetStateAction<HomeSubject[]>>;
+  subjects: Map<number, UserSubject>;
+  isPlanEdited: boolean;
+  loading: { subjects: boolean; };
+  saveUserPlan: () => void
+  addSubject: () => void;
+  deleteSubject: (id: number) => void;
+  changeSubjectName: (event: React.ChangeEvent<HTMLInputElement>, id: number) => void;
+  changeEcts: (event: number|null, id: number) => void;
 }
 
-const SubjectsPage = ({ subjects, setSubjects }: Props) => {
+const SubjectsPage = ({ subjects, isPlanEdited, loading, saveUserPlan, addSubject, deleteSubject, changeSubjectName, changeEcts }: Props) => {
   return (
     <div id="subjects-page-container">
       <div id="plan-list" className="block">
         <div id="plan-headder">
           <h1>Subjects:</h1>
-          <Button size="large" type="primary" onClick={undefined}>
+          <Button size="large" type="primary" onClick={saveUserPlan} disabled={!isPlanEdited}>
             Save changes
           </Button>
           <Button
             size="large"
             type="primary"
-            onClick={() => {
-              setSubjects(prevState => {
-                const newSubjects = [...prevState];
-                newSubjects.push({
-                  id: -1,
-                  name: "",
-                  ects: 0,
-                });
-                return newSubjects;
-              });
-            }}>
+            onClick={addSubject}>
             Add new subject
           </Button>
         </div>
 
         <List
-          dataSource={subjects}
+          dataSource={Array.from(subjects.values())}
+          loading={loading.subjects}
           renderItem={item => (
             <List.Item className="plan-subject-row" key={item.id}>
               <Input
+                addonBefore="Subject name:"
                 className="subject-text-input"
                 placeholder="Subject name"
                 maxLength={100}
                 value={item.name}
-                onChange={event => {
-                  setSubjects(prevState => {
-                    const newSubjects = [...prevState];
-                    newSubjects.find(x => {
-                      return x.id === item.id;
-                    })!.name = event.target.value;
-                    return newSubjects;
-                  });
-                }}
+                onChange={event => {changeSubjectName(event, item.id)}}
               />
               <InputNumber
+                addonBefore="ECTS:"
                 min={1}
                 max={30}
                 defaultValue={1}
                 value={item.ects}
-                onChange={event => {
-                  setSubjects(prevState => {
-                    const newSubjects = [...prevState];
-                    newSubjects.find(x => {
-                      return x.id === item.id;
-                    })!.ects = event!;
-                    return newSubjects;
-                  });
-                }}
+                onChange={event => {changeEcts(event, item.id)}}
               />
               <Button
                 className="delete-button"
                 size="large"
                 type="primary"
-                onClick={() => {
-                  setSubjects(prevState => {
-                    const newSubjects = [
-                      ...prevState.filter(x => {
-                        return x.id !== item.id;
-                      }),
-                    ];
-                    return newSubjects;
-                  });
-                }}>
+                onClick={() => {deleteSubject(item.id)}}
+              >
                 ✖
               </Button>
             </List.Item>

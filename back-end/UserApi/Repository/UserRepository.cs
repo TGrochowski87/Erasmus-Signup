@@ -39,5 +39,10 @@ namespace UserApi.Repository
             return await _context.UserProfiles.FirstOrDefaultAsync(x => x.UserId == userId);
         }
 
+        public async Task<IEnumerable<UserProfile>> GetUsersByStudyDomain(short studyDomainId)
+        {
+            return await _context.UserProfiles.Where(x => x.PreferencedStudyDomainId == studyDomainId).ToListAsync();
+        }
+
     }
 }

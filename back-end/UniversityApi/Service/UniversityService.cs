@@ -1,4 +1,7 @@
-﻿using UniversityApi.DbModels;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Net.Http.Headers;
+using UniversityApi.DbModels;
 using UniversityApi.Helpers;
 using UniversityApi.Models;
 using UniversityApi.Repository;
@@ -8,10 +11,20 @@ namespace UniversityApi.Service
     public class UniversityService : IUniversityService
     {
         private readonly IUniversityRepository _universityRepository;
+        private readonly HttpClient _httpClientUser;
+        private readonly HttpClient _httpClientNote;
 
         public UniversityService(IUniversityRepository universityRepository)
         {
             _universityRepository = universityRepository;
+
+            _httpClientUser = new HttpClient();
+            _httpClientUser.BaseAddress = new Uri("https://localhost:7077/");
+            _httpClientUser.Timeout = new TimeSpan(0, 2, 0);
+
+            _httpClientNote = new HttpClient();
+            _httpClientNote.BaseAddress = new Uri("https://localhost:7169/");
+            _httpClientNote.Timeout = new TimeSpan(0, 2, 0);
         }
 
 
@@ -30,20 +43,60 @@ namespace UniversityApi.Service
             return new DestinationResult(filterList.Select(x => new DestinationVM(x)), totalRows);
         }
 
-        public async Task<IEnumerable<DestinationVM>> GetRecommendedDestinations()
+        public async Task<RecommendedDestination> GetRecommendedDestinations(UserJWT userJWT)
         {
-            var recomendedDestinations = await _universityRepository.GetListRecommendedDestinationsAsync(null, null); //TODO
+            var profile = await GetProfile(int.Parse(userJWT.UserId), userJWT.Token);
+
+            if (profile.AverageGrade == null && profile.PreferencedStudyDomainId == null)
+            {
+                return new RecommendedDestination() { IsCompletedProfile = false, Destinations = new List<DestinationVM>() };
+            }
+
+            var recomendedDestinations = await _universityRepository.GetListRecommendedDestinationsAsync(profile.PreferencedStudyDomainId, (float?)profile.AverageGrade);
             var filterRecomendedDestinations = recomendedDestinations.Take(10);
 
-            return filterRecomendedDestinations.Select(x => new DestinationVM(x));
+            return new RecommendedDestination() { IsCompletedProfile = true, Destinations = filterRecomendedDestinations.Select(x => new DestinationVM(x)) };
         }
 
-        public async Task<IEnumerable<DestinationVM>> GetRecommendedByStudentsDestinations()
+        public async Task<RecommendedDestination> GetRecommendedByStudentsDestinations(UserJWT userJWT)
         {
-            var recomendedByStudentsDestinations = await _universityRepository.GetListRecommendedDestinationsAsync(null, null); //TODO
-            var filterRecomendedByStudentsDestinations = recomendedByStudentsDestinations.Take(5);
+            List<DestSpeciality> recommendedDest = new List<DestSpeciality>();
 
-            return filterRecomendedByStudentsDestinations.Select(x => new DestinationVM(x));
+            var profile = await GetProfile(int.Parse(userJWT.UserId), userJWT.Token);
+
+            if (profile.PreferencedStudyDomainId == null)
+            {
+                return new RecommendedDestination() { IsCompletedProfile = false, Destinations = new List<DestinationVM>() };
+            }
+
+            var users = await GetUsersByStudyDomain(profile.PreferencedStudyDomainId.Value, userJWT.Token);
+
+            if (!users.Any())
+            {
+                return new RecommendedDestination() { IsCompletedProfile = true, Destinations = new List<DestinationVM>() };
+            }
+
+            foreach (var user in users)
+            {
+                if (user != int.Parse(userJWT.UserId))
+                {
+                    var specIds = await GetSpecListByUser(user, userJWT.Token);
+
+                    if (specIds.Any())
+                    {
+                        foreach (var specId in specIds)
+                        {
+                            var spec = await _universityRepository.GetRecommendedByStudentsDestinationsAsync((short)specId);
+                            recommendedDest.Add(spec);
+
+                            if (recommendedDest.Count() >= 5)
+                                return new RecommendedDestination() { IsCompletedProfile = true, Destinations = recommendedDest.Select(x => new DestinationVM(x)).Take(5) };
+                        }
+                    }
+                }
+            }
+            
+            return new RecommendedDestination() { IsCompletedProfile = true, Destinations = recommendedDest.Select(x => new DestinationVM(x)).Take(5) };
         }
 
         public IEnumerable<string> GetCountries()
@@ -70,6 +123,63 @@ namespace UniversityApi.Service
             var university = await _universityRepository.GetAsync(destId);
 
             return new UniversityGetVM(university, destId);
+        }
+
+        public async Task<DestinationResult> GetListForUserAsync(UserDestinationCriteria criteria)
+        {
+            var list = await _universityRepository.GetListForUserAsync(criteria);
+
+            return new DestinationResult(list.Select(x => new DestinationVM(x)), list.Count());
+        }
+
+        private async Task<Profile> GetProfile(int userId, string token)
+        {
+            _httpClientUser.DefaultRequestHeaders
+                .Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var result = await _httpClientUser.GetAsync("user/profiles");
+            if (!result.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException(result.ReasonPhrase);
+            }
+
+            JObject jProfile = JObject.Parse(await result.Content.ReadAsStringAsync());
+            short? preferencedStudyDomainId = (short?)jProfile["preferencedStudyDomainId"];
+            double? averageGrade = (double?)jProfile["averageGrade"];
+
+            return new Profile(preferencedStudyDomainId, averageGrade);
+        }
+
+        private async Task<IEnumerable<int>> GetUsersByStudyDomain(short studyDomainId, string token)
+        {
+            _httpClientUser.DefaultRequestHeaders
+                .Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var result = await _httpClientUser.GetAsync($"user/study-domain/{studyDomainId}");
+            if (!result.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException(result.ReasonPhrase);
+            }
+
+            var list = await result.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<IEnumerable<int>>(list); 
+        }
+
+        private async Task<IEnumerable<int>> GetSpecListByUser(int userId, string token)
+        {
+            _httpClientNote.DefaultRequestHeaders
+                .Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var result = await _httpClientNote.GetAsync($"note/favorite-spec/{userId}");
+            if (!result.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException(result.ReasonPhrase);
+            }
+
+            var list = await result.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<IEnumerable<int>>(list);
         }
     }
 }

@@ -1,10 +1,14 @@
-import HomeSubject from "./HomeSubject";
+import { UserSubject } from "./UserSubject";
 
-interface PlanSubject {
-    id: number;
-    homeSubject: HomeSubject;
+export interface PlanSubjectSend {
+    mappedSubject: number;
     name: string;
     ects: number;
 }
 
-export default PlanSubject;
+export interface PlanSubject {
+    id: number;
+    mappedSubject: UserSubject;
+    name: string;
+    ects: number;
+}
