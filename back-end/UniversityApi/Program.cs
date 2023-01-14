@@ -28,8 +28,7 @@ builder.Services.AddDbContext<UniversitydbContext>(o => o.UseNpgsql(builder.Conf
 
 builder.Services.AddRabbitMqServices();
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -43,7 +42,7 @@ builder.Services.AddTransient<IUniversityRepository, UniversityRepository>();
 var app = builder.Build();
 
 app.UseSwagger();
-// Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "UniversityApi v1"));
