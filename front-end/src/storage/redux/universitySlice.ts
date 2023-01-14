@@ -10,6 +10,7 @@ import {
 import DestFiltering from "models/DestFiltering";
 import DestinationList from "models/DestinationList";
 import DestSpecialty from "models/DestSpecialty";
+import RecommendationList from "models/RecommendationList";
 import StudyArea from "models/StudyArea";
 import StudyDomain from "models/StudyDomain";
 
@@ -18,6 +19,7 @@ interface State {
   studyDomains: StudyDomain[];
   countries: string[];
   destinationList: DestinationList;
+  userPreferencesFilled: boolean;
   destinationsRecommended: DestSpecialty[] | undefined;
   destinationsRecommendedByStudents: DestSpecialty[] | undefined;
 }
@@ -30,6 +32,7 @@ const initialState: State = {
     totalRows: 0,
     destinations: [],
   },
+  userPreferencesFilled: false,
   destinationsRecommended: undefined,
   destinationsRecommendedByStudents: undefined,
 };
@@ -57,12 +60,15 @@ export const fetchDestinations = createAsyncThunk<
   return response;
 });
 
-export const fetchDestinationsRecommended = createAsyncThunk<DestSpecialty[]>("destinations_recommended", async () => {
-  const response = await getDestinationsRecommended();
-  return response;
-});
+export const fetchDestinationsRecommended = createAsyncThunk<RecommendationList>(
+  "destinations_recommended",
+  async () => {
+    const response = await getDestinationsRecommended();
+    return response;
+  }
+);
 
-export const fetchDestinationsRecommendedByStudents = createAsyncThunk<DestSpecialty[]>(
+export const fetchDestinationsRecommendedByStudents = createAsyncThunk<RecommendationList>(
   "destinations_recommended_by_students",
   async () => {
     const response = await getDestinationsRecommendedByStudents();
@@ -89,13 +95,15 @@ const universitySlice = createSlice({
         state.destinationList = action.payload;
       })
       .addCase(fetchDestinationsRecommended.fulfilled, (state, action) => {
-        state.destinationsRecommended = action.payload;
+        state.userPreferencesFilled = action.payload.isCompletedProfile;
+        state.destinationsRecommended = action.payload.destinations;
       })
       .addCase(fetchDestinationsRecommended.rejected, state => {
         state.destinationsRecommended = undefined;
       })
       .addCase(fetchDestinationsRecommendedByStudents.fulfilled, (state, action) => {
-        state.destinationsRecommendedByStudents = action.payload;
+        state.userPreferencesFilled = action.payload.isCompletedProfile;
+        state.destinationsRecommendedByStudents = action.payload.destinations;
       })
       .addCase(fetchDestinationsRecommendedByStudents.rejected, state => {
         state.destinationsRecommendedByStudents = undefined;

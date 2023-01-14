@@ -23,6 +23,7 @@ interface Props {
   setUniversityNameSearch: React.Dispatch<React.SetStateAction<string>>;
   pageNum: number;
   destinations: DestSpecialty[];
+  userPreferencesFilled: boolean;
   recommended: DestSpecialty[] | undefined;
   recommendedByStudent: DestSpecialty[] | undefined;
   countries: string[];
@@ -47,6 +48,7 @@ const ListPage = ({
   setUniversityNameSearch,
   pageNum,
   destinations,
+  userPreferencesFilled,
   recommended,
   recommendedByStudent,
   countries,
@@ -60,20 +62,15 @@ const ListPage = ({
   handleSearch,
 }: Props) => {
   const renderSideListContent = (items: DestSpecialty[] | undefined) => {
-    if (items !== undefined && userLoggedIn) {
-      return items.length !== 0 ? (
-        <SideList destinations={items} loading={loading} handleOnClick={handleOnClick} />
-      ) : (
-        <>
-          <p>
-            {`You haven't yet provided your preferences. `}
-            <Link to="/profile">Do it here.</Link>
-          </p>
-        </>
-      );
-    } else {
-      return <p>Log in to see helpful recommendations!</p>;
-    }
+    // prettier-ignore
+    return userLoggedIn === false || items === undefined 
+      ? <p>Log in to see helpful recommendations!</p> 
+      : userPreferencesFilled === false 
+        ? <p>{`You haven't yet provided your preferences. `}<Link to="/profile">Do it here.</Link></p>
+        : items.length === 0 
+          ? <p>{`Sorry, we don't have any recommendations for you yet.`}</p> 
+          : <SideList destinations={items} loading={loading} handleOnClick={handleOnClick} />;
+    // prettier-ignore-end
   };
 
   return (

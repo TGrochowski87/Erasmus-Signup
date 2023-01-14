@@ -20,9 +20,8 @@ import DestFiltering from "models/DestFiltering";
 const ListPageContainer = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { destinationsRecommended, destinationsRecommendedByStudents, countries, studyAreas } = useAppSelector(
-    (state: RootState) => state.university
-  );
+  const { userPreferencesFilled, destinationsRecommended, destinationsRecommendedByStudents, countries, studyAreas } =
+    useAppSelector((state: RootState) => state.university);
   const { userLoggedIn } = useAppSelector((state: RootState) => state.login);
   const [pageNum, setPageNum] = useState<number>(1);
   const [destinations, setDestinations] = useState<DestSpecialty[]>([]);
@@ -118,6 +117,7 @@ const ListPageContainer = () => {
       setUniversityNameSearch={setUniversityNameSearch}
       pageNum={pageNum}
       destinations={destinations}
+      userPreferencesFilled={userPreferencesFilled}
       recommended={destinationsRecommended}
       recommendedByStudent={destinationsRecommendedByStudents}
       countries={countries}
