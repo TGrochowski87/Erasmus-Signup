@@ -6,10 +6,11 @@ namespace UserApi.Utilities
 {
     static class Secrets
     {
+    {
 
         #region variables
         private const string SecretsFilePath = @"secrets.json";
-        static private string serviceUrl = "http://localhost:3000/";
+        static private string serviceUrl = "https://erasmussignup.azurewebsites.net/";
         static private string oauthHostUrl = "https://apps.usos.pwr.edu.pl/";
         static private string oauthApiConsumerKey = "E6PSSxPABSJgyGhpDthM";
         static private string oauthApiConsumerSecret = "xXEVHG9VTwpNGrKsP9WexjKUxzL9SRtXVk3gLfjD";

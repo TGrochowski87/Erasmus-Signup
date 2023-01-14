@@ -27,7 +27,7 @@ builder.Services.AddCors(options =>
                       policy =>
                       {
                           policy.AllowAnyMethod().AllowAnyHeader().WithOrigins(
-                            "https://erasmussignup.azurewebsites.net"
+                            "https://erasmussignup.azurewebsites.net",
                             "https://universityapiservice.azure-api.net"
                           );
                       });
