@@ -1,9 +1,6 @@
 using UserApi.Service;
-
 using System.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
-using Microsoft.Net.Http.Headers;
-using UserApi.Attributes;
 using Microsoft.EntityFrameworkCore;
 using UserApi.Repository;
 using UserApi.DbModels;
@@ -30,8 +27,7 @@ builder.Services.AddCors(options =>
                       policy =>
                       {
                           policy.AllowAnyMethod().AllowAnyHeader().WithOrigins(
-                            "http://localhost:3000",
-                            "http://localhost:3001",
+                            "https://erasmussignup.azurewebsites.net"
                             "https://universityapiservice.azure-api.net"
                           );
                       });
