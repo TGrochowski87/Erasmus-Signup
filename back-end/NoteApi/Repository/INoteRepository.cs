@@ -31,5 +31,6 @@ namespace NoteApi.Repository
         Task DeleteSpecialityNoteAsync(int noteId);
         Task<bool> DeleteSpecialityHighlightNoteAsync(int noteId);
         Task<bool> DeleteSpecialityPriorityNoteAsync(int noteId);
+        Task<IEnumerable<Note>> GetNotesByUserId(long userId);
     }
 }

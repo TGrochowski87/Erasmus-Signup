@@ -29,5 +29,6 @@ namespace NoteApi.Service
         Task DeleteSpecialityHighlightNoteAsync(int noteId, bool positive, int specialityId);
         Task DeleteSpecialityPriorityNoteAsync(int noteId, int specialityId);
         Task<IEnumerable<SpecialityRatingVM>> GetSpecialityRatingNoteAsync(long userId);
+        Task<IEnumerable<int>> GetFavoriteSpec(long userId);
     }
 }

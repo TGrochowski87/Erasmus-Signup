@@ -9,8 +9,8 @@ namespace UniversityApi.Service
         Task<IEnumerable<StudyDomainVM>> GetStudyDomainListAsync();
         Task<IEnumerable<StudyAreaVM>> GetStudyAreaListAsync();
         IEnumerable<string> GetCountries();
-        Task<IEnumerable<DestinationVM>> GetRecommendedDestinations();
-        Task<IEnumerable<DestinationVM>> GetRecommendedByStudentsDestinations();
+        Task<RecommendedDestination> GetRecommendedDestinations(UserJWT userJWT);
+        Task<RecommendedDestination> GetRecommendedByStudentsDestinations(UserJWT userJWT);
         Task<DestinationResult> GetListForUserAsync(UserDestinationCriteria criteria);
     }
 }

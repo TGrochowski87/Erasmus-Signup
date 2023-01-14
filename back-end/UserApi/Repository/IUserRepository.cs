@@ -6,5 +6,6 @@ namespace UserApi.Repository
     {
         Task ProfileEditAsync(UserProfile student);
         Task<UserProfile> GetProfileAsync(int userId);
+        Task<IEnumerable<UserProfile>> GetUsersByStudyDomain(short studyDomainId);
     }
 }
