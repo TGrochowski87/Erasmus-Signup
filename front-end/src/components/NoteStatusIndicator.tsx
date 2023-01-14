@@ -1,21 +1,26 @@
 import { ContainerFilled, ContainerOutlined } from "@ant-design/icons";
 
 interface Props {
+  relatedId: number;
   active: boolean;
 }
 
-const NoteStatusIndicator = ({ active }: Props) => {
+const NoteStatusIndicator = ({ relatedId, active }: Props) => {
   return active ? (
     <ContainerFilled
+      className="status-indicator"
       style={{
-        fontSize: "1.5rem",
         color: "yellow",
+      }}
+      onClick={event => {
+        event.stopPropagation();
       }}
     />
   ) : (
     <ContainerOutlined
-      style={{
-        fontSize: "1.5rem",
+      className="status-indicator"
+      onClick={event => {
+        event.stopPropagation();
       }}
     />
   );

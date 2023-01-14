@@ -35,6 +35,7 @@ interface Props {
   handleOnClick: (id: number) => void;
   applyFilters: () => Promise<void>;
   handleSearch: () => void;
+  favoriteIndicatorClickHandler: (id: number) => void;
 }
 
 const { Search } = Input;
@@ -60,6 +61,7 @@ const ListPage = ({
   handleOnClick,
   applyFilters,
   handleSearch,
+  favoriteIndicatorClickHandler,
 }: Props) => {
   const renderSideListContent = (items: DestSpecialty[] | undefined) => {
     // prettier-ignore
@@ -162,6 +164,7 @@ const ListPage = ({
             handleOnClick={handleOnClick}
             handlePageChange={handlePageChange}
             pageNum={pageNum}
+            favoriteIndicatorClickHandler={favoriteIndicatorClickHandler}
           />
         </div>
       </div>

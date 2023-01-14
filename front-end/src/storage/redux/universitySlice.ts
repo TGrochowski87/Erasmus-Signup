@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   getCountries,
   getDestinations,
@@ -54,9 +54,9 @@ export const fetchCountries = createAsyncThunk<string[]>("countries", async () =
 
 export const fetchDestinations = createAsyncThunk<
   DestinationList,
-  { pageSize: number; page: number; filters?: DestFiltering }
->("destinations", async ({ page, pageSize, filters }) => {
-  const response = await getDestinations(page, pageSize, filters);
+  { pageSize: number; page: number; filters?: DestFiltering; universityName?: string }
+>("destinations", async ({ page, pageSize, filters, universityName }) => {
+  const response = await getDestinations(page, pageSize, filters, universityName);
   return response;
 });
 
@@ -79,7 +79,13 @@ export const fetchDestinationsRecommendedByStudents = createAsyncThunk<Recommend
 const universitySlice = createSlice({
   name: "university",
   initialState,
-  reducers: {},
+  reducers: {
+    changeObservedStatus(state, action: PayloadAction<number>) {
+      state.destinationList.destinations = state.destinationList.destinations.map(d =>
+        d.destinationSpecialityId === action.payload ? { ...d, isObserved: !d.isObserved } : d
+      );
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(fetchStudyDomains.fulfilled, (state, action) => {
@@ -110,4 +116,6 @@ const universitySlice = createSlice({
       });
   },
 });
+
+export const { changeObservedStatus } = universitySlice.actions;
 export default universitySlice.reducer;

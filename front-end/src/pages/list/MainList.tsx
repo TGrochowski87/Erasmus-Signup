@@ -12,9 +12,18 @@ interface Props {
   loading: boolean;
   handleOnClick: (id: number) => void;
   pageNum: number;
+  favoriteIndicatorClickHandler: (id: number) => void;
 }
 
-const MainList = ({ destinations, loading, totalAmount, handlePageChange, handleOnClick, pageNum }: Props) => {
+const MainList = ({
+  destinations,
+  loading,
+  totalAmount,
+  handlePageChange,
+  handleOnClick,
+  pageNum,
+  favoriteIndicatorClickHandler,
+}: Props) => {
   return (
     <List
       loading={loading}
@@ -71,7 +80,13 @@ const MainList = ({ destinations, loading, totalAmount, handlePageChange, handle
                       top: "-10px",
                     }}
                   />
-                  <FavoriteStatusIndicator active={item.isObserved} />
+                  <FavoriteStatusIndicator
+                    onClick={event => {
+                      event.stopPropagation();
+                      favoriteIndicatorClickHandler(item.destinationSpecialityId);
+                    }}
+                    active={item.isObserved}
+                  />
                 </div>
 
                 <p style={{ marginTop: "0.5rem" }}>

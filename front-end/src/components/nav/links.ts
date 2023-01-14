@@ -41,18 +41,18 @@ export const loggedInUserLinks = (
     text: "Destinations",
     path: "list",
   },
+  // {
+  //   id: 2,
+  //   text: "Notes",
+  //   path: "notes",
+  // },
   {
     id: 2,
-    text: "Notes",
-    path: "notes",
-  },
-  {
-    id: 3,
     text: "Profile",
     path: "profile",
   },
   {
-    id: 4,
+    id: 3,
     text: "Log out",
     customOnClick: event => {
       event.preventDefault();

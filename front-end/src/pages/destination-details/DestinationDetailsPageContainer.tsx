@@ -1,6 +1,8 @@
 // React
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+// Redux
+import { useAppDispatch } from "storage/redux/hooks";
 // API
 import { createOpinion, getOpinion } from "api/opinionApi";
 import { getDestinationDetails } from "api/universityApi";
@@ -8,9 +10,11 @@ import { getDestinationDetails } from "api/universityApi";
 import { OpinionResponse } from "models/Opinion";
 import DestinationDetailsPage from "./DestinationDetailsPage";
 import GetDestinationDetails from "api/DTOs/GET/GetDestinationDetails";
+import { changeObservedStatus } from "storage/redux/universitySlice";
 
 const DestinationDetailsPageContainer = () => {
   const { id } = useParams();
+  const dispatch = useAppDispatch();
   const [detailsData, setDetailsData] = useState<GetDestinationDetails | undefined>(undefined);
   const [opinions, setOpinions] = useState<OpinionResponse | undefined>(undefined);
   const [selectedDestId, setSelectedDestId] = useState<number>(0);
@@ -68,6 +72,24 @@ const DestinationDetailsPageContainer = () => {
     setOpinionInput("");
   };
 
+  const favoriteIndicatorClickHandler = () => {
+    if (detailsData === undefined) {
+      return;
+    }
+
+    // Thank you TypeScript...
+    setDetailsData((prevState: GetDestinationDetails | undefined) => {
+      return prevState === undefined
+        ? undefined
+        : {
+            ...prevState,
+            destinations: prevState!.destinations.map(d =>
+              d.id === selectedDestId ? { ...d, isObserved: !d.isObserved } : d
+            ),
+          };
+    });
+  };
+
   return (
     <DestinationDetailsPage
       detailsData={detailsData}
@@ -80,6 +102,7 @@ const DestinationDetailsPageContainer = () => {
       opinions={opinions ? opinions.opinions : []}
       loading={loading}
       submitOpinionHandler={submitOpinionHandler}
+      favoriteIndicatorClickHandler={favoriteIndicatorClickHandler}
     />
   );
 };

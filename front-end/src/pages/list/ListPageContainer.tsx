@@ -1,15 +1,14 @@
 // React
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// API
-import { getDestinations } from "api/universityApi";
 // Components
 import ListPage from "./ListPage";
-import DestSpecialty from "models/DestSpecialty";
 import { useAppDispatch, useAppSelector } from "storage/redux/hooks";
 import { RootState } from "storage/redux/store";
 import {
+  changeObservedStatus,
   fetchCountries,
+  fetchDestinations,
   fetchDestinationsRecommended,
   fetchDestinationsRecommendedByStudents,
   fetchStudyAreas,
@@ -20,13 +19,17 @@ import DestFiltering from "models/DestFiltering";
 const ListPageContainer = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { userPreferencesFilled, destinationsRecommended, destinationsRecommendedByStudents, countries, studyAreas } =
-    useAppSelector((state: RootState) => state.university);
+  const {
+    destinationList,
+    userPreferencesFilled,
+    destinationsRecommended,
+    destinationsRecommendedByStudents,
+    countries,
+    studyAreas,
+  } = useAppSelector((state: RootState) => state.university);
   const { preferences } = useAppSelector((state: RootState) => state.userCurrent);
   const { userLoggedIn } = useAppSelector((state: RootState) => state.login);
   const [pageNum, setPageNum] = useState<number>(1);
-  const [destinations, setDestinations] = useState<DestSpecialty[]>([]);
-  const [totalAmount, setTotalAmount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [universityNameSearch, setUniversityNameSearch] = useState<string>("");
   const [filters, setFilters] = useState<DestFiltering>({
@@ -76,32 +79,32 @@ const ListPageContainer = () => {
     setLoading(true);
     setPageNum(1);
     setCurrentFilters({ ...filters });
-    const currentPage = await getDestinations(1, 10, filters);
-    setDestinations(currentPage.destinations);
-    setTotalAmount(currentPage.totalRows);
+    dispatch(fetchDestinations({ page: 1, pageSize: 10, filters }));
     setLoading(false);
   };
 
   const handlePageChange = async (page: number, pageSize: number) => {
     setLoading(true);
     setPageNum(page);
-    const currentPage = await getDestinations(page, pageSize, currentFilters);
-    setDestinations(currentPage.destinations);
-    setTotalAmount(currentPage.totalRows);
+    dispatch(fetchDestinations({ page, pageSize, filters: currentFilters }));
     setLoading(false);
   };
 
   const handleSearch = async () => {
     setLoading(true);
     setPageNum(1);
-    const currentPage = await getDestinations(1, 10, currentFilters, universityNameSearch);
-    setDestinations(currentPage.destinations);
-    setTotalAmount(currentPage.totalRows);
+    dispatch(
+      fetchDestinations({ page: 1, pageSize: 10, filters: currentFilters, universityName: universityNameSearch })
+    );
     setLoading(false);
   };
 
   const handleOnClick = (id: number) => {
     navigate(`/list/${id}`);
+  };
+
+  const favoriteIndicatorClickHandler = (id: number) => {
+    dispatch(changeObservedStatus(id));
   };
 
   return (
@@ -113,7 +116,7 @@ const ListPageContainer = () => {
       universityNameSearch={universityNameSearch}
       setUniversityNameSearch={setUniversityNameSearch}
       pageNum={pageNum}
-      destinations={destinations}
+      destinations={destinationList.destinations}
       userPreferencesFilled={userPreferencesFilled}
       recommended={destinationsRecommended}
       recommendedByStudent={destinationsRecommendedByStudents}
@@ -121,11 +124,12 @@ const ListPageContainer = () => {
       studyAreas={studyAreas}
       sortingOptions={sortingOptionsList.current}
       handlePageChange={handlePageChange}
-      totalAmount={totalAmount}
+      totalAmount={destinationList.totalRows}
       loading={loading}
       handleOnClick={handleOnClick}
       applyFilters={applyFilters}
       handleSearch={handleSearch}
+      favoriteIndicatorClickHandler={favoriteIndicatorClickHandler}
     />
   );
 };
