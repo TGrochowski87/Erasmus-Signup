@@ -5,6 +5,7 @@ import DestinationList from "../models/DestinationList";
 import DestSpecialty from "models/DestSpecialty";
 import StudyArea from "models/StudyArea";
 import DestFiltering from "models/DestFiltering";
+import RecommendationList from "models/RecommendationList";
 
 const universityApiBaseUrl = "https://universityapiservice.azure-api.net/";
 
@@ -33,7 +34,7 @@ export const getDestinations = async (
     .catch(error => error);
 };
 
-export const getDestinationsRecommended = async (): Promise<DestSpecialty[]> => {
+export const getDestinationsRecommended = async (): Promise<RecommendationList> => {
   return await axios
     .get<DestSpecialty>(`${universityApiBaseUrl}/universities-recommended`, {
       headers: {
@@ -44,7 +45,7 @@ export const getDestinationsRecommended = async (): Promise<DestSpecialty[]> => 
     .catch(error => error);
 };
 
-export const getDestinationsRecommendedByStudents = async (): Promise<DestSpecialty[]> => {
+export const getDestinationsRecommendedByStudents = async (): Promise<RecommendationList> => {
   return await axios
     .get<DestSpecialty>(`${universityApiBaseUrl}/universities-recommended-by-students`, {
       headers: {

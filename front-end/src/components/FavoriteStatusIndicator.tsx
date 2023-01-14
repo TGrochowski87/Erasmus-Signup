@@ -3,22 +3,20 @@ import { HeartFilled, HeartOutlined } from "@ant-design/icons";
 
 interface Props {
   active: boolean;
+  onClick?: React.MouseEventHandler<HTMLSpanElement> | undefined;
 }
 
-const FavoriteStatusIndicator = ({ active }: Props) => {
+const FavoriteStatusIndicator = ({ active, onClick }: Props) => {
   return active ? (
     <HeartFilled
+      className="status-indicator"
+      onClick={onClick}
       style={{
-        fontSize: "1.5rem",
         color: "red",
       }}
     />
   ) : (
-    <HeartOutlined
-      style={{
-        fontSize: "1.5rem",
-      }}
-    />
+    <HeartOutlined className="status-indicator" onClick={onClick} />
   );
 };
 

@@ -25,6 +25,7 @@ interface Props {
   opinions: Opinion[];
   loading: { details: boolean; opinions: boolean };
   submitOpinionHandler: () => void;
+  favoriteIndicatorClickHandler: () => void;
 }
 
 // TODO: Remove from here
@@ -47,6 +48,7 @@ const DestinationDetailsPage = ({
   opinions,
   loading,
   submitOpinionHandler,
+  favoriteIndicatorClickHandler,
 }: Props) => {
   const specialty = detailsData?.destinations.find(d => d.id === selectedDestId);
 
@@ -113,8 +115,14 @@ const DestinationDetailsPage = ({
           </div>
 
           <div className="icon-space">
-            <NoteStatusIndicator active={specialty.isNote} />
-            <FavoriteStatusIndicator active={specialty.isObserved} />
+            <NoteStatusIndicator relatedId={specialty.id} active={specialty.isNote} />
+            <FavoriteStatusIndicator
+              onClick={event => {
+                event.stopPropagation();
+                favoriteIndicatorClickHandler();
+              }}
+              active={specialty.isObserved}
+            />
           </div>
         </div>
       )}

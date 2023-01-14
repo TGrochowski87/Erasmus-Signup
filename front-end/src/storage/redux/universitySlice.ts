@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   getCountries,
   getDestinations,
@@ -10,6 +10,7 @@ import {
 import DestFiltering from "models/DestFiltering";
 import DestinationList from "models/DestinationList";
 import DestSpecialty from "models/DestSpecialty";
+import RecommendationList from "models/RecommendationList";
 import StudyArea from "models/StudyArea";
 import StudyDomain from "models/StudyDomain";
 
@@ -18,6 +19,7 @@ interface State {
   studyDomains: StudyDomain[];
   countries: string[];
   destinationList: DestinationList;
+  userPreferencesFilled: boolean;
   destinationsRecommended: DestSpecialty[] | undefined;
   destinationsRecommendedByStudents: DestSpecialty[] | undefined;
 }
@@ -30,6 +32,7 @@ const initialState: State = {
     totalRows: 0,
     destinations: [],
   },
+  userPreferencesFilled: false,
   destinationsRecommended: undefined,
   destinationsRecommendedByStudents: undefined,
 };
@@ -51,18 +54,21 @@ export const fetchCountries = createAsyncThunk<string[]>("countries", async () =
 
 export const fetchDestinations = createAsyncThunk<
   DestinationList,
-  { pageSize: number; page: number; filters?: DestFiltering }
->("destinations", async ({ page, pageSize, filters }) => {
-  const response = await getDestinations(page, pageSize, filters);
+  { pageSize: number; page: number; filters?: DestFiltering; universityName?: string }
+>("destinations", async ({ page, pageSize, filters, universityName }) => {
+  const response = await getDestinations(page, pageSize, filters, universityName);
   return response;
 });
 
-export const fetchDestinationsRecommended = createAsyncThunk<DestSpecialty[]>("destinations_recommended", async () => {
-  const response = await getDestinationsRecommended();
-  return response;
-});
+export const fetchDestinationsRecommended = createAsyncThunk<RecommendationList>(
+  "destinations_recommended",
+  async () => {
+    const response = await getDestinationsRecommended();
+    return response;
+  }
+);
 
-export const fetchDestinationsRecommendedByStudents = createAsyncThunk<DestSpecialty[]>(
+export const fetchDestinationsRecommendedByStudents = createAsyncThunk<RecommendationList>(
   "destinations_recommended_by_students",
   async () => {
     const response = await getDestinationsRecommendedByStudents();
@@ -73,7 +79,13 @@ export const fetchDestinationsRecommendedByStudents = createAsyncThunk<DestSpeci
 const universitySlice = createSlice({
   name: "university",
   initialState,
-  reducers: {},
+  reducers: {
+    changeObservedStatus(state, action: PayloadAction<number>) {
+      state.destinationList.destinations = state.destinationList.destinations.map(d =>
+        d.destinationSpecialityId === action.payload ? { ...d, isObserved: !d.isObserved } : d
+      );
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(fetchStudyDomains.fulfilled, (state, action) => {
@@ -89,17 +101,21 @@ const universitySlice = createSlice({
         state.destinationList = action.payload;
       })
       .addCase(fetchDestinationsRecommended.fulfilled, (state, action) => {
-        state.destinationsRecommended = action.payload;
+        state.userPreferencesFilled = action.payload.isCompletedProfile;
+        state.destinationsRecommended = action.payload.destinations;
       })
       .addCase(fetchDestinationsRecommended.rejected, state => {
         state.destinationsRecommended = undefined;
       })
       .addCase(fetchDestinationsRecommendedByStudents.fulfilled, (state, action) => {
-        state.destinationsRecommendedByStudents = action.payload;
+        state.userPreferencesFilled = action.payload.isCompletedProfile;
+        state.destinationsRecommendedByStudents = action.payload.destinations;
       })
       .addCase(fetchDestinationsRecommendedByStudents.rejected, state => {
         state.destinationsRecommendedByStudents = undefined;
       });
   },
 });
+
+export const { changeObservedStatus } = universitySlice.actions;
 export default universitySlice.reducer;
