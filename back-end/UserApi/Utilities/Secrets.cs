@@ -6,7 +6,7 @@ namespace UserApi.Utilities
 {
     static class Secrets
     {
-    {
+    
 
         #region variables
         private const string SecretsFilePath = @"secrets.json";
