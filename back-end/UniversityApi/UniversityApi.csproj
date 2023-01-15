@@ -22,5 +22,9 @@
   <ItemGroup>
     <Folder Include="Common\" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <InternalsVisibleTo Include="$(AccemblyName).Test" />
+  </ItemGroup>
 
 </Project>
