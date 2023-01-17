@@ -27,8 +27,7 @@ namespace NoteApi.DbModels
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseNpgsql("Host=localhost;Database=notedb;Username=test;Password=123;Port=5401");
+                optionsBuilder.UseNpgsql("Host=erasmus-db.postgres.database.azure.com;Database=note;Username=postgres;Password=Erasmus123;Port=5432");
             }
         }
 

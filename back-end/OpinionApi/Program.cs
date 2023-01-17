@@ -15,8 +15,7 @@ builder.Services.AddCors(options =>
                       policy =>
                       {
                           policy.AllowAnyMethod().AllowAnyHeader().WithOrigins(
-                            "http://localhost:3000",
-                            "http://localhost:3001"
+                           "https://erasmussignup.azurewebsites.net"
                           );
                       });
 });
@@ -29,30 +28,7 @@ builder.Services.AddDbContext<OpiniondbContext>(o => o.UseNpgsql(builder.Configu
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiPlayground", Version = "v1" });
-    c.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme
-    {
-        Name = HeaderNames.Authorization,
-        Type = SecuritySchemeType.Http,
-        In = ParameterLocation.Header,
-        Scheme = "bearer",
-        BearerFormat = "JWT",
-        Description = "JWT Authorization header using the Bearer scheme.",
-    });
-
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "bearerAuth"
-                }
-            },
-            new string[] {}
-        }
-     });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "OpinionAPI", Version = "v1" });
 });
 
 builder.Services.AddTransient<IOpinionService, OpinionService>();
@@ -61,11 +37,11 @@ builder.Services.AddTransient<IOpinionRepository, OpinionRepository>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseSwagger();
+
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "OpinionApi v1"));
 }
 app.UseCors(MyAllowSpecificOrigins);
 

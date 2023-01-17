@@ -17,7 +17,7 @@ builder.Services.AddCors(options =>
                       {
                           policy.AllowAnyMethod().AllowAnyHeader().WithOrigins(
                             "https://erasmussignup.azurewebsites.net",
-                            "https://localhost:7169",
+                            "https://noteapiservice.azure-api.net",
                             "https://userapiservice.azure-api.net"
                           );
                       });

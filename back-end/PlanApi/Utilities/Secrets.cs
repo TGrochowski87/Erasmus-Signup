@@ -6,7 +6,7 @@ namespace PlanApi.Utilities
     static class Secrets
     {
         private const string SecretsFilePath = @"secrets.json";
-        static private string jwtKey = "";
+        static private string jwtKey = "Yh2k7QSu4l8CZg5p6X3Pna9L0Miy4D3Bvt0JVr87UcOj69Kqw5R2Nmf4FWs03Hdx";
 
         static public string JwtKey
         {

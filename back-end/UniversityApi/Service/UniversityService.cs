@@ -19,11 +19,11 @@ namespace UniversityApi.Service
             _universityRepository = universityRepository;
 
             _httpClientUser = new HttpClient();
-            _httpClientUser.BaseAddress = new Uri("https://userapiservice.azure-api.net/");  
+            _httpClientUser.BaseAddress = new Uri("https://userapi23.azurewebsites.net");  
             _httpClientUser.Timeout = new TimeSpan(0, 2, 0);
 
             _httpClientNote = new HttpClient();
-            _httpClientNote.BaseAddress = new Uri("https://localhost:7169/");
+            _httpClientNote.BaseAddress = new Uri("https://noteapi23.azurewebsites.net");
             _httpClientNote.Timeout = new TimeSpan(0, 2, 0);
         }
 
