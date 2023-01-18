@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Runtime.Caching;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using UserApi.Models;
 using UserApi.Service;
 using UserApi.Attributes;
+using System.Collections.Generic;
 
 namespace UserApi.Controllers
 {
@@ -60,37 +62,64 @@ namespace UserApi.Controllers
             {
                 return Unauthorized();
             }
-            HttpResponseMessage responseMessage = userService.GetCurrentUser(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
-            if (responseMessage.IsSuccessStatusCode)
+
+            string cacheKey = "User("+ UserToken.UserId +")";
+            bool cachEnable = true;
+
+            ObjectCache cache = System.Runtime.Caching.MemoryCache.Default;
+
+            User user;
+
+            if (cachEnable && cache.Contains(cacheKey))
             {
+                user = (User)cache.Get(cacheKey);
+            }
+            else
+            {
+                HttpResponseMessage responseMessage = userService.GetCurrentUser(UserToken.OAuthAccessToken, UserToken.OAuthAccessTokenSecret);
+
+                if (!responseMessage.IsSuccessStatusCode)
+                {
+                    return BadRequest("Authorized service error: " + responseMessage.ReasonPhrase);
+                }
+
                 string result = responseMessage.Content.ReadAsStringAsync().Result;
                 JObject jUser = JObject.Parse(result);
 
-                if (jUser.Count > 0)
+                if (jUser.Count <= 0)
                 {
-                    if(Convert.ToInt16(jUser["student_status"]!.ToString()) != 2 && Convert.ToInt16(jUser["staff_status"]!.ToString()) != 2)
-                    {
-                        return Unauthorized("User is not an active user or staff");
-                    }
-                    
-                    return Ok(new User(
-                        Convert.ToInt64(jUser["id"]!.ToString()),
-                        jUser["first_name"]!.ToString(),
-                        jUser["middle_names"]!.ToString(),
-                        jUser["last_name"]!.ToString(),
-                        jUser["sex"]!.ToString()[0],
-                        jUser["titles"]!["before"]!.ToString(),
-                        jUser["titles"]!["after"]!.ToString(),
-                        Convert.ToInt16(jUser["staff_status"]!.ToString()) == 2,
-                        jUser["email"]!.ToString(),
-                        jUser["photo_urls"]!["50x50"]!.ToString(),
-                        jUser["photo_urls"]!["400x500"]!.ToString(),
-                        jUser["student_number"]!.ToString()
-                    ));
+                    return BadRequest("Authorized service error: crucial elements not found");
                 }
-                return BadRequest("Authorized service error: crucial elements not found");
+
+                if(Convert.ToInt16(jUser["student_status"]!.ToString()) != 2 && Convert.ToInt16(jUser["staff_status"]!.ToString()) != 2)
+                {
+                    return Unauthorized("User is not an active user or staff");
+                }
+                
+                user = new User(
+                    Convert.ToInt64(jUser["id"]!.ToString()),
+                    jUser["first_name"]!.ToString(),
+                    jUser["middle_names"]!.ToString(),
+                    jUser["last_name"]!.ToString(),
+                    jUser["sex"]!.ToString()[0],
+                    jUser["titles"]!["before"]!.ToString(),
+                    jUser["titles"]!["after"]!.ToString(),
+                    Convert.ToInt16(jUser["staff_status"]!.ToString()) == 2,
+                    jUser["email"]!.ToString(),
+                    jUser["photo_urls"]!["50x50"]!.ToString(),
+                    jUser["photo_urls"]!["400x500"]!.ToString(),
+                    jUser["student_number"]!.ToString()
+                );
+
+                if (cachEnable)
+                {
+                    CacheItemPolicy cacheItemPolicy = new CacheItemPolicy();
+                    cacheItemPolicy.AbsoluteExpiration = DateTime.Now.AddHours(2.0);
+                    cache.Add(cacheKey, user, cacheItemPolicy);
+                }
             }
-            return BadRequest("Authorized service error: " + responseMessage.ReasonPhrase);
+
+            return Ok(user);
         }
 
         //[AuthorizeUser]

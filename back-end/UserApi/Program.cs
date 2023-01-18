@@ -7,6 +7,8 @@ using UserApi.Attributes;
 using Microsoft.EntityFrameworkCore;
 using UserApi.Repository;
 using UserApi.DbModels;
+using Microsoft.AspNetCore.ResponseCompression;
+using System.IO.Compression;
 
 using HttpClient client = new();
 client.DefaultRequestHeaders.Accept.Clear();
@@ -21,6 +23,8 @@ static async Task ProcessRepositoriesAsync(HttpClient client)
 }
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+bool compressionEnable = true;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -87,7 +91,27 @@ builder.Services.AddSession( options =>
 });
 
 
+if (compressionEnable)
+{
+    builder.Services.AddResponseCompression(options =>
+    {
+        options.EnableForHttps = true;
+        options.Providers.Add<GzipCompressionProvider>();
+    });
+
+
+    builder.Services.Configure<GzipCompressionProviderOptions>(options =>
+    {
+        options.Level = CompressionLevel.Fastest;
+    });
+}
+
 var app = builder.Build();
+
+if (compressionEnable)
+{
+    app.UseResponseCompression();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
