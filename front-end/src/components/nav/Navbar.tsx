@@ -56,7 +56,7 @@ const Navbar = () => {
       {status === RequestStatus.loading && <FullViewLoading />}
       <nav className="nav">
         <img src={pwrlogo} alt="pwr logo" />
-        <img src={eulogo} alt="eu logo" style={{ marginRight: "auto" }} />
+        <img src={eulogo} alt="eu logo" className="erasmus-logo" />
         {links.map(link => (
           <NavbarLink
             key={link.id}

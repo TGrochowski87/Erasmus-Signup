@@ -1,4 +1,5 @@
 // React
+import { lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
 // Ant Design
 import { Button, Input } from "antd";
@@ -6,13 +7,17 @@ import { Button, Input } from "antd";
 import "./ListPage.scss";
 // Components
 import DestSpecialty from "models/DestSpecialty";
-import SelectFilter from "./SelectFilter";
-import MainList from "./MainList";
-import SideList from "./SideList";
+// import SelectFilter from "./SelectFilter";
+// import MainList from "./MainList";
+// import SideList from "./SideList";
 import StudyArea from "models/StudyArea";
 import DestFiltering from "models/DestFiltering";
 // Utilities
 import isEqual from "lodash.isequal";
+
+const SelectFilter = lazy(() => import("./SelectFilter"));
+const MainList = lazy(() => import("./MainList"));
+const SideList = lazy(() => import("./SideList"));
 
 interface Props {
   userLoggedIn: boolean;
@@ -80,49 +85,51 @@ const ListPage = ({
       <div className="block filter-section">
         <p className="header-font">FITLERS</p>
         <div className="filters">
-          <SelectFilter
-            handleSelect={(value: { value: string; label: string } | undefined) =>
-              setFilters(prevState => {
-                return {
-                  ...prevState,
-                  country: value?.label,
-                };
-              })
-            }
-            label="Country"
-            placeholder="Select country"
-            options={countries.map(c => {
-              return { value: crypto.randomUUID(), label: c };
-            })}
-          />
-          <SelectFilter
-            handleSelect={(value: { value: string; label: string } | undefined) =>
-              setFilters(prevState => {
-                return {
-                  ...prevState,
-                  subjectAreaId: value?.value,
-                };
-              })
-            }
-            label="Subject area"
-            placeholder="Select subject area"
-            options={studyAreas.map(s => {
-              return { value: s.id.toString(), label: s.areaName };
-            })}
-          />
-          <SelectFilter
-            handleSelect={(value: { value: string; label: string } | undefined) =>
-              setFilters(prevState => {
-                return {
-                  ...prevState,
-                  orderBy: value?.value,
-                };
-              })
-            }
-            label="Sort by"
-            placeholder="Select sorting option"
-            options={sortingOptions}
-          />
+          <Suspense>
+            <SelectFilter
+              handleSelect={(value: { value: string; label: string } | undefined) =>
+                setFilters(prevState => {
+                  return {
+                    ...prevState,
+                    country: value?.label,
+                  };
+                })
+              }
+              label="Country"
+              placeholder="Select country"
+              options={countries.map(c => {
+                return { value: crypto.randomUUID(), label: c };
+              })}
+            />
+            <SelectFilter
+              handleSelect={(value: { value: string; label: string } | undefined) =>
+                setFilters(prevState => {
+                  return {
+                    ...prevState,
+                    subjectAreaId: value?.value,
+                  };
+                })
+              }
+              label="Subject area"
+              placeholder="Select subject area"
+              options={studyAreas.map(s => {
+                return { value: s.id.toString(), label: s.areaName };
+              })}
+            />
+            <SelectFilter
+              handleSelect={(value: { value: string; label: string } | undefined) =>
+                setFilters(prevState => {
+                  return {
+                    ...prevState,
+                    orderBy: value?.value,
+                  };
+                })
+              }
+              label="Sort by"
+              placeholder="Select sorting option"
+              options={sortingOptions}
+            />
+          </Suspense>
           <div className="filter" style={{ marginLeft: "auto" }}>
             <p className="header-font">University name</p>
             <Search
@@ -149,23 +156,25 @@ const ListPage = ({
         <div className="left-section">
           <div className="block list-space side-list">
             <p className="header-font">Recommended destinations</p>
-            {renderSideListContent(recommended)}
+            <Suspense>{renderSideListContent(recommended)}</Suspense>
           </div>
           <div className="block list-space side-list">
             <p className="header-font">Students like you chose</p>
-            {renderSideListContent(recommendedByStudent)}
+            <Suspense>{renderSideListContent(recommendedByStudent)}</Suspense>
           </div>
         </div>
         <div className="block list-space main-list">
-          <MainList
-            destinations={destinations}
-            loading={loading}
-            totalAmount={totalAmount}
-            handleOnClick={handleOnClick}
-            handlePageChange={handlePageChange}
-            pageNum={pageNum}
-            favoriteIndicatorClickHandler={favoriteIndicatorClickHandler}
-          />
+          <Suspense>
+            <MainList
+              destinations={destinations}
+              loading={loading}
+              totalAmount={totalAmount}
+              handleOnClick={handleOnClick}
+              handlePageChange={handlePageChange}
+              pageNum={pageNum}
+              favoriteIndicatorClickHandler={favoriteIndicatorClickHandler}
+            />
+          </Suspense>
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Web;
 using System.Security.Claims;
@@ -154,6 +155,8 @@ namespace UserApi.Utilities
             string oauth_token_secret = ""
         )
         {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
             string url = Secrets.OAuthHostUrl + method;
             string nonce = useOAuth ? OAuthTool.GenerateNonce() : String.Empty;
             string timestamp = useOAuth ? OAuthTool.GenerateTimeStamp() : String.Empty;
@@ -186,7 +189,12 @@ namespace UserApi.Utilities
             {
                 Timeout = new TimeSpan(0, 2, 0)
             };
-            return client.GetAsync(url + "?" + paramsString).Result;
+            var response = client.GetAsync(url + "?" + paramsString).Result;
+            stopwatch.Stop();
+            Console.WriteLine("XD");
+            Console.WriteLine(stopwatch.Elapsed);
+
+            return response;
         }
     }
 }

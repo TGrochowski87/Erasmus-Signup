@@ -1,4 +1,5 @@
-﻿using FluentResults;
+﻿using System.Diagnostics;
+using FluentResults;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using UniversityApi.Attributes;
@@ -32,7 +33,13 @@ namespace UniversityApi.Controllers
         [HttpGet("universities-recommended")]
         public async Task<RecommendedDestination> GetRecommendedDestinations()
         {
-            return await universityService.GetRecommendedDestinations(UserToken);
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            var response = await universityService.GetRecommendedDestinations(UserToken);
+            stopwatch.Stop();
+            Console.WriteLine(stopwatch.Elapsed);
+
+            return response;
         }
 
         [AuthorizeUser]

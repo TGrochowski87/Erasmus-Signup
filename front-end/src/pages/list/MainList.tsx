@@ -4,6 +4,9 @@ import FavoriteStatusIndicator from "components/FavoriteStatusIndicator";
 import InlineItems from "components/InlineItems";
 import DestSpecialty from "models/DestSpecialty";
 import openInNewTab from "utilities/openInNewTab";
+import flags from "assets/flag_placeholder.png";
+import "./flags.scss";
+import map from "./countryMap";
 
 interface Props {
   destinations: DestSpecialty[];
@@ -52,6 +55,11 @@ const MainList = ({
           <div className="university-list-item-content">
             <div className="country-flag-space">
               <img src={item.flagUrl} alt="country flag" />
+              {/* <img
+                src={flags}
+                className={`flag flag-${map[item.country.toLowerCase() as keyof typeof map]}`}
+                alt="country flag"
+              /> */}
             </div>
             <div className="university-data-space">
               <div className="university-information">
